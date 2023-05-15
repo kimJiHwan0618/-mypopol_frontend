@@ -1,0 +1,359 @@
+*,
+::before,
+::after {
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x: '';
+  --tw-pan-y: '';
+  --tw-pinch-zoom: '';
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ordinal: '';
+  --tw-slashed-zero: '';
+  --tw-numeric-figure: '';
+  --tw-numeric-spacing: '';
+  --tw-numeric-fraction: '';
+  --tw-ring-inset: '';
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(33 150 243 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur: '';
+  --tw-brightness: '';
+  --tw-contrast: '';
+  --tw-grayscale: '';
+  --tw-hue-rotate: '';
+  --tw-invert: '';
+  --tw-saturate: '';
+  --tw-sepia: '';
+  --tw-drop-shadow: '';
+  --tw-backdrop-blur: '';
+  --tw-backdrop-brightness: '';
+  --tw-backdrop-contrast: '';
+  --tw-backdrop-grayscale: '';
+  --tw-backdrop-hue-rotate: '';
+  --tw-backdrop-invert: '';
+  --tw-backdrop-opacity: '';
+  --tw-backdrop-saturate: '';
+  --tw-backdrop-sepia: '';
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x: '';
+  --tw-pan-y: '';
+  --tw-pinch-zoom: '';
+  --tw-scroll-snap-strictness: proximity;
+  --tw-ordinal: '';
+  --tw-slashed-zero: '';
+  --tw-numeric-figure: '';
+  --tw-numeric-spacing: '';
+  --tw-numeric-fraction: '';
+  --tw-ring-inset: '';
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(33 150 243 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur: '';
+  --tw-brightness: '';
+  --tw-contrast: '';
+  --tw-grayscale: '';
+  --tw-hue-rotate: '';
+  --tw-invert: '';
+  --tw-saturate: '';
+  --tw-sepia: '';
+  --tw-drop-shadow: '';
+  --tw-backdrop-blur: '';
+  --tw-backdrop-brightness: '';
+  --tw-backdrop-contrast: '';
+  --tw-backdrop-grayscale: '';
+  --tw-backdrop-hue-rotate: '';
+  --tw-backdrop-invert: '';
+  --tw-backdrop-opacity: '';
+  --tw-backdrop-saturate: '';
+  --tw-backdrop-sepia: '';
+  --main-color: #00b0f0;
+}
+
+.shadow-5 {
+  --tw-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  --tw-shadow-colored: 0px 3px 5px -1px var(--tw-shadow-color), 0px 5px 8px 0px var(--tw-shadow-color), 0px 1px 14px 0px var(--tw-shadow-color);
+}
+
+.vertical__scroll::-webkit-scrollbar {
+  width: 7px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.vertical__scroll::-webkit-scrollbar-thumb {
+  background-color: #b9b9b9;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+
+.selector__label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-transition: all 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  padding: 0 14px;
+  font-weight: 400;
+  color: rgb(17, 24, 39);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  line-height: 1;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  justify-content: space-between;
+}
+
+.selector__label p {
+  white-space: nowrap;
+}
+
+.selector__label>input {
+  position: absolute;
+  left: -9999px;
+  top: 50%;
+  z-index: -99999;
+  border: none;
+  cursor: none;
+  color: transparent;
+  text-shadow: 0 0 0 #2196f3;
+}
+
+.selector__label>input:focus {
+  outline: none;
+}
+
+.selector__label:focus-within .arrow {
+  -webkit-transform: rotate(270deg);
+}
+
+.selector__label input:focus+ul {
+  top: 48px !important;
+  opacity: 1;
+  visibility: visible;
+  z-index: 4999;
+}
+
+.selector__label>.arrow {
+  color: black;
+  -webkit-transform: rotate(90deg);
+  margin-left: 10px;
+  background: url(../img/icon/ic_selector_arrow.svg) no-repeat 50% 50%;
+  background-size: 100% 100%;
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  min-height: 12px;
+  font-size: 12px;
+  display: block;
+}
+
+.selector__label>ul {
+  top: 60px;
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -9999;
+  transform: none;
+  width: 100%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  padding: 8px 0;
+  background-image: none;
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 5px 5px -3px, rgb(0 0 0 / 14%) 0px 8px 10px 1px,
+    rgb(0 0 0 / 12%) 0px 3px 14px 2px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(17, 24, 39);
+  max-height: 132px;
+  overflow-y: auto;
+  -webkit-transition: all 0.3s linear 0s;
+}
+
+.selector__label>ul::-webkit-scrollbar {
+  width: 7px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.selector__label>ul::-webkit-scrollbar-thumb {
+  background-color: #b9b9b9;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+
+header .selector__label>ul {
+  width: auto;
+}
+
+.selector__label>ul>li {
+  padding: 6px 12px;
+  white-space: nowrap;
+  line-height: 1.5;
+  color: #111827;
+}
+
+
+.selector__label>ul>li.selected {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.selector__label>ul>li:hover {
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+
+.common__grid>table {
+  border: none;
+  border-spacing: 0;
+  text-align: left;
+  width: 100%;
+  min-width: 100%;
+  text-indent: 0;
+}
+
+.common__grid>table tr {
+  color: inherit;
+  display: table-row;
+  vertical-align: middle;
+  outline: 0px;
+}
+
+.common__grid>table tr>th:first-of-type {
+  padding-left: 24px;
+}
+
+.common__grid>table tr>th {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-weight: 500;
+  padding: 16px 14px;
+  white-space: nowrap;
+  border-color: rgb(226, 232, 240);
+  line-height: 2.4rem;
+  display: table-cell;
+  vertical-align: inherit;
+  font-size: 0.9rem;
+}
+
+.common__grid>table tr>th>p {
+  white-space: nowrap;
+  line-height: 1.5;
+  color: rgb(107, 114, 128);
+}
+
+.custom__btn {
+  --tw-space-y-reverse: 0;
+  margin-bottom: calc(0px * var(--tw-space-y-reverse));
+  margin-top: calc(0px * (1 - var(--tw-space-y-reverse)));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  font-family: 'Inter var', Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 1.4rem;
+  line-height: 1.75;
+  min-width: 64px;
+  padding: 6px 16px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: rgb(255, 255, 255);
+  background-color: var(--main-color);
+  text-transform: none;
+  box-shadow: none;
+  border-radius: 20px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+}
+
+.custom__btn>span {
+  white-space: nowrap;
+}
+
+.custom__btn:hover {
+  background: #0f93c3;
+}
+
+.custom__btn>span {
+  margin: 0 8px;
+  font-size: 1rem;
+}
+
+.custom__btn>svg {
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  font-size: 20px;
+  line-height: 20;
+}
+
+.custom__btn>symbol {
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  font-size: 20px;
+  line-height: 20;
+}
+
+.custom__input {
+  letter-spacing: inherit;
+  color: currentcolor;
+  border: 1px solid rgb(222, 222, 222);
+  box-sizing: border-box;
+  background: none;
+  height: 1.4375em;
+  min-height: 48px;
+  margin: 0px;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0px;
+  width: 100%;
+  animation-name: mui-auto-fill-cancel;
+  animation-duration: 10ms;
+  border-radius: 6px;
+  padding: 16.5px 14px;
+  -webkit-transition: all 0.15s linear 0s;
+}
+
+.custom__input:focus {
+  border: 2px solid var(--main-color);
+}

@@ -1,0 +1,365 @@
+nav.main__nav {
+  min-width: 280px;
+  width: 280px;
+  max-width: 280px;
+  transition: all 195ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  background: rgb(17, 24, 39);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.main__nav.hide {
+  margin-left: -280px;
+}
+
+.main__nav.hide ~ .modal_bg {
+  background: red;
+}
+
+nav.main__nav > .nav__inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+nav.main__nav > .nav__inner > .top {
+  padding-left: 20px;
+  padding-right: 20px;
+  align-items: center;
+  display: flex;
+  height: 72px;
+}
+
+nav.main__nav > .nav__inner > .top > div {
+  flex: 1 1;
+  display: flex;
+  margin-left: 0.4rem;
+  margin-right: 0.4rem;
+  flex-direction: column;
+  color: white;
+}
+
+nav.main__nav > .nav__inner > .top > div h1 {
+  font-size: 1rem;
+  margin-bottom: 2px;
+}
+
+nav.main__nav > .nav__inner > .top > div p {
+  font-size: 0.8rem;
+  color: var(--main-color);
+}
+
+nav.main__nav > .nav__inner > .top > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  text-align: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  overflow: visible;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: inherit;
+  font-size: 1.8rem;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+}
+
+nav.main__nav > .nav__inner > .top > button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+nav.main__nav > .nav__inner > .top > button svg {
+  fill: currentColor;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  font-size: 20px;
+  line-height: 20;
+  color: rgb(255, 255, 255);
+}
+
+nav.main__nav > .nav__inner > .bottom {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  max-height: calc(100vh - 100px);
+}
+
+nav.main__nav > .nav__inner > .bottom > .profile__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .profile__box > .img__wrap {
+  width: 96px;
+  height: 96px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .profile__box > .img__wrap > img {
+  width: 100%;
+  height: 100%;
+}
+
+nav.main__nav > .nav__inner > .bottom > .profile__box > .name {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+nav.main__nav > .nav__inner > .bottom > .profile__box > .email {
+  line-height: 1.5;
+  color: rgb(148, 163, 184);
+  font-size: 0.9rem;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list {
+  padding: 0 12px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > a,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  border-radius: 6px;
+  -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > a:hover,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title {
+  cursor: pointer;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .txt {
+  flex: 1 1 auto;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .arrow__btn {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0px;
+  border: 0px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  text-align: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  overflow: visible;
+  color: rgb(255, 255, 255);
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-size: 2.8rem;
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .arrow__btn svg {
+  color: inherit;
+  width: 12px;
+  height: 12px;
+  min-width: 12px;
+  min-height: 12px;
+  font-size: 12px;
+  line-height: 12;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list .icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  max-height: 24px;
+  line-height: 24px;
+  font-size: 24px;
+  margin-right: 16px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list .icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list {
+  height: 0px;
+  transition-duration: 300ms;
+  overflow: hidden;
+  visibility: visible;
+  -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list > div {
+  overflow: hidden;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list {
+  overflow: visible;
+}
+
+/* 섭메뉴 개수별 기지정 */
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size1 {
+  height: 44px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size2 {
+  height: 92px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size3 {
+  height: 140px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size4 {
+  height: 188px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size5 {
+  height: 236px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size6 {
+  height: 294px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size7 {
+  height: 342px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size8 {
+  height: 390px;
+}
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size9 {
+  height: 438px;
+}
+
+/* // 섭메뉴 개수별 기지정 */
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a {
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0px;
+  border: 0px;
+  user-select: none;
+  vertical-align: middle;
+  appearance: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  text-align: left;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  min-height: 44px;
+  width: 100%;
+  border-radius: 6px;
+  margin: 0px 0px 4px;
+  padding: 10px 16px 10px 54px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul li {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item a.active,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active .sub__title {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-bottom: 4px;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.page__active .sub__title {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-bottom: 4px;
+}
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active .arrow__btn {
+  -webkit-transform: rotate(90deg);
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul li.on a {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a.active {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a p {
+  flex: 1 1 auto;
+}
+
+/* padding 10px 16px */
+
+@media (max-width: 1200px) {
+  nav.main__nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 99999;
+  }
+
+  .main__nav.hide {
+    margin-left: 0px;
+    left: -280px;
+  }
+}
+
+/* .main__nav.hide {
+  margin-left: -280px;
+} */

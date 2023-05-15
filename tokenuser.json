@@ -1,0 +1,10 @@
+{
+  "grantType": "bearer",
+  "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBoaW5nb20uY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE2ODU1NDcyMTd9.B8qCggs_00Mta3LSbq1KjzBlJv-_Fm-vgabvPdq-QHYj2_hAcaRMda4vqnBPt99Gja2FphLz6WrsTLXp6JXKvg",
+  "tokenExpiresIn": 1685547217697,
+  "userId": "admin@hingom.com",
+  "username": "흰곰 관리자",
+  "role": "ROLE_ADMIN",
+  "roleName": "시스템 관리자",
+  "departments": []
+}

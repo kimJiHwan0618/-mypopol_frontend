@@ -1,0 +1,159 @@
+body,
+html,
+#root {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100%;
+  position: relative;
+}
+
+.signin__wrap {
+  height: 100%;
+  background: white;
+}
+
+.signin__wrap > div {
+  border-radius: 0px;
+  box-shadow: none;
+  background: none;
+  height: 100%;
+}
+
+.signin__wrap .inner {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.signin__wrap .inner > div {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 6rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+main > .container {
+  /* max-width: none !important; */
+  /* padding: 0px !important; */
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+.signin__wrap .inner > div > div.inner__left {
+  height: 100%;
+  max-width: 330px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.signin__wrap .inner div > h1 {
+  font-size: 2.6rem;
+  margin-top: 32px;
+}
+.signin__wrap .inner > .left {
+  align-items: flex-end;
+}
+
+.signin__wrap .inner > .right > svg {
+  position: absolute;
+}
+.signin__wrap .inner > .right > svg:first-of-type {
+  right: -64px;
+  top: -64px;
+  opacity: 0.2;
+  width: 220px;
+  height: 192px;
+  color: rgb(100, 116, 139);
+}
+.signin__wrap .inner > .right > svg circle {
+  color: rgb(100, 116, 139);
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+.signin__wrap .inner > .right > svg:nth-of-type(2) {
+  left: 0;
+  top: 0;
+}
+
+.signin__wrap .inner > .right > svg > g {
+  color: rgb(100, 116, 139);
+  opacity: 0.2;
+}
+.signin__wrap .inner > .left > .inner__left > div {
+  display: flex;
+  margin-bottom: 32px;
+}
+.signin__wrap .inner a {
+  margin-left: 6px;
+  color: var(--main-color);
+  font-weight: 800;
+}
+
+.signin__wrap .inner > .left > .inner__left form > div {
+  margin-bottom: 24px;
+}
+.signin__wrap .inner > .left > .inner__left form > div:nth-of-type(3) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.signin__wrap .inner > .left > .inner__left form > button {
+  width: 100%;
+}
+.signin__wrap .inner > .right {
+  background: rgb(30, 41, 59);
+  color: white;
+  overflow: hidden;
+}
+.signin__wrap .inner > .right > h2 {
+  font-size: 3.2rem;
+  margin-bottom: 24px;
+}
+.signin__wrap .inner > .right > p {
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+
+@media (max-width: 960px) {
+  .signin__wrap .inner > .right {
+    display: none;
+  }
+  .signin__wrap .inner > div > div.inner__left {
+    max-width: none;
+  }
+  .signin__wrap .inner {
+    justify-content: center;
+    background: rgb(241, 245, 249);
+    align-items: center;
+  }
+  .signin__wrap .inner > div {
+    padding: 48px;
+    background: white;
+    border-radius: 16px;
+    height: 100%;
+    min-height: 488px;
+    max-height: calc(100vh - 32px);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
+    --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+  }
+}
+@media (max-width: 600px) {
+  .signin__wrap .inner > div {
+    max-height: none;
+    width: 100%;
+  }
+  .signin__wrap .inner > .left {
+    align-items: center;
+  }
+}

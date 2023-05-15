@@ -1,0 +1,152 @@
+@charset "utf-8";
+
+/*reset.css*/
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+li,
+ol,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+fieldset,
+input,
+textarea,
+p,
+blockquote,
+th,
+td,
+table,
+small,
+b,
+i,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+menu,
+nav,
+section,
+video {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+img,
+fieldset {
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+address,
+caption,
+cite,
+code,
+em,
+strong,
+th {
+  font-style: normal;
+  font-weight: normal;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+
+q:after,
+q:before {
+  content: "";
+}
+
+abbr,
+acronym {
+  border: none;
+}
+
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display: none;
+}
+
+img,
+input {
+  vertical-align: middle;
+  outline: none;
+}
+
+hr {
+  display: none;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  text-transform: none;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
