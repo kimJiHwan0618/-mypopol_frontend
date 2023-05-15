@@ -4,9 +4,8 @@ module.exports = (app) => {
   app.use(
     createProxyMiddleware(['/api'], {
       target: 'http://localhost:3000',
-      // target: 'https://diamond.hingomdev.com/api',
+      // target: 'https://kimjihodo.synology.me:3001',
       changeOrigin: true,
-      router: {},
       pathRewrite: {
         '^/api': '',
       },

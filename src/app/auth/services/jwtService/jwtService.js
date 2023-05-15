@@ -5,13 +5,11 @@ import jwtServiceConfig from './jwtServiceConfig';
 /* eslint-disable camelcase */
 class JwtService extends FuseUtils.EventEmitter {
   init() {
-    console.log('실행확인 1 --');
     this.setInterceptors();
     this.handleAuthentication();
   }
 
   setInterceptors = () => {
-    console.log('실행확인 2 --');
     axios.interceptors.response.use(
       (response) => {
         return response;
@@ -30,7 +28,6 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   handleAuthentication = () => {
-    console.log('실행확인 3 --');
     const access_token = this.getAccessToken();
     if (!access_token) {
       this.emit('onNoAccessToken');
@@ -48,7 +45,6 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   createUser = (user) => {
-    console.log('실행확인 4 --');
     return new Promise((resolve, reject) => {
       axios
         .post(jwtServiceConfig.signUp, user)
@@ -69,12 +65,13 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithEmailAndPassword = (userKey, userId, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/api/auth/login', {
+        .post(process.env.REACT_APP_HOST + jwtServiceConfig.signIn, {
           userKey,
           userId,
           password,
         })
         .then((response) => {
+          console.log(response);
           if (response.data.code === 200) {
             const data = response.data.response;
             this.setSession(data.accessToken);
@@ -96,7 +93,7 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.accessToken, {
+        .get(process.env.REACT_APP_HOST + jwtServiceConfig.accessToken, {
           access_token: this.getAccessToken(),
         })
         .then((response) => {
@@ -117,14 +114,12 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   updateUserData = (user) => {
-    console.log('실행확인 7 --');
     return axios.post(jwtServiceConfig.updateUser, {
       user,
     });
   };
 
   setSession = (access_token) => {
-    console.log('실행확인 8 --');
     if (access_token) {
       localStorage.setItem('jwt_access_token', access_token);
       axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
@@ -140,7 +135,6 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   isAuthTokenValid = (access_token) => {
-    console.log('실행확인 9 --');
     /* if (!access_token) {
       return false;
     }
@@ -155,7 +149,6 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   getAccessToken = () => {
-    console.log('실행확인 10 --');
     return window.localStorage.getItem('jwt_access_token');
   };
 }
