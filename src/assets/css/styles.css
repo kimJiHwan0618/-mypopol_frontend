@@ -186,7 +186,7 @@ main>.container {
 }
 
 .gridjs-wrapper {
-  min-height: 493.6px;
+  /* min-height: 493.6px; */
   overflow-x: auto;
 }
 
