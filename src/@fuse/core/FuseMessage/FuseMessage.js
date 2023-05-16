@@ -1,4 +1,4 @@
-import { amber, blue, green } from '@mui/material/colors';
+import { amber, deepOrange, green } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
@@ -25,7 +25,7 @@ const StyledSnackbar = styled(Snackbar)(({ theme, variant }) => ({
     }),
 
     ...(variant === 'info' && {
-      backgroundColor: blue[600],
+      backgroundColor: deepOrange[300],
       color: '#FFFFFF',
     }),
 

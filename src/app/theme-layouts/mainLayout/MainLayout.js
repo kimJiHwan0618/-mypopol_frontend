@@ -1,15 +1,16 @@
 import FuseSuspense from '@fuse/core/FuseSuspense';
 import { memo, useContext, useState } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useRoutes, useLocation } from 'react-router-dom';
 import AppContext from 'app/AppContext';
 import { selectFuseCurrentLayoutConfig } from 'app/store/fuse/settingsSlice';
 import { useSelector } from 'react-redux';
 import FuseMessage from '@fuse/core/FuseMessage';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { Header, SideMenuBar } from './components';
+import { Header, SideMenuBar, MainTitleBar } from './components';
 
 function MainLayout() {
+  const location = useLocation();
   const [menuBarStatus, setMenuBarStatus] = useState();
   const menuBarToggle = (menuBarStatus) => {
     setMenuBarStatus(menuBarStatus);
@@ -30,6 +31,7 @@ function MainLayout() {
         {config.toolbar.display && (
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
         )}
+        {config.toolbar.display && location.pathname.split('/')[1] !== 'apps' && <MainTitleBar />}
         <FuseSuspense>{useRoutes(routes)}</FuseSuspense>
       </main>
       <FuseMessage />

@@ -85,7 +85,8 @@
   --tw-backdrop-opacity: '';
   --tw-backdrop-saturate: '';
   --tw-backdrop-sepia: '';
-  --main-color: #00b0f0;
+  --main-color: #ff9c3a;
+  /* --main-color: #00b0f0; */
 }
 
 .shadow-5 {
@@ -306,7 +307,7 @@ header .selector__label>ul {
 }
 
 .custom__btn:hover {
-  background: #0f93c3;
+  background: #e08122;
 }
 
 .custom__btn>span {

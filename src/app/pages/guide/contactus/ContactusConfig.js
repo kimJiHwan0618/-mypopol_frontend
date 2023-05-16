@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-const TemplatesDashboard = lazy(() => import('./TemplateDashboard'));
+const Contactus = lazy(() => import('./Contactus'));
 
 const config = {
   settings: {
@@ -10,8 +10,8 @@ const config = {
   },
   routes: [
     {
-      path: 'dashboard/template',
-      element: <TemplatesDashboard />,
+      path: 'guide/contactus',
+      element: <Contactus />,
     },
   ],
 };

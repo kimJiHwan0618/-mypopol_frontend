@@ -9,7 +9,7 @@ function DashBoard() {
   console.log(user);
 
   return (
-    <div className="section__grid__wrap content dashboard">
+    <div className="section__grid__wrap content">
       <h1>환영합니다 {user.userId}님!</h1>
     </div>
   );

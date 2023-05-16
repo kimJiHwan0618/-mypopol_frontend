@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 
-const TemplatesDashboard = lazy(() => import('./TemplateDashboard'));
+const Manual = lazy(() => import('./Manual'));
 
 const config = {
   settings: {
@@ -10,8 +10,8 @@ const config = {
   },
   routes: [
     {
-      path: 'dashboard/template',
-      element: <TemplatesDashboard />,
+      path: 'guide/manual',
+      element: <Manual />,
     },
   ],
 };

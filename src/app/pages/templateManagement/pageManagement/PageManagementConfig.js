@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 const PageManagement = lazy(() => import('./PageManagement'));
 
-const PageManagementConfig = {
+const config = {
   settings: {
     layout: {
       config: {},
@@ -16,4 +16,4 @@ const PageManagementConfig = {
   ],
 };
 
-export default PageManagementConfig;
+export default config;

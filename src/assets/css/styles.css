@@ -245,6 +245,57 @@ table.gridjs-table tr td {
   background: url(../img/icon/ic_calendar.svg) no-repeat 50% 50%;
 }
 
+#pageTitleWrap {
+  grid-column: span 4 / span 4;
+  box-sizing: border-box;
+  padding: 24px 36px 0px;
+}
+
+#pageTitleWrap>h2 {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+#pageTitleWrap>p {
+  color: rgb(135, 140, 150);
+}
+
+#pageTitleWrap>ul {
+  display: flex;
+}
+
+#pageTitleWrap>ul li {
+  display: flex;
+  align-items: center;
+}
+
+#pageTitleWrap>ul>li span {
+  color: rgb(135, 140, 150);
+  margin: 0 6px;
+}
+
+#pageTitleWrap>ul>li p,
+#pageTitleWrap>ul>li a {
+  text-decoration: none;
+  color: rgb(135, 140, 150);
+  cursor: pointer;
+}
+
+#pageTitleWrap>ul>li p:hover,
+#pageTitleWrap>ul>li a:hover {
+  color: var(--main-color);
+}
+
+#pageTitleWrap>ul>li p,
+#pageTitleWrap>ul>li a {
+  pointer-events: none;
+}
+
+#pageTitleWrap>ul>li:last-of-type span {
+  display: none;
+}
+
+
 @media (max-width: 1200px) {
   .main__nav+.modal__bg {
     display: block;

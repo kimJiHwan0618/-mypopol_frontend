@@ -7,18 +7,15 @@ import {
 import FuseUtils from '@fuse/utils';
 import _ from '@lodash';
 import axios from 'axios';
-import menuJson from 'app/menu.json';
 
 const navigationAdapter = createEntityAdapter();
 const emptyInitialState = {};
 const initialState = navigationAdapter.upsertMany(emptyInitialState, []);
 
 export const getSideMenus = createAsyncThunk('common/sideMenus', async (user) => {
-  // const response = await axios.get(`/api/common/sideMenus/${user.role}`);
-  // const data = await response.data;
-  console.log("가져와라 메뉴 --------------")
-  console.log(menuJson)
-  return menuJson;
+  const response = await axios.get(`${process.env.REACT_APP_API_HOST}/common/sideMenus?roleId=${user.roleId}`);
+  const data = await response.data;
+  return JSON.parse(data.response.menuJson);
 });
 
 export const appendNavigationItem = (item, parentId) => (dispatch, getState) => {

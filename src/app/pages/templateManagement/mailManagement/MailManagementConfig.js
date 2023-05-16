@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 const MailManagement = lazy(() => import('./MailManagement'));
 
-const MailManagementConfig = {
+const confg = {
   settings: {
     layout: {
       config: {},
@@ -16,4 +16,4 @@ const MailManagementConfig = {
   ],
 };
 
-export default MailManagementConfig;
+export default confg;

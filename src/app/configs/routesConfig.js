@@ -8,6 +8,8 @@ import LandingPageConfig from 'app/pages/landing/LandingPageConfig';
 import DashboardConfig from 'app/pages/dashboard/templateDashboard/TemplateDashboardConfig';
 import MailManagementConfig from 'app/pages/templateManagement/mailManagement/MailManagementConfig';
 import PageManagementConfig from 'app/pages/templateManagement/pageManagement/PageManagementConfig';
+import ContactusConfig from 'app/pages/guide/contactus/ContactusConfig';
+import ManualConfig from 'app/pages/guide/manual/ManualConfig';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/pages/404/Error404Page';
 
@@ -19,7 +21,9 @@ const routeConfigs = [
   signUpConfig,
   DashboardConfig,
   MailManagementConfig,
-  PageManagementConfig
+  PageManagementConfig,
+  ContactusConfig,
+  ManualConfig
 ];
 
 const routes = [

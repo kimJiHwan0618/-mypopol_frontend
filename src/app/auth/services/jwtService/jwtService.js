@@ -65,7 +65,7 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithEmailAndPassword = (userKey, userId, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .post(process.env.REACT_APP_HOST + jwtServiceConfig.signIn, {
+        .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, {
           userKey,
           userId,
           password,
@@ -93,7 +93,7 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
       axios
-        .get(process.env.REACT_APP_HOST + jwtServiceConfig.accessToken, {
+        .get(process.env.REACT_APP_API_HOST + jwtServiceConfig.accessToken, {
           access_token: this.getAccessToken(),
         })
         .then((response) => {
