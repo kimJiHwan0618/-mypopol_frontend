@@ -97,7 +97,7 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
                         />
                       </svg> */}
                       <svg
-                        className="shrink-0 fill-current  fuse-list-item-icon shrink-0 MuiBox-root muiltr-syvc0x"
+
                         size="24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"

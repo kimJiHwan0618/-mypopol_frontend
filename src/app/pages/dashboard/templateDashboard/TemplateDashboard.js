@@ -12,6 +12,25 @@ function DashBoard() {
   return (
     <div className="section__grid__wrap content">
       {/* <!-- 총 포폴수 --> */}
+      <div className={css.selector__wrap}>
+        <TextField
+          select
+          value='카리보페이지'
+          label="포폴명"
+          id="searchGroupId"
+          variant="outlined"
+          fullWidth
+        // onChange={(e) => {
+        //   handleGroupComboChange(e.target.value);
+        // }}
+        >
+          {[{ name: "카리보페이지" }].map((obj, idx) => (
+            <MenuItem key={obj.code} value={obj.name}>
+              {obj.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
@@ -84,7 +103,7 @@ function DashBoard() {
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
-            <p className="f__medium">응원</p>
+            <p className="f__medium">댓글</p>
             <button>
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -98,71 +117,121 @@ function DashBoard() {
           </div>
           <dl>
             <dt className="f__medium">105</dt>
-            <dd className="f__medium">전체 응원</dd>
+            <dd className="f__medium">전체 댓글</dd>
           </dl>
         </div>
       </section>
       {/* <!-- // 응원 --> */}
       <section className={css.status__template}>
-        <div className={`${css.template__info__wrap1} section__inner`}>
+        <div className={`${css.template__info__wrap} section__inner`}>
           <div className='template__info'>
             <div className={css.status__top2}>
               <p className="normal__title f__medium">포폴 현황</p>
-              <div className='right'>
-                <div className='selector__wrap'>
-                  <TextField
-                    select
-                    value='카리보페이지'
-                    label="포폴명"
-                    id="searchGroupId"
-                    variant="outlined"
-                    fullWidth
-                  // onChange={(e) => {
-                  //   handleGroupComboChange(e.target.value);
-                  // }}
-                  >
-                    {[{ name: "카리보페이지" }].map((obj, idx) => (
-                      <MenuItem key={obj.code} value={obj.name}>
-                        {obj.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </div>
-              </div>
             </div>
             <div className={css.img__box}>
               <img src={require('assets/img/thumbnail.jpg')} alt='썸네일 이미지 테스트' />
             </div>
+            <ul>
+              <li>
+                <a href='#'>
+                  <dl>
+                    <dt className='f__medium'>링크</dt>
+                    <dd>site.mypopol.com/tem1/caribo</dd>
+                  </dl>
+                  <svg
+                    size="24"
+                    viewBox="0 0 100 100"
+                  >
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href='#'>
+                  <dl>
+                    <dt className='f__medium'>페이지 템플릿</dt>
+                    <dd>PTID01</dd>
+                  </dl>
+                  <svg
+                    size="24"
+                    viewBox="0 0 100 100"
+                  >
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <dl>
+                    <dt className='f__medium'>메일 템플릿</dt>
+                    <dd>MTID01</dd>
+                  </dl>
+                  <svg
+
+                    size="24"
+                    viewBox="0 0 100 100"
+                  >
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
+                    />
+                  </svg>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <dl>
+                    <dt className='f__medium'>남은기한</dt>
+                    <dd>340일</dd>
+                  </dl>
+                  <svg
+                    className="shrink-0 fill-current  fuse-list-item-icon shrink-0 MuiBox-root muiltr-syvc0x"
+                    size="24"
+                    fill='none'
+                    viewBox="0 0 100 100"
+                  >
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-sm-right`}
+                    />
+                  </svg>
+                </a>
+              </li>
+            </ul>
           </div>
           <div className='cheering__grid'>
             <div className={css.status__top2}>
-              <p className="normal__title f__medium">한마디 응원</p>
-              <div className='right'>
-                <button className="custom__btn">
-                  <span className="f__medium">더보기</span>
-                </button>
-              </div>
+              <p className="normal__title f__medium">한줄 댓글</p>
             </div>
-            <Grid
-              sort="true"
-              className="grid"
-              data={[
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-              ]}
-              columns={[
-                { name: "시간", id: "evttime", width: 150 },
-                { name: "한줄응원", id: "comment" },
-              ]}
-              pagination={{
-                enabled: true,
-                limit: 10,
-              }}
-            />
+            <div className='grid__wrap'>
+              <Grid
+                sort="true"
+                className="grid"
+                data={[
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                ]}
+                columns={[
+                  { name: "시간", id: "evttime", width: 150 },
+                  { name: "한줄응원", id: "comment" },
+                ]}
+                pagination={{
+                  enabled: true,
+                  limit: 10,
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
