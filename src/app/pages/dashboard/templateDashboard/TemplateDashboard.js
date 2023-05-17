@@ -1,13 +1,13 @@
-import { selectUser } from 'app/store/userSlice';
-import { useSelector } from 'react-redux';
-import { Grid } from 'gridjs-react';
-import css from "assets/css/templateDashboard.module.css"
+import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { useState } from 'react';
 
 function DashBoard() {
-  const user = useSelector(selectUser);
+  // const user = useSelector(selectUser);
+  const [term, setTerm] = useState(0);
+  const [countType, setCountType] = useState(0);
 
   return (
     <div className="section__grid__wrap content">
@@ -15,16 +15,16 @@ function DashBoard() {
       <div className={css.selector__wrap}>
         <TextField
           select
-          value='카리보페이지'
+          value="카리보페이지"
           label="포폴명"
           id="searchGroupId"
           variant="outlined"
           fullWidth
-        // onChange={(e) => {
-        //   handleGroupComboChange(e.target.value);
-        // }}
+          // onChange={(e) => {
+          //   handleGroupComboChange(e.target.value);
+          // }}
         >
-          {[{ name: "카리보페이지" }].map((obj, idx) => (
+          {[{ name: '카리보페이지' }].map((obj, idx) => (
             <MenuItem key={obj.code} value={obj.name}>
               {obj.name}
             </MenuItem>
@@ -122,121 +122,140 @@ function DashBoard() {
         </div>
       </section>
       {/* <!-- // 응원 --> */}
-      <section className={css.status__template}>
+      {/* 포폴 정보 & 한줄 댓글 */}
+      <section className={css.fw__section}>
         <div className={`${css.template__info__wrap} section__inner`}>
-          <div className='template__info'>
+          <div className="template__info">
             <div className={css.status__top2}>
-              <p className="normal__title f__medium">포폴 현황</p>
+              <p className="normal__title f__medium">포폴 정보</p>
             </div>
             <div className={css.img__box}>
-              <img src={require('assets/img/thumbnail.jpg')} alt='썸네일 이미지 테스트' />
+              <img src={require('assets/img/thumbnail.jpg')} alt="썸네일 이미지 테스트" />
             </div>
             <ul>
               <li>
-                <a href='#'>
-                  <dl>
-                    <dt className='f__medium'>링크</dt>
-                    <dd>site.mypopol.com/tem1/caribo</dd>
-                  </dl>
+                <dl>
+                  <dt>링크</dt>
+                  <dd>site.mypopol.com/ptid01/caribo</dd>
+                </dl>
+                <a href="http://caribo.me" target="_blank" className={css.icon} rel="noreferrer">
                   <svg
-                    size="24"
-                    viewBox="0 0 100 100"
-                  >
-                    <use
-                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
+                    id="external-link"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
                     />
                   </svg>
                 </a>
               </li>
               <li>
-                <a href='#'>
-                  <dl>
-                    <dt className='f__medium'>페이지 템플릿</dt>
-                    <dd>PTID01</dd>
-                  </dl>
-                  <svg
-                    size="24"
-                    viewBox="0 0 100 100"
-                  >
-                    <use
-                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
-                    />
-                  </svg>
-                </a>
+                <dl>
+                  <dt>페이지 템플릿</dt>
+                  <dd>PTID01</dd>
+                </dl>
               </li>
               <li>
-                <a href="#">
-                  <dl>
-                    <dt className='f__medium'>메일 템플릿</dt>
-                    <dd>MTID01</dd>
-                  </dl>
-                  <svg
-
-                    size="24"
-                    viewBox="0 0 100 100"
-                  >
-                    <use
-                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-right`}
-                    />
-                  </svg>
-                </a>
+                <dl>
+                  <dt>메일 템플릿</dt>
+                  <dd>MTID01</dd>
+                </dl>
               </li>
               <li>
-                <a href="#">
-                  <dl>
-                    <dt className='f__medium'>남은기한</dt>
-                    <dd>340일</dd>
-                  </dl>
-                  <svg
-                    className="shrink-0 fill-current  fuse-list-item-icon shrink-0 MuiBox-root muiltr-syvc0x"
-                    size="24"
-                    fill='none'
-                    viewBox="0 0 100 100"
-                  >
-                    <use
-                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#arrow-sm-right`}
-                    />
-                  </svg>
-                </a>
+                <dl>
+                  <dt>남은기한</dt>
+                  <dd>340일</dd>
+                </dl>
+              </li>
+              <li>
+                <dl>
+                  <dt>마지막 수정일시</dt>
+                  <dd>05-17 17:48</dd>
+                </dl>
               </li>
             </ul>
           </div>
-          <div className='cheering__grid'>
+          <div className="cheering__grid">
             <div className={css.status__top2}>
               <p className="normal__title f__medium">한줄 댓글</p>
             </div>
-            <div className='grid__wrap'>
-              <Grid
+            <div className="grid__wrap">
+              {/* <Grid
                 sort="true"
                 className="grid"
                 data={[
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
-                  { evttime: "05/16 17:00:53", comment: "웹툰이 너무 재밌어요!!" },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
+                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
                 ]}
                 columns={[
-                  { name: "시간", id: "evttime", width: 150 },
-                  { name: "한줄응원", id: "comment" },
+                  { name: '시간', id: 'evttime', width: 150 },
+                  { name: '한줄응원', id: 'comment' },
                 ]}
                 pagination={{
                   enabled: true,
                   limit: 10,
                 }}
-              />
+              /> */}
             </div>
           </div>
         </div>
       </section>
+      {/* // 포폴 정보 & 한줄 댓글 */}
+      {/* 차트 웹 */}
+      <section className={css.fw__section}>
+        <div className="section__inner">
+          <div className={css.chart__top}>
+            <div className={css.status__top2}>
+              <p className="normal__title f__medium">트렌드 차트</p>
+            </div>
+            <div>
+              <div className={css.select__list}>
+                {['일별', '주별'].map((obj, idx) => (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTerm(idx);
+                    }}
+                    className={`${css.item} f__medium`}>
+                    <p>{obj}</p>
+                  </div>
+                ))}
+                <div style={{ left: 8 + 82 * term }} className={css.selected__tab} />
+              </div>
+              <div className={css.select__list}>
+                {['방문자', '메일', '한줄 댓글'].map((obj, idx) => (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCountType(idx);
+                    }}
+                    className={`${css.item} f__medium`}>
+                    <p>{obj}</p>
+                  </div>
+                ))}
+                <div style={{ left: 8 + 82 * countType }} className={css.selected__tab} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* // 차트 웹 */}
     </div>
   );
 }
 
 export default DashBoard;
+// export default React.memo(DashBoard);

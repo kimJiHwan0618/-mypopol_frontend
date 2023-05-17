@@ -3,7 +3,8 @@ nav.main__nav {
   width: 280px;
   max-width: 280px;
   transition: all 195ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
   background: rgb(17, 24, 39);
   height: 100vh;
   position: sticky;
@@ -14,14 +15,14 @@ nav.main__nav {
   margin-left: -280px;
 }
 
-nav.main__nav>.nav__inner {
+nav.main__nav > .nav__inner {
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: hidden;
 }
 
-nav.main__nav>.nav__inner>.top {
+nav.main__nav > .nav__inner > .top {
   padding-left: 20px;
   padding-right: 20px;
   align-items: center;
@@ -29,7 +30,7 @@ nav.main__nav>.nav__inner>.top {
   height: 72px;
 }
 
-nav.main__nav>.nav__inner>.top>div {
+nav.main__nav > .nav__inner > .top > div {
   flex: 1 1;
   display: flex;
   margin-left: 0.4rem;
@@ -38,17 +39,17 @@ nav.main__nav>.nav__inner>.top>div {
   color: white;
 }
 
-nav.main__nav>.nav__inner>.top>div h1 {
+nav.main__nav > .nav__inner > .top > div h1 {
   font-size: 1rem;
   margin-bottom: 2px;
 }
 
-nav.main__nav>.nav__inner>.top>div p {
+nav.main__nav > .nav__inner > .top > div p {
   font-size: 0.8rem;
   color: var(--main-color);
 }
 
-nav.main__nav>.nav__inner>.top>button {
+nav.main__nav > .nav__inner > .top > button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -76,11 +77,11 @@ nav.main__nav>.nav__inner>.top>button {
   padding: 0;
 }
 
-nav.main__nav>.nav__inner>.top>button:hover {
+nav.main__nav > .nav__inner > .top > button:hover {
   background-color: rgba(255, 255, 255, 0.08);
 }
 
-nav.main__nav>.nav__inner>.top>button svg {
+nav.main__nav > .nav__inner > .top > button svg {
   fill: currentColor;
   flex-shrink: 0;
   width: 20px;
@@ -92,7 +93,7 @@ nav.main__nav>.nav__inner>.top>button svg {
   color: rgb(255, 255, 255);
 }
 
-nav.main__nav>.nav__inner>.bottom {
+nav.main__nav > .nav__inner > .bottom {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -100,14 +101,14 @@ nav.main__nav>.nav__inner>.bottom {
   max-height: calc(100vh - 100px);
 }
 
-nav.main__nav>.nav__inner>.bottom>.profile__box {
+nav.main__nav > .nav__inner > .bottom > .profile__box {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.profile__box>.img__wrap {
+nav.main__nav > .nav__inner > .bottom > .profile__box > .img__wrap {
   width: 96px;
   height: 96px;
   border-radius: 100px;
@@ -115,28 +116,28 @@ nav.main__nav>.nav__inner>.bottom>.profile__box>.img__wrap {
   margin-bottom: 24px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.profile__box>.img__wrap>img {
+nav.main__nav > .nav__inner > .bottom > .profile__box > .img__wrap > img {
   width: 100%;
   height: 100%;
 }
 
-nav.main__nav>.nav__inner>.bottom>.profile__box>.name {
+nav.main__nav > .nav__inner > .bottom > .profile__box > .name {
   font-size: 1rem;
   line-height: 1.5;
 }
 
-nav.main__nav>.nav__inner>.bottom>.profile__box>.email {
+nav.main__nav > .nav__inner > .bottom > .profile__box > .email {
   line-height: 1.5;
   color: rgb(148, 163, 184);
   font-size: 0.9rem;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list {
+nav.main__nav > .nav__inner > .bottom > .menu__list {
   padding: 0 12px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>a,
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__title {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > a,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   display: flex;
@@ -146,28 +147,29 @@ nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__title {
   -webkit-transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>a:hover,
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__title:hover {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > a:hover,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title:hover {
   background: rgba(255, 255, 255, 0.05);
   color: white;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__title {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__title {
   cursor: pointer;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   margin-bottom: 4px;
   overflow: hidden;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item .txt {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .txt {
   flex: 1 1 auto;
+  font-size: 0.8rem;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item .arrow__btn {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .arrow__btn {
   width: 20px;
   height: 20px;
   display: inline-flex;
@@ -196,7 +198,7 @@ nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item .arrow__btn {
   margin-right: -12px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item .arrow__btn svg {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item .arrow__btn svg {
   color: inherit;
   width: 12px;
   height: 12px;
@@ -206,23 +208,23 @@ nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item .arrow__btn svg {
   line-height: 12;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list .icon {
+nav.main__nav > .nav__inner > .bottom > .menu__list .icon {
   display: inline-block;
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  max-height: 24px;
-  line-height: 24px;
-  font-size: 24px;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  max-height: 22px;
+  line-height: 22px;
+  font-size: 22px;
   margin-right: 16px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list .icon>svg {
+nav.main__nav > .nav__inner > .bottom > .menu__list .icon > svg {
   width: 100%;
   height: 100%;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list {
   height: 0px;
   transition-duration: 300ms;
   overflow: hidden;
@@ -230,53 +232,53 @@ nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list {
   -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list>div {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list > div {
   overflow: hidden;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list {
   overflow: visible;
 }
 
 /* 섭메뉴 개수별 기지정 */
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size1 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size1 {
   height: 44px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size2 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size2 {
   height: 92px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size3 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size3 {
   height: 140px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size4 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size4 {
   height: 188px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size5 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size5 {
   height: 236px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size6 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size6 {
   height: 294px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size7 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size7 {
   height: 342px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size8 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size8 {
   height: 390px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active>.sub__menu__list.size9 {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active > .sub__menu__list.size9 {
   height: 438px;
 }
 
 /* // 섭메뉴 개수별 기지정 */
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul a {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a {
   -webkit-tap-highlight-color: transparent;
   background-color: transparent;
   outline: 0px;
@@ -296,50 +298,51 @@ nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul a 
   border-radius: 6px;
   margin: 0px 0px 4px;
   padding: 10px 16px 10px 54px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7) !important;
   cursor: pointer;
   text-decoration: none !important;
+  font-size: 0.8rem;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul li {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul li {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
   margin-bottom: 4px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item a.active,
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active .sub__title {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item a.active,
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active .sub__title {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   margin-bottom: 4px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.page__active .sub__title {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.page__active .sub__title {
   background: rgba(255, 255, 255, 0.1);
   color: white;
   margin-bottom: 4px;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item.active .arrow__btn {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item.active .arrow__btn {
   -webkit-transform: rotate(90deg);
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul li.on a {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul li.on a {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul a:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgb(212, 212, 212) !important;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul a.active {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a.active {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
 }
 
-nav.main__nav>.nav__inner>.bottom>.menu__list>.list__item>.sub__menu__list ul a p {
+nav.main__nav > .nav__inner > .bottom > .menu__list > .list__item > .sub__menu__list ul a p {
   flex: 1 1 auto;
 }
 

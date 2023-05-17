@@ -46,7 +46,18 @@ video {
   margin: 0;
   padding: 0;
 }
-
+a.link,
+a:not([role='button'])[target='_blank'] {
+  background: none;
+  border: none;
+}
+a:visited {
+  color: #696969 !important;
+  background: none !important;
+}
+a:hover {
+  background: #ebebeb !important;
+}
 article,
 aside,
 details,
@@ -103,7 +114,7 @@ h6 {
 
 q:after,
 q:before {
-  content: "";
+  content: '';
 }
 
 abbr,
@@ -143,9 +154,9 @@ textarea {
 }
 
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
+[type='button'],
+[type='reset'],
+[type='submit'] {
   -webkit-appearance: button;
   background-color: transparent;
   background-image: none;
