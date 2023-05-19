@@ -3,6 +3,8 @@ import 'gridjs/dist/theme/mermaid.min.css';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
+import Button from '@mui/material/Button';
+import ReactApexChart from 'react-apexcharts';
 
 function DashBoard() {
   // const user = useSelector(selectUser);
@@ -182,8 +184,89 @@ function DashBoard() {
           <div className="cheering__grid">
             <div className={css.status__top2}>
               <p className="normal__title f__medium">한줄 댓글</p>
+              <Button variant="contained" className="custom__btn">
+                <span className="f__medium">더보기</span>
+              </Button>
             </div>
-            <div className="grid__wrap">
+            <div className={`${css.gird__wrap} vertical__scroll common__grid`}>
+              <table className={css.table}>
+                <thead>
+                  <tr>
+                    <th>
+                      <p className="f__medium">발생일시</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">내용</p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className={css.tbody}>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      <p className="f__medium">05-16 14:00</p>
+                    </th>
+                    <th>
+                      <p className="f__medium">다음 작품이 기대되요!</p>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
               {/* <Grid
                 sort="true"
                 className="grid"
@@ -249,6 +332,45 @@ function DashBoard() {
                 <div style={{ left: 8 + 82 * countType }} className={css.selected__tab} />
               </div>
             </div>
+          </div>
+          <div className="chart__wrap" style={{ marginTop: 24 }}>
+            <ReactApexChart
+              options={{
+                chart: {
+                  id: 'column-chart',
+                },
+                xaxis: {
+                  categories: ['05/07', '05/08', '05/09', '05/10', '05/11', '05/12', '05/13'],
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 10,
+                    dataLabels: {
+                      position: 'top', // top, center, bottom
+                    },
+                  },
+                },
+                dataLabels: {
+                  enabled: true,
+                  // formatter(val) {
+                  //   return `${val}%`;
+                  // },
+                  offsetY: -20,
+                  style: {
+                    fontSize: '12px',
+                    colors: ['#304758'],
+                  },
+                },
+              }}
+              series={[
+                {
+                  name: '메일',
+                  data: [30, 40, 45, 50, 49, 80, 20],
+                },
+              ]}
+              type="bar"
+              height={350}
+            />
           </div>
         </div>
       </section>

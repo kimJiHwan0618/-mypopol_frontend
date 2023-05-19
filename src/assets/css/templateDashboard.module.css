@@ -271,6 +271,18 @@
 .select__list > .selected__tab.active3 {
   left: 172px;
 }
+.table {
+  width: 100%;
+}
+.tbody {
+  overflow-y: auto;
+  height: 200px !important;
+}
+.gird__wrap {
+  overflow-y: auto;
+  min-height: 412px;
+  max-height: 412px;
+}
 @media (max-width: 960px) {
   .selector__wrap {
     grid-column: span 2 / span 2;
@@ -316,5 +328,9 @@
   }
   .select__list:first-of-type {
     margin-bottom: 8px;
+  }
+  .selector__wrap > div {
+    min-width: unset;
+    width: 100%;
   }
 }

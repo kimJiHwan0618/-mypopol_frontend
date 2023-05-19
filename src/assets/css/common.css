@@ -247,16 +247,26 @@ header .selector__label > ul {
   padding-left: 24px;
 }
 
+.common__grid > table thead th {
+  z-index: 50;
+}
+
 .common__grid > table tr > th {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgb(226, 232, 240);
   font-weight: 500;
   padding: 16px 14px;
   white-space: nowrap;
-  border-color: rgb(226, 232, 240);
   line-height: 2.4rem;
   display: table-cell;
   vertical-align: inherit;
   font-size: 0.9rem;
+  position: sticky;
+  top: 0;
+  background: white;
+}
+
+.common__grid > table thead {
+  border-top: 1px solid rgb(226, 232, 240);
 }
 
 .common__grid > table tr > th > p {
@@ -297,7 +307,7 @@ header .selector__label > ul {
   background-color: var(--main-color);
   text-transform: none;
   box-shadow: none;
-  border-radius: 20px;
+  border-radius: 6px;
   height: 40px;
   min-height: 40px;
   max-height: 40px;
