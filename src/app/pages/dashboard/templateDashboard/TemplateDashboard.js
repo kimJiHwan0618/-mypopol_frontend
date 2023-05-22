@@ -2,14 +2,28 @@ import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import ReactApexChart from 'react-apexcharts';
+import { sftpTest } from 'app/store/dashboardSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 function DashBoard() {
   // const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const [term, setTerm] = useState(0);
   const [countType, setCountType] = useState(0);
+
+  useEffect(() => {
+    dispatch(sftpTest({ gd: "test" })).then(({ payload }) => {
+      console.log(payload)
+    })
+      .catch((error) => {
+        toast.error("sftp api 에러입니다.");
+        console.log(error)
+      })
+  }, [])
 
   return (
     <div className="section__grid__wrap content">
@@ -22,9 +36,9 @@ function DashBoard() {
           id="searchGroupId"
           variant="outlined"
           fullWidth
-          // onChange={(e) => {
-          //   handleGroupComboChange(e.target.value);
-          // }}
+        // onChange={(e) => {
+        //   handleGroupComboChange(e.target.value);
+        // }}
         >
           {[{ name: '카리보페이지' }].map((obj, idx) => (
             <MenuItem key={obj.code} value={obj.name}>
@@ -267,31 +281,6 @@ function DashBoard() {
                   </tr>
                 </tbody>
               </table>
-              {/* <Grid
-                sort="true"
-                className="grid"
-                data={[
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                  { evttime: '05/16 17:00:53', comment: '웹툰이 너무 재밌어요!!' },
-                ]}
-                columns={[
-                  { name: '시간', id: 'evttime', width: 150 },
-                  { name: '한줄응원', id: 'comment' },
-                ]}
-                pagination={{
-                  enabled: true,
-                  limit: 10,
-                }}
-              /> */}
             </div>
           </div>
         </div>

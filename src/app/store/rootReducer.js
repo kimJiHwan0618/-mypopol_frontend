@@ -1,6 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import fuse from './fuse';
 import user from './userSlice';
+import dashboard from './dashboardSlice';
 import common from './common';
 
 const createReducer = (asyncReducers) => (state, action) => {
@@ -8,12 +9,13 @@ const createReducer = (asyncReducers) => (state, action) => {
     fuse,
     user,
     common,
+    dashboard,
     ...asyncReducers,
   });
 
   /*
-	Reset the redux store when user logged out
-	 */
+  Reset the redux store when user logged out
+   */
   if (action.type === 'user/userLoggedOut') {
     // state = undefined;
   }
