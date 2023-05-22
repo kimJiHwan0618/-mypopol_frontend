@@ -5,9 +5,7 @@ import TextField from '@mui/material/TextField';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import ReactApexChart from 'react-apexcharts';
-import { sftpTest } from 'app/store/dashboardSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 function DashBoard() {
   // const user = useSelector(selectUser);
@@ -16,14 +14,14 @@ function DashBoard() {
   const [countType, setCountType] = useState(0);
 
   useEffect(() => {
-    dispatch(sftpTest({ gd: "test" })).then(({ payload }) => {
-      console.log(payload)
-    })
-      .catch((error) => {
-        toast.error("sftp api 에러입니다.");
-        console.log(error)
-      })
-  }, [])
+    // dispatch(sftpTest({ gd: "test" })).then(({ payload }) => {
+    //   console.log(payload)
+    // })
+    //   .catch((error) => {
+    //     toast.error("sftp api 에러입니다.");
+    //     console.log(error)
+    //   })
+  }, []);
 
   return (
     <div className="section__grid__wrap content">
@@ -36,9 +34,9 @@ function DashBoard() {
           id="searchGroupId"
           variant="outlined"
           fullWidth
-        // onChange={(e) => {
-        //   handleGroupComboChange(e.target.value);
-        // }}
+          // onChange={(e) => {
+          //   handleGroupComboChange(e.target.value);
+          // }}
         >
           {[{ name: '카리보페이지' }].map((obj, idx) => (
             <MenuItem key={obj.code} value={obj.name}>
@@ -151,7 +149,7 @@ function DashBoard() {
             <ul>
               <li>
                 <dl>
-                  <dt>링크</dt>
+                  <dt className="f__medium">링크</dt>
                   <dd>site.mypopol.com/ptid01/caribo</dd>
                 </dl>
                 <a href="http://caribo.me" target="_blank" className={css.icon} rel="noreferrer">
@@ -171,25 +169,25 @@ function DashBoard() {
               </li>
               <li>
                 <dl>
-                  <dt>페이지 템플릿</dt>
-                  <dd>PTID01</dd>
+                  <dt className="f__medium">페이지 템플릿</dt>
+                  <dd>ptid01</dd>
                 </dl>
               </li>
               <li>
                 <dl>
-                  <dt>메일 템플릿</dt>
-                  <dd>MTID01</dd>
+                  <dt className="f__medium">메일 템플릿</dt>
+                  <dd>mtid01</dd>
                 </dl>
               </li>
               <li>
                 <dl>
-                  <dt>남은기한</dt>
+                  <dt className="f__medium">남은기한</dt>
                   <dd>340일</dd>
                 </dl>
               </li>
               <li>
                 <dl>
-                  <dt>마지막 수정일시</dt>
+                  <dt className="f__medium">마지막 수정일시</dt>
                   <dd>05-17 17:48</dd>
                 </dl>
               </li>
