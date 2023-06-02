@@ -1,12 +1,14 @@
 .template__section {
   grid-column: span 4 / span 4;
 }
+
 .template__top {
   align-items: center;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
 }
+
 .template__top p {
   color: #6b7280;
   font-size: 1rem;
@@ -28,7 +30,7 @@
 
 .img__box {
   border: 1px solid rgb(219, 219, 219);
-  background: rgb(243, 243, 243);
+  background: #FAFAFA;
   box-sizing: border-box;
   height: 220px;
   width: 440px;
@@ -36,6 +38,7 @@
   align-items: center;
   overflow: hidden;
 }
+
 .img__box img {
   width: 400px;
   height: 200px;
@@ -46,8 +49,7 @@
   width: calc(100% - 590px);
 }
 
-.list__wrap {
-}
+.list__wrap {}
 
 .list__wrap li {
   border-bottom: 1px solid #e2e8f0;
@@ -55,12 +57,14 @@
   justify-content: flex-start;
   align-items: center;
 }
+
 .list__wrap li dl {
   display: flex;
   align-items: center;
   padding: 12px 0;
   font-size: 0.9rem;
 }
+
 .link__icon {
   padding: 6px;
   width: 26px;
@@ -71,9 +75,11 @@
   border-radius: 100px;
   background: none;
 }
+
 .link__icon svg {
   fill: var(--main-color);
 }
+
 .list__wrap li dl dt {
   overflow: hidden;
   position: relative;
@@ -84,30 +90,40 @@
   min-width: 130px;
   max-width: 130px;
 }
+
 .list__wrap li dl dd {
   color: #6b7280;
-  white-space: nowrap; /* 텍스트가 한 줄로 표시되도록 설정 */
-  overflow: hidden; /* 영역을 넘어가는 텍스트를 숨김 */
-  text-overflow: ellipsis; /* 영역을 넘어가는 텍스트를 "..."으로 표시 */
+  white-space: nowrap;
+  /* 텍스트가 한 줄로 표시되도록 설정 */
+  overflow: hidden;
+  /* 영역을 넘어가는 텍스트를 숨김 */
+  text-overflow: ellipsis;
+  /* 영역을 넘어가는 텍스트를 "..."으로 표시 */
 }
+
 .icon__wrap {
   width: 97px;
 }
-.icon__wrap > li {
+
+.icon__wrap>li {
   height: 73px;
   display: flex;
   align-items: center;
 }
-.icon__wrap > li:first-of-type dl {
+
+.icon__wrap>li:first-of-type dl {
   background: #00c39f;
 }
-.icon__wrap > li:nth-of-type(2) dl {
+
+.icon__wrap>li:nth-of-type(2) dl {
   background: #00b7e1;
 }
-.icon__wrap > li:nth-of-type(3) dl {
+
+.icon__wrap>li:nth-of-type(3) dl {
   background: #9f70df;
 }
-.icon__wrap > li > dl {
+
+.icon__wrap>li>dl {
   display: flex;
   align-items: center;
   height: 70%;
@@ -117,87 +133,109 @@
   border-radius: 8px;
   color: white;
 }
-.icon__wrap > li > dl dt {
+
+.icon__wrap>li>dl dt {
   width: 24px;
   height: 24px;
   margin-right: 10px;
 }
-.icon__wrap > li > dl dt svg {
+
+.icon__wrap>li>dl dt svg {
   min-width: 100%;
   min-height: 100%;
 }
-.icon__wrap > li > dl dd {
+
+.icon__wrap>li>dl dd {
   font-size: 1.2rem;
 }
+
 @media (max-width: 1220px) {
   .content {
     flex-direction: column;
   }
+
   .list__wrap {
     margin: 24px 0;
   }
+
   .right__content {
     width: 80%;
     margin: 0 auto;
   }
+
   .img__box {
     width: 80%;
     margin: 0 auto;
   }
+
   .list__wrap li dl {
     width: calc(100% - 20px);
   }
+
   .icon__wrap {
     width: 80%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
   }
-  .icon__wrap > li {
+
+  .icon__wrap>li {
     width: 20%;
   }
-  .icon__wrap > li > dl {
+
+  .icon__wrap>li>dl {
     justify-content: space-between;
   }
 }
+
 @media (max-width: 800px) {
   .right__content {
     width: 100%;
   }
+
   .img__box {
     width: 100%;
   }
+
   .icon__wrap {
     width: 100%;
   }
-  .icon__wrap > li {
+
+  .icon__wrap>li {
     width: 32%;
   }
 }
+
 @media (max-width: 650px) {
-  .icon__wrap > li > dl dt {
+  .icon__wrap>li>dl dt {
     width: 18px;
     height: 18px;
     margin-right: 6px;
   }
-  .icon__wrap > li > dl dd {
+
+  .icon__wrap>li>dl dd {
     font-size: 1rem;
   }
+
   .list__wrap li dl {
     font-size: 0.8rem;
   }
+
   .link__icon {
     min-width: 20px;
     min-height: 20px;
   }
+
   .list__wrap li dl dt {
     min-width: 110px;
     max-width: 110px;
   }
+
   .img__box img {
     width: 300px;
     height: 150px;
   }
+
   .img__box {
     height: 160px;
     width: 100%;
