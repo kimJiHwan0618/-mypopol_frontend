@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import dashboardConfig from 'app/auth/services/dashboard/dashboardConfig';
 import axios from 'axios';
 
 export const sftpTest = createAsyncThunk(

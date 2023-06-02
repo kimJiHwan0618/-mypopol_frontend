@@ -1,10 +1,22 @@
 import css from 'assets/css/pageManagement.module.css';
 import { selectUser } from 'app/store/userSlice';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
+import { useState, useEffect } from 'react';
+import { getPageTemList } from 'app/store/pageTemplatesSlice';
 
 function PageManagement() {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPageTemList(user)).then(({ payload }) => {
+      console.log(payload)
+    })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, []);
 
   return (
     <div className="section__grid__wrap content">
