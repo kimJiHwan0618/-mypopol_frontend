@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 
-const PageManagement = lazy(() => import('./PageManagement'));
+const PageManagements = lazy(() => import('./PageManagements'));
+const PageManagement = lazy(() => import('./detail/PageManagement'));
 
 const config = {
   settings: {
@@ -11,6 +12,10 @@ const config = {
   routes: [
     {
       path: 'template/page',
+      element: <PageManagements />,
+    },
+    {
+      path: 'template/page/:userId',
       element: <PageManagement />,
     },
   ],

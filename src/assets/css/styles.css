@@ -104,6 +104,13 @@ main > .container {
   padding: 24px;
 }
 
+.section__grid__wrap.common__detail {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.section__grid__wrap.common__detail > .sub__nav {
+  grid-column: span 1 / span 1;
+}
+
 .section__grid__wrap > section > .section__inner {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
     var(--tw-shadow);
@@ -327,5 +334,12 @@ table.gridjs-table tr td {
 @media (max-width: 660px) {
   .section__grid__wrap {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .section__grid__wrap.common__detail > .sub__nav {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .section__grid__wrap.common__detail > .sub__nav > .left {
+    margin-bottom: 18px;
   }
 }
