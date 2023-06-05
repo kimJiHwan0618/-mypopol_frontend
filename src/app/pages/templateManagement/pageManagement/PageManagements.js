@@ -1,4 +1,4 @@
-import css from 'assets/css/pageManagement.module.css';
+import css from 'assets/css/pageManagements.module.css';
 import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
@@ -44,6 +44,7 @@ function PageManagements() {
                         title: '수정',
                         goBackUrl: 'template/page',
                       },
+                      template: obj
                     },
                   });
                 }}>
