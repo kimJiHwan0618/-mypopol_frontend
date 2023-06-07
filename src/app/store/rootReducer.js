@@ -2,8 +2,8 @@ import { combineReducers } from '@reduxjs/toolkit';
 import fuse from './fuse';
 import user from './userSlice';
 import dashboard from './dashboardSlice';
-import pageTemplates from './pageTemplatesSlice';
 import common from './common';
+// import pageTemplates from './pageTemplatesSlice';
 
 const createReducer = (asyncReducers) => (state, action) => {
   const combinedReducer = combineReducers({
@@ -11,7 +11,6 @@ const createReducer = (asyncReducers) => (state, action) => {
     user,
     common,
     dashboard,
-    pageTemplates,
     ...asyncReducers,
   });
 

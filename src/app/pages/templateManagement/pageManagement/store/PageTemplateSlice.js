@@ -1,14 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getPageTemList = createAsyncThunk(
-  'templatemanage/page/list',
+export const updatePageTem = createAsyncThunk(
+  'templateManage/page/update',
   async (param, { dispatch, rejectWithValue }) => {
     try {
+      console.log(param)
+      const formData = new FormData();
+      formData.append('fields', new Blob([JSON.stringify(param.fields)], { type: 'application/json' }));
+      formData.append('files', param.files);
+      console.log(formData)
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templatemanage/page/list`,
-        param
-      );
+        `${process.env.REACT_APP_API_HOST}/templatemanage/page/update`,
+        formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return await response;
     } catch (error) {
       if (!error.response.data) {
@@ -19,13 +27,6 @@ export const getPageTemList = createAsyncThunk(
   }
 );
 
-// export const setUser = createAsyncThunk('user/setUser', async (user, { dispatch, getState }) => {
-//   /*
-//     You can redirect the logged-in user to a specific route depending on his role
-//     */
-
-//   return user;
-// });
 
 const initialState = {
   // userRole: "",
@@ -33,8 +34,8 @@ const initialState = {
   // userName: "",
 };
 
-const pageTemplatesSlice = createSlice({
-  name: 'pageTemplates',
+const pageTemplateSlice = createSlice({
+  name: 'pageTemplate',
   initialState,
   // extraReducers: (builder) => {
   //   builder
@@ -46,4 +47,4 @@ const pageTemplatesSlice = createSlice({
 
 // export const selectUser = ({ common }) => common.user;
 
-export default pageTemplatesSlice.reducer;
+export default pageTemplateSlice.reducer;

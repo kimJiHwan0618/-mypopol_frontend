@@ -1,14 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 
-// function DetailTitleBar({ flag, deleteBtnClick, saveBtnClick, trigger }) {
-function DetailTitleBar() {
+function DetailTitleBar({ saveBtnClick, trigger }) {
+  // function DetailTitleBar() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const historyBack = () => {
-    // navigate(location.state === null ? -1 : location.state.detailLink.goBackUrl);
-    navigate(-1);
+    navigate(location.state === null ? -1 : location.state.detailLink.goBackUrl);
   };
 
   return (
@@ -34,11 +33,11 @@ function DetailTitleBar() {
           className="custom__btn"
           // disabled={_.isEmpty(dirtyFields) || !isValid}
           onClick={(e) => {
-            // trigger().then((isValid) => {
-            //   if (isValid) {
-            //     saveBtnClick();
-            //   }
-            // });
+            trigger().then((isValid) => {
+              if (isValid) {
+                saveBtnClick();
+              }
+            });
           }}>
           <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#upload`} />

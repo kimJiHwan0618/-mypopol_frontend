@@ -18,7 +18,6 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
   const [basePath, setBasePath] = useState();
 
   useEffect(() => {
-    console.log("가져왔다 메뉴 --")
     console.log(navigation)
     setBasePath(location.pathname.split('/')[1]);
   }, [location.pathname]);

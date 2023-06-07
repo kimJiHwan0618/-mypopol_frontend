@@ -3,9 +3,10 @@ import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
-import { getPageTemList } from 'app/store/pageTemplatesSlice';
-import dateParser from 'app/utils/dateParser';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import dateParser from 'app/utils/dateParser';
+import { getPageTemList } from './store/PageTemplatesSlice';
 
 function PageManagements() {
   const navigate = useNavigate();
@@ -22,13 +23,14 @@ function PageManagements() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error("데이터 조회 실패");
       });
   }, []);
 
   return (
     <div className="section__grid__wrap content">
       {popols.map((obj, idx) => (
-        <section className={css.template__section}>
+        <section key={obj.userKey + obj.ptId} className={css.template__section}>
           <div className={`${css.section__inner} section__inner`}>
             <div className={css.template__top}>
               <p>
@@ -42,7 +44,7 @@ function PageManagements() {
                     state: {
                       detailLink: {
                         title: '수정',
-                        goBackUrl: 'template/page',
+                        goBackUrl: '/template/page',
                       },
                       template: obj
                     },
