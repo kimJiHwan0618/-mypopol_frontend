@@ -1,12 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 // import FormControl from '@mui/material/FormControl';
 // import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
 import Paper from '@mui/material/Paper';
@@ -47,7 +45,7 @@ function SignInPage() {
 
   useEffect(
     (paramUserKey) => {
-      setValue('userKey', paramUserKey == null ? 'M42K128MC9EK2A' : paramUserKey, {
+      setValue('userKey', paramUserKey == null ? '' : paramUserKey, {
         shouldDirty: true,
         shouldValidate: true,
       });
@@ -175,8 +173,7 @@ function SignInPage() {
                   y="0"
                   width="20"
                   height="20"
-                  patternUnits="userSpaceOnUse"
-                >
+                  patternUnits="userSpaceOnUse">
                   <rect x="0" y="0" width="4" height="4" fill="currentColor" />
                 </pattern>
               </defs>
@@ -187,17 +184,14 @@ function SignInPage() {
               width="100%"
               height="100%"
               preserveAspectRatio="xMidYMax slice"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+              xmlns="http://www.w3.org/2000/svg">
               <g fill="none" stroke="currentColor" strokeWidth="100">
                 <circle r="234" cx="196" cy="23" />
                 <circle r="234" cx="790" cy="491" />
               </g>
             </svg>
             <h2>Mypopol Admin System</h2>
-            <p>
-              안녕하세요 Mypopol 관리자 시스템입니다.
-            </p>
+            <p>안녕하세요 Mypopol 관리자 시스템입니다.</p>
           </div>
         </div>
       </Paper>
