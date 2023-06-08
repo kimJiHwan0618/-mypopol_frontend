@@ -79,7 +79,9 @@ function PageManagement() {
     };
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
-        console.log(payload);
+        if (payload.data.response.code === 200) {
+          toast.success('업데이트 성공 ! 뒤로 한번 돌아갔다 와주세요 .. (개발중이라)');
+        }
       })
       .catch((error) => {
         toast.error('포폴 업데이트 실패');
