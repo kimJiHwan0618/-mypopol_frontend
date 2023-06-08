@@ -39,7 +39,7 @@ function DashBoard() {
         // }}
         >
           {[{ name: '카리보페이지' }].map((obj, idx) => (
-            <MenuItem key={obj.code} value={obj.name}>
+            <MenuItem key={obj.name} value={obj.name}>
               {obj.name}
             </MenuItem>
           ))}
@@ -299,6 +299,7 @@ function DashBoard() {
                       e.stopPropagation();
                       setTerm(idx);
                     }}
+                    key={idx}
                     className={`${css.item} f__medium`}>
                     <p>{obj}</p>
                   </div>
@@ -312,6 +313,7 @@ function DashBoard() {
                       e.stopPropagation();
                       setCountType(idx);
                     }}
+                    key={idx}
                     className={`${css.item} f__medium`}>
                     <p>{obj}</p>
                   </div>
