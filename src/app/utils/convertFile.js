@@ -1,4 +1,4 @@
-const convertRemoteImageToFile = (remoteImageUrl, fileName, callback) => {
+const convertRemoteImageToFile = (remoteImageUrl, fileName, fileType, callback) => {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', remoteImageUrl, true);
   xhr.responseType = 'blob';
@@ -9,7 +9,7 @@ const convertRemoteImageToFile = (remoteImageUrl, fileName, callback) => {
       blob.lastModifiedDate = new Date();
       blob.name = fileName;
 
-      return callback(null, blob);
+      return callback(null, new File([blob], fileName, { type: fileType }));
     }
 
     return callback(new Error('Failed to load remote image'));

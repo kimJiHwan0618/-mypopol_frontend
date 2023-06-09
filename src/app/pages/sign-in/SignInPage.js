@@ -8,8 +8,10 @@ import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
 import Paper from '@mui/material/Paper';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import Lottie from 'react-lottie';
+import animationData from 'app/data/loading.json';
 import jwtService from '../../auth/services/jwtService';
 import 'assets/css/signin.css';
 
@@ -32,6 +34,7 @@ const defaultValues = {
 };
 
 function SignInPage() {
+  const [loginLoading, setLoginLoading] = useState(false);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -45,23 +48,19 @@ function SignInPage() {
 
   useEffect(
     (paramUserKey) => {
-      setValue('userKey', paramUserKey == null ? '' : paramUserKey, {
+      const activeOption = {
         shouldDirty: true,
         shouldValidate: true,
-      });
-      setValue('userId', paramUserKey == null ? 'caribo1129' : paramUserKey, {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      setValue('password', paramUserKey == null ? '12345678' : '', {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
+      }
+      setValue('userKey', paramUserKey == null ? '' : paramUserKey, activeOption);
+      setValue('userId', paramUserKey == null ? 'caribo1129' : paramUserKey, activeOption);
+      setValue('password', paramUserKey == null ? '12345678' : '', activeOption);
     },
     [setValue]
   );
 
   function onSubmit({ userKey, userId, password }) {
+    setLoginLoading(true);
     jwtService
       .signInWithEmailAndPassword(userKey, userId, password)
       .then((user) => {
@@ -73,6 +72,9 @@ function SignInPage() {
         //   message: _error.message,
         // });
         toast.error(_error.message);
+      })
+      .finally(() => {
+        setLoginLoading(false);
       });
   }
 
@@ -156,10 +158,16 @@ function SignInPage() {
                   color="secondary"
                   className=" w-full mt-16 custom__btn f__bold"
                   aria-label="Sign in"
-                  disabled={_.isEmpty(dirtyFields) || !isValid}
+                  disabled={_.isEmpty(dirtyFields) || !isValid || loginLoading}
                   type="submit"
                   size="large">
-                  <span className="mx-8 text-white font-bold">로그인</span>
+                  {
+                    !loginLoading ? (
+                      <span className="mx-8 text-white font-bold">로그인</span>
+                    ) : (
+                      <Lottie options={{ loop: true, autoplay: true, animationData, }} />
+                    )
+                  }
                 </Button>
               </form>
             </div>

@@ -22,7 +22,7 @@ function MainLayout() {
 
   return (
     <div id="layout">
-      <ToastContainer position="bottom-right" />
+      <ToastContainer position="bottom-center" />
       {config.leftSidePanel.display && (
         <SideMenuBar menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
       )}

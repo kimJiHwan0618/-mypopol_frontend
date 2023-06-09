@@ -1,7 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import Lottie from 'react-lottie';
+import animationData from 'app/data/loading.json';
+import _ from '@lodash';
 
-function DetailTitleBar({ saveBtnClick, trigger }) {
+function DetailTitleBar({ saveBtnClick, isValid, dirtyFields, updateLoading }) {
   // function DetailTitleBar() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,18 +34,25 @@ function DetailTitleBar({ saveBtnClick, trigger }) {
         <Button
           variant="contained"
           className="custom__btn"
-          // disabled={_.isEmpty(dirtyFields) || !isValid}
+          disabled={_.isEmpty(dirtyFields) || !isValid || updateLoading}
           onClick={(e) => {
-            trigger().then((isValid) => {
-              if (isValid) {
-                saveBtnClick();
-              }
-            });
+            // trigger().then((isValid) => {
+            //   if (isValid) {
+            //     saveBtnClick();
+            //   }
+            // });
+            saveBtnClick();
           }}>
           <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#upload`} />
           </svg>
-          <span className="f__medium">저장</span>
+          {
+            !updateLoading ? (
+              <span className="f__medium">저장</span>
+            ) : (
+              <Lottie options={{ loop: true, autoplay: true, animationData, }} />
+            )
+          }
         </Button>
       </div>
     </div>

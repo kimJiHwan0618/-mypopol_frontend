@@ -22,6 +22,11 @@ function PageManagement() {
   const [thumbnailImg, setThumbnailImg] = useState(null);
   const popolSection = useRef(null);
   const profileSection = useRef(null);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const activeOption = {
+    shouldDirty: true,
+    shouldValidate: true,
+  }
 
   const schema = yup.object().shape({
     popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
@@ -47,6 +52,7 @@ function PageManagement() {
   const form = watch();
 
   const handleFileSelect = (arg) => {
+    arg.file = new File([arg.file], arg.file.name.replaceAll(" ", ""), { type: arg.file.type })
     if (arg.file.type.startsWith('image/')) {
       switch (arg.name) {
         case 'thumbnail':
@@ -77,15 +83,27 @@ function PageManagement() {
         thumbnailImg,
       },
     };
+    console.log(param)
+    setUpdateLoading(true)
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
         if (payload.data.response.code === 200) {
-          toast.success('업데이트 성공 ! 뒤로 한번 돌아갔다 와주세요 .. (개발중이라)');
+          if (thumbnailImg !== null) {
+            setValue('thumbnailOld', thumbnailImg.name, activeOption);
+          }
+          if (profileImg !== null) {
+            setValue('profileOld', profileImg.name, activeOption);
+          }
+          toast.success('포폴 정보가 업데이트 되었습니다!');
         }
       })
       .catch((error) => {
+        console.log(error)
         toast.error('포폴 업데이트 실패');
-      });
+      })
+      .finally(() => {
+        setUpdateLoading(false);
+      });;
   };
 
   const sectionTitleClick = (e) => {
@@ -99,6 +117,23 @@ function PageManagement() {
       el.nextSibling.style.height = '0px';
     }
   };
+
+  const setImgFile = (imgFileName, backFileName, setImgFile, ptId) => {
+    if (imgFileName !== null && imgFileName !== undefined && imgFileName !== '') {
+      setValue(backFileName, imgFileName, activeOption);
+      const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${imgFileName}`;
+      const fileName = imgFileName;
+      const imgType = `${imgFileName.split(".")[1]}` === "jpg" ? "jpeg" : `${imgFileName.split(".")[1]}`
+      convertFile(remoteImageUrl, fileName, `image/${imgType}`, function (error, file) {
+        if (error) {
+          toast.error(error);
+          return;
+        }
+        setImgFile(file);
+      });
+    }
+  }
+
   useEffect(() => {
     const {
       popolName,
@@ -111,42 +146,20 @@ function PageManagement() {
       profileImg: profile,
       ptId,
     } = location.state.template;
-    setValue('popolName', popolName);
-    setValue('mainColor', mainColor);
-    setValue('fakeName', fakeName);
-    setValue('email', email);
-    setValue('phone', phone.replaceAll('-', ''));
-    setValue('title', title);
-    setValue('thumbnail', thumbnail);
-    setValue('profile', profile);
-    if (thumbnail !== null && thumbnail !== undefined && thumbnail !== '') {
-      setValue('thumbnailOld', thumbnail);
-      const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${thumbnail}`;
-      const fileName = thumbnail;
-      convertFile(remoteImageUrl, fileName, function (error, file) {
-        if (error) {
-          toast.error(error);
-          return;
-        }
-        setThumbnailImg(file);
-      });
-    }
-    if (profile !== null && profile !== undefined && profile !== '') {
-      setValue('profileOld', profile);
-      const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${profile}`;
-      const fileName = profile;
-      convertFile(remoteImageUrl, fileName, function (error, file) {
-        if (error) {
-          toast.error(error);
-          return;
-        }
-        setProfileImg(file);
-      });
-    }
-  }, []);
+    setValue('popolName', popolName, activeOption);
+    setValue('mainColor', mainColor, activeOption);
+    setValue('fakeName', fakeName, activeOption);
+    setValue('email', email, activeOption);
+    setValue('phone', phone.replaceAll('-', ''), activeOption);
+    setValue('title', title, activeOption);
+    setValue('thumbnail', thumbnail, activeOption);
+    setValue('profile', profile, activeOption);
+    setImgFile(thumbnail, "thumbnailOld", setThumbnailImg, ptId)
+    setImgFile(profile, "profileOld", setProfileImg, ptId)
+  }, [setValue]);
   return (
     <div className={`section__grid__wrap content common__detail ${css.page__tem__wrap}`}>
-      <DetailTitleBar saveBtnClick={saveBtnClick} trigger={trigger} />
+      <DetailTitleBar saveBtnClick={saveBtnClick} isValid={isValid} dirtyFields={dirtyFields} updateLoading={updateLoading} />
       <section>
         <div className={`${css.detail__section} section__inner`}>
           <div
