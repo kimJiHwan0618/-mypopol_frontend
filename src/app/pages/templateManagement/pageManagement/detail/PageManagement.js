@@ -5,13 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DetailTitleBar } from 'app/theme-layouts/mainLayout/components';
 import { useLocation } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
-import TextField from '@mui/material/TextField';
 import css from 'assets/css/pageManagement.module.css';
 import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploader';
 import { useEffect, useState, useRef } from 'react';
 import convertFile from 'app/utils/convertFile';
 import { toast } from 'react-toastify';
+import { MenuItem, TextField, Button } from '@mui/material';
 import { updatePageTem } from '../store/PageTemplateSlice';
+import { setSearchedFlag } from '../store/PageTemplatesSlice';
 
 function PageManagement() {
   // const routeParams = useParams();
@@ -20,18 +21,21 @@ function PageManagement() {
   const location = useLocation();
   const [profileImg, setProfileImg] = useState(null);
   const [thumbnailImg, setThumbnailImg] = useState(null);
+  const [snsSelected, setSnsSelected] = useState('twitter');
+  const [snsList, setSnsList] = useState({});
   const popolSection = useRef(null);
   const profileSection = useRef(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
-  }
+  };
 
   const schema = yup.object().shape({
     popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
     thumbnail: yup.string(), // 파일여부?
     mainColor: yup.string().notOneOf([' ', null], '메인색상을 선택해 주세요.'),
+    icon: yup.string().notOneOf([' ', null], '아이콘타입을 선택해 주세요.'),
     fakeName: yup.string(),
     email: yup
       .string()
@@ -46,13 +50,23 @@ function PageManagement() {
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
-  const { reset, watch, control, getValues, setValue, onChange, setError, formState, trigger } =
-    methods;
+  const {
+    register,
+    reset,
+    watch,
+    control,
+    getValues,
+    setValue,
+    onChange,
+    setError,
+    formState,
+    trigger,
+  } = methods;
   const { errors, isValid, dirtyFields } = formState;
   const form = watch();
 
   const handleFileSelect = (arg) => {
-    arg.file = new File([arg.file], arg.file.name.replaceAll(" ", ""), { type: arg.file.type })
+    arg.file = new File([arg.file], arg.file.name.replaceAll(' ', ''), { type: arg.file.type });
     if (arg.file.type.startsWith('image/')) {
       switch (arg.name) {
         case 'thumbnail':
@@ -73,18 +87,27 @@ function PageManagement() {
   };
 
   const saveBtnClick = () => {
+    const snsKeys = Object.keys(snsList);
+    const clone = JSON.parse(JSON.stringify(snsList));
+    for (let i = 0; i < snsKeys.length; i += 1) {
+      clone[`${snsKeys[i]}`].id = `${getValues()[`${snsKeys[i]}Id`]}`;
+      clone[`${snsKeys[i]}`].link = `${getValues()[`${snsKeys[i]}Link`]}`;
+    }
+    setSnsList(clone);
     const param = {
       fields: {
         ...getValues(),
         ...{ userId: user.userId, ptId: location.state.template.ptId, userKey: user.userKey },
+        snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(snsList),
       },
       files: {
         profileImg,
         thumbnailImg,
       },
     };
-    console.log(param)
-    setUpdateLoading(true)
+    param.fields.phone = param.fields.phone.replace(/(\d{3})(\d{3,4})(\d{3,4})/, '$1-$2-$3');
+    console.log(param);
+    setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
         if (payload.data.response.code === 200) {
@@ -94,16 +117,17 @@ function PageManagement() {
           if (profileImg !== null) {
             setValue('profileOld', profileImg.name, activeOption);
           }
+          dispatch(setSearchedFlag(false));
           toast.success('포폴 정보가 업데이트 되었습니다!');
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         toast.error('포폴 업데이트 실패');
       })
       .finally(() => {
         setUpdateLoading(false);
-      });;
+      });
   };
 
   const sectionTitleClick = (e) => {
@@ -123,7 +147,8 @@ function PageManagement() {
       setValue(backFileName, imgFileName, activeOption);
       const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${imgFileName}`;
       const fileName = imgFileName;
-      const imgType = `${imgFileName.split(".")[1]}` === "jpg" ? "jpeg" : `${imgFileName.split(".")[1]}`
+      const imgType =
+        `${imgFileName.split('.')[1]}` === 'jpg' ? 'jpeg' : `${imgFileName.split('.')[1]}`;
       convertFile(remoteImageUrl, fileName, `image/${imgType}`, function (error, file) {
         if (error) {
           toast.error(error);
@@ -132,7 +157,7 @@ function PageManagement() {
         setImgFile(file);
       });
     }
-  }
+  };
 
   useEffect(() => {
     const {
@@ -145,6 +170,8 @@ function PageManagement() {
       title,
       profileImg: profile,
       ptId,
+      icon,
+      sns,
     } = location.state.template;
     setValue('popolName', popolName, activeOption);
     setValue('mainColor', mainColor, activeOption);
@@ -154,12 +181,32 @@ function PageManagement() {
     setValue('title', title, activeOption);
     setValue('thumbnail', thumbnail, activeOption);
     setValue('profile', profile, activeOption);
-    setImgFile(thumbnail, "thumbnailOld", setThumbnailImg, ptId)
-    setImgFile(profile, "profileOld", setProfileImg, ptId)
-  }, [setValue]);
+    setValue('icon', icon);
+    setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
+    setImgFile(profile, 'profileOld', setProfileImg, ptId);
+    if (sns !== null && sns !== '' && sns !== undefined) {
+      setSnsList(JSON.parse(sns));
+      const snsListLocal = JSON.parse(sns);
+      const snsKeys = Object.keys(snsListLocal);
+      const snsValues = Object.values(snsListLocal);
+      for (let i = 0; i < snsKeys.length; i += 1) {
+        // 필드 등록
+        register(`${snsKeys[i]}Id`, { required: `${snsKeys[i]} 아이디를 입력해주세요` });
+        register(`${snsKeys[i]}Link`, { required: `${snsKeys[i]} 링크를 입력해주세요` });
+        // 값 세팅
+        setValue(`${snsKeys[i]}Id`, snsValues[i].id, activeOption);
+        setValue(`${snsKeys[i]}Link`, snsValues[i].link, activeOption);
+      }
+    }
+  }, [setValue, register, setSnsList]);
   return (
     <div className={`section__grid__wrap content common__detail ${css.page__tem__wrap}`}>
-      <DetailTitleBar saveBtnClick={saveBtnClick} isValid={isValid} dirtyFields={dirtyFields} updateLoading={updateLoading} />
+      <DetailTitleBar
+        saveBtnClick={saveBtnClick}
+        isValid={isValid}
+        dirtyFields={dirtyFields}
+        updateLoading={updateLoading}
+      />
       <section>
         <div className={`${css.detail__section} section__inner`}>
           <div
@@ -200,7 +247,7 @@ function PageManagement() {
                               popolSection.current.style.height = 'auto';
                               setValue('thumbnail', '');
                             }}
-                            className="img__remove"
+                            className={css.remove__btn}
                           />
                         </div>
                       )}
@@ -289,7 +336,7 @@ function PageManagement() {
                               profileSection.current.style.height = 'auto';
                               setValue('profile', '');
                             }}
-                            className="img__remove"
+                            className={css.remove__btn}
                           />
                         </div>
                       )}
@@ -318,46 +365,6 @@ function PageManagement() {
               </div>
               <div className={css.list__item}>
                 <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      className="mb-24"
-                      label="이메일"
-                      autoFocus
-                      type="text"
-                      error={!!errors.email}
-                      helperText={errors?.email?.message}
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                />
-              </div>
-              <div className={css.list__item}>
-                <Controller
-                  name="phone"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      className="mb-24"
-                      label="전화번호"
-                      autoFocus
-                      type="text"
-                      error={!!errors.phone}
-                      helperText={errors?.phone?.message}
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                />
-              </div>
-              <div className={css.list__item}>
-                <Controller
                   name="title"
                   control={control}
                   render={({ field }) => (
@@ -374,7 +381,193 @@ function PageManagement() {
                 />
               </div>
               <div className={css.list__item}>
+                <TextField
+                  select
+                  value={getValues().icon}
+                  label="아이콘 타입"
+                  required
+                  variant="outlined"
+                  fullWidth
+                  onChange={(e) => {
+                    setValue('icon', e.target.value);
+                  }}>
+                  {[
+                    { name: '비트맵 아이콘', value: 'bite' },
+                    { name: '타입2 아이콘', value: 'ex' },
+                  ].map((obj, idx) => (
+                    <MenuItem key={obj.value} value={obj.value}>
+                      {obj.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div className={`${css.list__item} ${css.profile__icon__list}`}>
+                <div>
+                  <span className={css.profile__icon}>
+                    <img
+                      src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
+                      alt="이메일 아이콘"
+                    />
+                  </span>
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        className="mb-24"
+                        label="이메일"
+                        autoFocus
+                        type="text"
+                        error={!!errors.email}
+                        helperText={errors?.email?.message}
+                        variant="outlined"
+                        required
+                        fullWidth
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <span className={css.profile__icon}>
+                    <img
+                      src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
+                      alt="전화 아이콘"
+                    />
+                  </span>
+                  <Controller
+                    name="phone"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        className="mb-24"
+                        label="전화번호"
+                        autoFocus
+                        type="text"
+                        error={!!errors.phone}
+                        helperText={errors?.phone?.message}
+                        variant="outlined"
+                        required
+                        fullWidth
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+              <div className={css.list__item}>
                 <p className="f__medium">SNS 정보</p>
+                <div className={css.sns__selector}>
+                  <TextField
+                    select
+                    value={snsSelected}
+                    label="SNS"
+                    variant="outlined"
+                    fullWidth
+                    onChange={(e) => {
+                      setSnsSelected(e.target.value);
+                    }}>
+                    {[
+                      { name: '트위터', value: 'twitter' },
+                      { name: '인스타그램', value: 'instargram' },
+                      { name: '유튜브', value: 'youtube' },
+                    ].map((obj, idx) => (
+                      <MenuItem key={obj.value} value={obj.value}>
+                        {obj.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button
+                    variant="contained"
+                    className="custom__btn"
+                    onClick={() => {
+                      if (!Object.keys(snsList).includes(snsSelected)) {
+                        const clone = JSON.parse(JSON.stringify(snsList));
+                        register(`${snsSelected}Id`, {
+                          required: `${snsSelected} 아이디를 입력해주세요`,
+                        });
+                        register(`${snsSelected}Link`, {
+                          required: `${snsSelected} 링크를 입력해주세요`,
+                        });
+                        setValue(`${snsSelected}Id`, '', activeOption);
+                        setValue(`${snsSelected}Link`, '', activeOption);
+                        clone[`${snsSelected}`] = {
+                          name: '',
+                          link: '',
+                        };
+                        setSnsList(clone);
+                        profileSection.current.style.height = 'auto';
+                      }
+                    }}>
+                    <span className="f__medium">추가</span>
+                    <svg
+                      size="24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 100 100">
+                      <use
+                        href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#plus`}
+                      />
+                    </svg>
+                  </Button>
+                </div>
+                {Object.keys(snsList).map((obj) => (
+                  <div className={`${css.sns__item} ${css.profile__icon__list} ${css.flex__row}`}>
+                    <span className={css.profile__icon}>
+                      <img
+                        src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/${obj}.png`}
+                        alt={`${obj} icon`}
+                      />
+                    </span>
+                    <Controller
+                      name={`${obj}Id`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          className="mb-24"
+                          label="아이디"
+                          autoFocus
+                          type="text"
+                          // error={!!errors.fakeName}
+                          // helperText={errors?.fakeName?.message}
+                          variant="outlined"
+                          fullWidth
+                          required
+                        />
+                      )}
+                    />
+                    <Controller
+                      name={`${obj}Link`}
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          className="mb-24"
+                          label="링크"
+                          autoFocus
+                          type="text"
+                          // error={!!errors.fakeName}
+                          // helperText={errors?.fakeName?.message}
+                          variant="outlined"
+                          fullWidth
+                          required
+                        />
+                      )}
+                    />
+                    <span
+                      className={css.remove__btn}
+                      onClick={() => {
+                        const clone = JSON.parse(JSON.stringify(snsList));
+                        delete clone[obj];
+                        delete schema.fields[`${obj}Id`];
+                        delete schema.fields[`${obj}Link`];
+                        profileSection.current.style.height = 'auto';
+                        setSnsList(clone);
+                      }}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>

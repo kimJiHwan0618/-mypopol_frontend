@@ -1,9 +1,7 @@
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+import { MenuItem, Button, TextField } from '@mui/material';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import ReactApexChart from 'react-apexcharts';
 import { useDispatch } from 'react-redux';
 
@@ -34,9 +32,9 @@ function DashBoard() {
           id="searchGroupId"
           variant="outlined"
           fullWidth
-        // onChange={(e) => {
-        //   handleGroupComboChange(e.target.value);
-        // }}
+          // onChange={(e) => {
+          //   handleGroupComboChange(e.target.value);
+          // }}
         >
           {[{ name: '카리보페이지' }].map((obj, idx) => (
             <MenuItem key={obj.name} value={obj.name}>

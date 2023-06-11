@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import { Button } from '@mui/material';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import _ from '@lodash';
@@ -46,13 +46,11 @@ function DetailTitleBar({ saveBtnClick, isValid, dirtyFields, updateLoading }) {
           <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
             <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#upload`} />
           </svg>
-          {
-            !updateLoading ? (
-              <span className="f__medium">저장</span>
-            ) : (
-              <Lottie options={{ loop: true, autoplay: true, animationData, }} />
-            )
-          }
+          {!updateLoading ? (
+            <span className="f__medium">저장</span>
+          ) : (
+            <Lottie options={{ loop: true, autoplay: true, animationData }} />
+          )}
         </Button>
       </div>
     </div>

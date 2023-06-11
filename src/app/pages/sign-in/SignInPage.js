@@ -1,13 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import Button from '@mui/material/Button';
-// import FormControl from '@mui/material/FormControl';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-import TextField from '@mui/material/TextField';
+import { TextField, Button, Paper } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
-import Paper from '@mui/material/Paper';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Lottie from 'react-lottie';
@@ -51,7 +47,7 @@ function SignInPage() {
       const activeOption = {
         shouldDirty: true,
         shouldValidate: true,
-      }
+      };
       setValue('userKey', paramUserKey == null ? '' : paramUserKey, activeOption);
       setValue('userId', paramUserKey == null ? 'caribo1129' : paramUserKey, activeOption);
       setValue('password', paramUserKey == null ? '12345678' : '', activeOption);
@@ -161,13 +157,11 @@ function SignInPage() {
                   disabled={_.isEmpty(dirtyFields) || !isValid || loginLoading}
                   type="submit"
                   size="large">
-                  {
-                    !loginLoading ? (
-                      <span className="mx-8 text-white font-bold">로그인</span>
-                    ) : (
-                      <Lottie options={{ loop: true, autoplay: true, animationData, }} />
-                    )
-                  }
+                  {!loginLoading ? (
+                    <span className="mx-8 text-white font-bold">로그인</span>
+                  ) : (
+                    <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                  )}
                 </Button>
               </form>
             </div>

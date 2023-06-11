@@ -19,31 +19,27 @@ export const getPageTemList = createAsyncThunk(
   }
 );
 
-// export const setUser = createAsyncThunk('user/setUser', async (user, { dispatch, getState }) => {
-//   /*
-//     You can redirect the logged-in user to a specific route depending on his role
-//     */
-
-//   return user;
-// });
-
 const initialState = {
-  // userRole: "",
-  // userId: "",
-  // userName: "",
+  all: [],
+  searchedFlag: false,
 };
 
 const pageTemplatesSlice = createSlice({
   name: 'pageTemplates',
   initialState,
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(setUser.fulfilled, (state, action) => {
-  //       return action.payload;
-  //     });
-  // },
+  reducers: {
+    setPageTemplates: (state, action) => {
+      state.all = action.payload;
+    },
+    setSearchedFlag: (state, action) => {
+      state.searchedFlag = action.payload;
+    },
+  },
 });
 
-// export const selectUser = ({ common }) => common.user;
+export const { setPageTemplates, setSearchedFlag } = pageTemplatesSlice.actions;
+
+export const selectSearchedFlag = (state) => state.pageTemplates.searchedFlag;
+export const selectAllData = (state) => state.pageTemplates.all;
 
 export default pageTemplatesSlice.reducer;
