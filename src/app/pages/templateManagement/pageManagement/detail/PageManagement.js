@@ -98,7 +98,7 @@ function PageManagement() {
       fields: {
         ...getValues(),
         ...{ userId: user.userId, ptId: location.state.template.ptId, userKey: user.userKey },
-        snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(snsList),
+        snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(clone),
       },
       files: {
         profileImg,
@@ -181,7 +181,7 @@ function PageManagement() {
     setValue('title', title, activeOption);
     setValue('thumbnail', thumbnail, activeOption);
     setValue('profile', profile, activeOption);
-    setValue('icon', icon);
+    setValue('icon', icon, activeOption);
     setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
     setImgFile(profile, 'profileOld', setProfileImg, ptId);
     if (sns !== null && sns !== '' && sns !== undefined) {
@@ -381,25 +381,30 @@ function PageManagement() {
                 />
               </div>
               <div className={css.list__item}>
-                <TextField
-                  select
-                  value={getValues().icon}
-                  label="아이콘 타입"
-                  required
-                  variant="outlined"
-                  fullWidth
-                  onChange={(e) => {
-                    setValue('icon', e.target.value);
-                  }}>
-                  {[
-                    { name: '비트맵 아이콘', value: 'bite' },
-                    { name: '타입2 아이콘', value: 'ex' },
-                  ].map((obj, idx) => (
-                    <MenuItem key={obj.value} value={obj.value}>
-                      {obj.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                <Controller
+                  name="icon"
+                  control={control}
+                  defaultValue={activeOption}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      select
+                      label="아이콘 타입"
+                      required
+                      id="icon"
+                      variant="outlined"
+                      fullWidth>
+                      {[
+                        { name: '기본 아이콘', value: 'default' },
+                        { name: '비트맵 아이콘', value: 'bite' },
+                      ].map((obj, idx) => (
+                        <MenuItem key={obj.value} value={obj.value}>
+                          {obj.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  )}
+                />
               </div>
               <div className={`${css.list__item} ${css.profile__icon__list}`}>
                 <div>
@@ -492,7 +497,7 @@ function PageManagement() {
                         setValue(`${snsSelected}Id`, '', activeOption);
                         setValue(`${snsSelected}Link`, '', activeOption);
                         clone[`${snsSelected}`] = {
-                          name: '',
+                          id: '',
                           link: '',
                         };
                         setSnsList(clone);
