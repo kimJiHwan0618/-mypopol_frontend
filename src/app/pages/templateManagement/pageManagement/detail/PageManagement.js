@@ -106,7 +106,6 @@ function PageManagement() {
       },
     };
     param.fields.phone = param.fields.phone.replace(/(\d{3})(\d{3,4})(\d{3,4})/, '$1-$2-$3');
-    console.log(param);
     setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
@@ -149,12 +148,13 @@ function PageManagement() {
       const fileName = imgFileName;
       const imgType =
         `${imgFileName.split('.')[1]}` === 'jpg' ? 'jpeg' : `${imgFileName.split('.')[1]}`;
-      convertFile(remoteImageUrl, fileName, `image/${imgType}`, function (error, file) {
+      convertFile(remoteImageUrl, fileName, `image/${imgType}`, async function (error, file) {
         if (error) {
           toast.error(error);
           return;
         }
-        setImgFile(file);
+        console.log(file)
+        await setImgFile(file);
       });
     }
   };
@@ -409,10 +409,12 @@ function PageManagement() {
               <div className={`${css.list__item} ${css.profile__icon__list}`}>
                 <div>
                   <span className={css.profile__icon}>
-                    <img
-                      src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
-                      alt="이메일 아이콘"
-                    />
+                    {
+                      getValues().icon !== undefined && <img
+                        src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
+                        alt="이메일 아이콘"
+                      />
+                    }
                   </span>
                   <Controller
                     name="email"
@@ -435,10 +437,13 @@ function PageManagement() {
                 </div>
                 <div>
                   <span className={css.profile__icon}>
-                    <img
-                      src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
-                      alt="전화 아이콘"
-                    />
+                    {
+                      getValues().icon !== undefined && <img
+                        src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
+                        alt="전화 아이콘"
+                      />
+                    }
+
                   </span>
                   <Controller
                     name="phone"
@@ -517,7 +522,7 @@ function PageManagement() {
                   </Button>
                 </div>
                 {Object.keys(snsList).map((obj) => (
-                  <div className={`${css.sns__item} ${css.profile__icon__list} ${css.flex__row}`}>
+                  <div key={obj} className={`${css.sns__item} ${css.profile__icon__list} ${css.flex__row}`}>
                     <span className={css.profile__icon}>
                       <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/${obj}.png`}

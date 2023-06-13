@@ -71,7 +71,6 @@ class JwtService extends FuseUtils.EventEmitter {
           password,
         })
         .then((response) => {
-          console.log(response);
           if (response.data.code === 200) {
             const data = response.data.response;
             this.setSession(data.accessToken);

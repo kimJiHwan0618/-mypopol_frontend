@@ -5,12 +5,10 @@ export const updatePageTem = createAsyncThunk(
   'templateManage/page/update',
   async (param, { dispatch, rejectWithValue }) => {
     try {
-      console.log(param);
       const formData = new FormData();
       formData.append('fields', JSON.stringify(param.fields));
       formData.append('profileImg', param.files.profileImg);
       formData.append('thumbnailImg', param.files.thumbnailImg);
-      console.log(formData);
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templatemanage/page/update`,
         formData,
