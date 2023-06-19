@@ -46,7 +46,7 @@ function DashBoard() {
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
-            <p className="f__medium">포폴</p>
+            <p className="f__medium">작품</p>
             <button>
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -60,7 +60,7 @@ function DashBoard() {
           </div>
           <dl>
             <dt className="f__medium">1</dt>
-            <dd className="f__medium">전체 포트폴리오</dd>
+            <dd className="f__medium">전체 작품 수</dd>
           </dl>
         </div>
       </section>

@@ -153,7 +153,7 @@ function PageManagement() {
           toast.error(error);
           return;
         }
-        console.log(file)
+        console.log(file);
         await setImgFile(file);
       });
     }
@@ -409,12 +409,12 @@ function PageManagement() {
               <div className={`${css.list__item} ${css.profile__icon__list}`}>
                 <div>
                   <span className={css.profile__icon}>
-                    {
-                      getValues().icon !== undefined && <img
+                    {getValues().icon !== undefined && (
+                      <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
                         alt="이메일 아이콘"
                       />
-                    }
+                    )}
                   </span>
                   <Controller
                     name="email"
@@ -437,13 +437,12 @@ function PageManagement() {
                 </div>
                 <div>
                   <span className={css.profile__icon}>
-                    {
-                      getValues().icon !== undefined && <img
+                    {getValues().icon !== undefined && (
+                      <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
                         alt="전화 아이콘"
                       />
-                    }
-
+                    )}
                   </span>
                   <Controller
                     name="phone"
@@ -522,7 +521,9 @@ function PageManagement() {
                   </Button>
                 </div>
                 {Object.keys(snsList).map((obj) => (
-                  <div key={obj} className={`${css.sns__item} ${css.profile__icon__list} ${css.flex__row}`}>
+                  <div
+                    key={obj}
+                    className={`${css.sns__item} ${css.profile__icon__list} ${css.flex__row}`}>
                     <span className={css.profile__icon}>
                       <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/${obj}.png`}
@@ -590,7 +591,7 @@ function PageManagement() {
               sectionTitleClick(e);
             }}
             className={`${css.title__bar} top line`}>
-            <p className="f__medium normal__title">웹툰 정보</p>
+            <p className="f__medium normal__title">작품 정보</p>
             <span className={css.arrow__btn} />
           </div>
           <div className={`${css.section__content}`}>
