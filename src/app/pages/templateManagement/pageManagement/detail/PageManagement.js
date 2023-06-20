@@ -11,6 +11,7 @@ import { useEffect, useState, useRef } from 'react';
 import convertFile from 'app/utils/convertFile';
 import { toast } from 'react-toastify';
 import { MenuItem, TextField, Button } from '@mui/material';
+import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkModal';
 import { updatePageTem } from '../store/PageTemplateSlice';
 import { setSearchedFlag } from '../store/PageTemplatesSlice';
 
@@ -26,9 +27,19 @@ function PageManagement() {
   const popolSection = useRef(null);
   const profileSection = useRef(null);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [popOpen, setPopOpen] = useState(false);
+  const [popInfo, setPopInfo] = useState({});
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
+  };
+
+  const closeModal = () => {
+    setPopOpen(false);
+  };
+
+  const openModal = () => {
+    setPopOpen(true);
   };
 
   const schema = yup.object().shape({
@@ -154,7 +165,14 @@ function PageManagement() {
           return;
         }
         console.log(file);
-        await setImgFile(file);
+
+        const loadComplate = () => {
+          setImgFile(file);
+          // profileSection.current.style.height = 'auto';
+          // popolSection.current.style.height = 'auto';
+        };
+
+        await loadComplate();
       });
     }
   };
@@ -208,6 +226,7 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
+        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} />
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
@@ -596,21 +615,31 @@ function PageManagement() {
           </div>
           <div className={`${css.section__content}`}>
             <div className="inner">
-              {/* <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p>
-              <p>layout test</p> */}
+              <div className={css.list__item}>
+                <Button
+                  variant="contained"
+                  className="custom__btn"
+                  style={{ width: '100%' }}
+                  onClick={() => {
+                    setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
+                    openModal();
+                  }}>
+                  <span className="f__medium">작품 추가</span>
+                  <svg
+                    size="24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 100 100">
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#plus`}
+                    />
+                  </svg>
+                </Button>
+              </div>
+              <div className={css.list__item}>
+                <div />
+                <div />
+              </div>
             </div>
           </div>
         </div>

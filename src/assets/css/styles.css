@@ -318,6 +318,10 @@ table.gridjs-table tr td {
 .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
   height: 20px !important;
 }
+.ReactModal__Content {
+  left: 50% !important;
+  top: 50% !important;
+}
 @media (max-width: 1200px) {
   .main__nav + .modal__bg {
     display: block;

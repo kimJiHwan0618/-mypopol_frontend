@@ -1,0 +1,26 @@
+.wrap__inner {
+  box-sizing: border-box;
+  border: 1px solid var(--main-color);
+  background: rgb(255, 255, 255);
+  border-radius: 4px;
+  overflow: auto;
+  min-width: 436px;
+  max-width: 436px;
+  /* 200px 추가 */
+  max-height: 600px;
+  padding: 16px;
+}
+
+.save__btn__wrap {
+  position: absolute;
+  bottom: 1px;
+  height: 56px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  width: calc(100% - 32px);
+  background: white;
+}
+
+.save__btn__wrap > button {
+  width: 100%;
+}
