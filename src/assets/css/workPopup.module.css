@@ -1,6 +1,5 @@
 .wrap__inner {
   box-sizing: border-box;
-  border: 1px solid var(--main-color);
   background: rgb(255, 255, 255);
   border-radius: 4px;
   overflow: auto;
@@ -8,7 +7,7 @@
   max-width: 436px;
   /* 200px 추가 */
   max-height: 600px;
-  padding: 16px;
+  padding: 16px 16px 32px;
 }
 
 .save__btn__wrap {
@@ -23,4 +22,52 @@
 
 .save__btn__wrap > button {
   width: 100%;
+}
+
+.popop__close__button {
+  position: absolute;
+  right: -40px;
+  top: -55px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.popop__close__button:hover {
+  opacity: 1;
+}
+
+.popop__close__button:after {
+  content: '';
+  display: block;
+  height: 30px;
+  width: 7px;
+  border-radius: 100px;
+  background: #999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: rotate(45deg);
+}
+.popop__close__button::before {
+  content: '';
+  display: block;
+  height: 30px;
+  width: 7px;
+  border-radius: 100px;
+  background: #999;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: rotate(-45deg);
+}
+
+@media (max-width: 600px) {
+  .wrap__inner {
+    min-width: 336px;
+    max-width: 336px;
+    max-height: 550px;
+  }
 }
