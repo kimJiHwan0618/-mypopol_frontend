@@ -322,6 +322,9 @@ table.gridjs-table tr td {
   left: 50% !important;
   top: 50% !important;
 }
+div#menu- {
+  z-index: 9999;
+}
 @media (max-width: 1200px) {
   .main__nav + .modal__bg {
     display: block;

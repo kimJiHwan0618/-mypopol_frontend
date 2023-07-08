@@ -4,16 +4,32 @@ import Modal from 'react-modal';
 import css from 'assets/css/workPopup.module.css';
 import css2 from 'assets/css/pageManagement.module.css';
 import { useEffect, useState } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, MenuItem } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploader';
 import { toast } from 'react-toastify';
 
 const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
+  const siteListData = [
+    { name: '레진코믹스', value: 'lezhin' },
+    { name: '카카오페이지', value: 'kakao' },
+    { name: '네이버웹툰', value: 'naver' },
+    { name: '리디', value: 'ridi' },
+    { name: '네이버 시리즈', value: 'series' },
+    { name: '봄툰', value: 'bomtoon' },
+    { name: '케이툰', value: 'ktoon' },
+    { name: '그 외', value: 'etc' },
+  ];
   const [ptid, setPtid] = useState('');
   const [state, setState] = useState('');
   const [bannerImg, setBannerImg] = useState('');
   const [titleImg, setTitleImg] = useState('');
+  const [siteSelected, setSiteSelected] = useState({ value: 'lezhin', name: '레진코믹스' });
+  const [siteList, setSiteList] = useState({});
+  const activeOption = {
+    shouldDirty: true,
+    shouldValidate: true,
+  };
 
   const schema = yup.object().shape({
     title: yup.string().required('작품명은 필수 정보 입니다.'),
@@ -165,6 +181,115 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
             )}
           />
         </div>
+        <div className={css2.list__item}>
+          <p className="f__medium">바로가기 링크</p>
+          <div className={css.site_selector}>
+            <TextField
+              select
+              value={siteSelected.value}
+              label="사이트"
+              variant="outlined"
+              fullWidth
+              onChange={(e) => {
+                console.log(e);
+                const selectedItem = siteListData.find((obj) => obj.value === e.target.value);
+                setSiteSelected({
+                  value: e.target.value,
+                  name: selectedItem.name,
+                });
+              }}>
+              {siteListData.map((obj, idx) => (
+                <MenuItem key={obj.value} value={obj.value} name={obj.name}>
+                  {obj.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Button
+              variant="contained"
+              className="custom__btn"
+              onClick={() => {
+                if (!Object.keys(siteList).includes(siteSelected.value)) {
+                  const clone = JSON.parse(JSON.stringify(siteList));
+                  register(`${siteSelected.value}Id`, {
+                    required: `${siteSelected.value} 아이디를 입력해주세요`,
+                  });
+                  register(`${siteSelected.value}Link`, {
+                    required: `${siteSelected.value} 링크를 입력해주세요`,
+                  });
+                  console.log(siteSelected.name);
+                  setValue(`${siteSelected.value}Id`, siteSelected.name, activeOption);
+                  setValue(`${siteSelected.value}Link`, '', activeOption);
+                  clone[`${siteSelected.value}`] = {
+                    name: siteSelected.name,
+                    link: '',
+                  };
+                  setSiteList(clone);
+                }
+              }}>
+              <span className="f__medium">추가</span>
+              <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#plus`} />
+              </svg>
+            </Button>
+          </div>
+          {Object.keys(siteList).map((obj) => (
+            <div key={obj} className={`${css.site__item} ${css.site__icon__list} ${css.flex__row}`}>
+              <span className={css.site__icon}>
+                <img src={`https://site.mypopol.com/src/img/icon/${obj}.png`} alt={`${obj} icon`} />
+              </span>
+              <Controller
+                name={`${obj}Id`}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    className="mb-24"
+                    label="이름"
+                    autoFocus
+                    type="text"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    disabled
+                    // error={!!errors.fakeName}
+                    // helperText={errors?.fakeName?.message}
+                    variant="outlined"
+                    fullWidth
+                    required
+                  />
+                )}
+              />
+              <Controller
+                name={`${obj}Link`}
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    className="mb-24"
+                    label="링크"
+                    autoFocus
+                    type="text"
+                    // error={!!errors.fakeName}
+                    // helperText={errors?.fakeName?.message}
+                    variant="outlined"
+                    fullWidth
+                    required
+                  />
+                )}
+              />
+              <span
+                className={css.remove__btn}
+                onClick={() => {
+                  const clone = JSON.parse(JSON.stringify(siteList));
+                  delete clone[obj];
+                  delete schema.fields[`${obj}Id`];
+                  delete schema.fields[`${obj}Link`];
+                  setSiteList(clone);
+                }}
+              />
+            </div>
+          ))}
+        </div>
         <div className={`${css.save__btn__wrap}`}>
           <Button
             variant="contained"
@@ -172,7 +297,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
             onClick={() => {
               workSaveClick();
             }}>
-            <span className="f__medium">추가</span>
+            <span className="f__medium">작품 추가</span>
             <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#plus`} />
             </svg>
