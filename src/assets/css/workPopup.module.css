@@ -91,9 +91,9 @@
   margin-bottom: 0px;
 }
 
-.site__item > div:first-of-type {
+/* .site__item > div:first-of-type {
   width: 30%;
-}
+} */
 .site__item > div:nth-of-type(2) {
   width: 60%;
   margin-left: 16px;
@@ -168,7 +168,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 50%;
+  width: 100%;
 }
 
 .flex__row {

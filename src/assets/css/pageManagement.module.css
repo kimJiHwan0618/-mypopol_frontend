@@ -361,6 +361,52 @@
 .sns__item > .remove__btn {
   margin-left: 16px;
 }
+.work__item__poster {
+  width: 70px;
+  border: 1px solid rgb(219, 219, 219);
+  margin-right: 6px;
+}
+
+.work__item:nth-of-type(2) {
+  margin-top: 24px;
+}
+
+.work__item__poster {
+  margin: 0 16px;
+}
+
+.work__item__poster > img {
+  width: 100%;
+}
+.work__info__wrap {
+  width: 100%;
+}
+.work__info__wrap > li:first-of-type {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: rgb(77, 79, 83);
+}
+.work__info__wrap > li:nth-of-type(2) {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.work__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modify__btn {
+  margin-right: 12px;
+}
+
+.work__btn__wrap {
+  margin-left: 16px;
+  display: flex;
+}
+.work__order {
+  font-size: 1.4rem;
+  color: rgb(77, 79, 83);
+}
 @media (max-width: 800px) {
   .page__tem__wrap > section {
     width: 100%;

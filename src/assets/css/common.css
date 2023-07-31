@@ -313,12 +313,20 @@ header .selector__label > ul {
   max-height: 40px;
 }
 
+.custom__btn.delete {
+  background: rgb(233, 24, 24);
+}
+
 .custom__btn > span {
   white-space: nowrap;
 }
 
 .custom__btn:hover {
   background: #1156a5;
+}
+
+.custom__btn.delete:hover {
+  background: rgb(180, 6, 6);
 }
 
 .custom__btn > span {

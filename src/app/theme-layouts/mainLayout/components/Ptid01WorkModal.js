@@ -18,7 +18,8 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
     { name: '네이버 시리즈', value: 'series' },
     { name: '봄툰', value: 'bomtoon' },
     { name: '케이툰', value: 'ktoon' },
-    { name: '그 외', value: 'etc' },
+    /** 예외 케이스는 추후 반영 예정 */
+    // // { name: '그 외', value: 'etc' },
   ];
   const [ptid, setPtid] = useState('');
   const [state, setState] = useState('');
@@ -208,22 +209,28 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
               variant="contained"
               className="custom__btn"
               onClick={() => {
-                if (!Object.keys(siteList).includes(siteSelected.value)) {
+                if (
+                  !Object.keys(siteList).includes(siteSelected.value)
+                  /** 예외 케이스는 추후 반영 예정 */
+                  // siteSelected.value === 'etc'
+                ) {
                   const clone = JSON.parse(JSON.stringify(siteList));
-                  register(`${siteSelected.value}Id`, {
+                  register(`${siteSelected.value}Name`, {
                     required: `${siteSelected.value} 아이디를 입력해주세요`,
                   });
                   register(`${siteSelected.value}Link`, {
                     required: `${siteSelected.value} 링크를 입력해주세요`,
                   });
                   console.log(siteSelected.name);
-                  setValue(`${siteSelected.value}Id`, siteSelected.name, activeOption);
+                  setValue(`${siteSelected.value}Name`, siteSelected.name, activeOption);
                   setValue(`${siteSelected.value}Link`, '', activeOption);
                   clone[`${siteSelected.value}`] = {
                     name: siteSelected.name,
                     link: '',
                   };
                   setSiteList(clone);
+                } else {
+                  toast.warning(`${siteSelected.name} 사이트 바로가기는 이미 등록되있습니다.`);
                 }
               }}>
               <span className="f__medium">추가</span>
@@ -237,28 +244,6 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
               <span className={css.site__icon}>
                 <img src={`https://site.mypopol.com/src/img/icon/${obj}.png`} alt={`${obj} icon`} />
               </span>
-              <Controller
-                name={`${obj}Id`}
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    className="mb-24"
-                    label="이름"
-                    autoFocus
-                    type="text"
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    disabled
-                    // error={!!errors.fakeName}
-                    // helperText={errors?.fakeName?.message}
-                    variant="outlined"
-                    fullWidth
-                    required
-                  />
-                )}
-              />
               <Controller
                 name={`${obj}Link`}
                 control={control}

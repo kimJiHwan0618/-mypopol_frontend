@@ -12,11 +12,66 @@ import convertFile from 'app/utils/convertFile';
 import { toast } from 'react-toastify';
 import { MenuItem, TextField, Button } from '@mui/material';
 import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkModal';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { updatePageTem } from '../store/PageTemplateSlice';
 import { setSearchedFlag } from '../store/PageTemplatesSlice';
 
+const ListItemTypes = {
+  ITEM: 'item',
+};
+
+const DraggableItem = ({ id, index, moveItem, children }) => {
+  const [, ref] = useDrag({
+    type: ListItemTypes.ITEM,
+    item: { id, index },
+  });
+
+  const [, drop] = useDrop({
+    accept: ListItemTypes.ITEM,
+    hover: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index);
+        draggedItem.index = index;
+      }
+    },
+  });
+
+  return (
+    <div
+      className={`${css.work__item} ${css.list__item}`}
+      ref={(node) => ref(drop(node))}
+      style={{ cursor: 'grab' }}>
+      {children}
+    </div>
+  );
+};
+
 function PageManagement() {
   // const routeParams = useParams();
+  const initialList = [
+    {
+      workSeq: 0,
+      title: '어망결에 로맨스',
+      subTitle: '내 짝남의 비밀을 알아버렸다...? 좀 많이 위에서 온 짝남과의 학원 로코',
+      img: 'poster1/poster.png',
+    },
+    {
+      workSeq: 1,
+      title: '제3경호팀',
+      subTitle:
+        '최고의 경호팀에 예사롭지 않은 신참이 들어왔다. 생사를 넘나드는 치열한 현장에서 겪는 경호팀의 활약상.',
+      img: 'poster2/poster.png',
+    },
+  ];
+  const [list, setList] = useState(initialList);
+  const moveItem = (fromIndex, toIndex) => {
+    const updatedList = [...list];
+    const [movedItem] = updatedList.splice(fromIndex, 1);
+    updatedList.splice(toIndex, 0, movedItem);
+    setList(updatedList);
+  };
+  //
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const location = useLocation();
@@ -615,7 +670,7 @@ function PageManagement() {
           </div>
           <div className={`${css.section__content}`}>
             <div className="inner">
-              <div className={css.list__item}>
+              <div>
                 <Button
                   variant="contained"
                   className="custom__btn"
@@ -636,10 +691,66 @@ function PageManagement() {
                   </svg>
                 </Button>
               </div>
-              <div className={css.list__item}>
-                <div />
-                <div />
-              </div>
+              <DndProvider backend={HTML5Backend}>
+                {list.map((item, index) => (
+                  <DraggableItem
+                    key={item.workSeq}
+                    id={item.workSeq}
+                    data={item}
+                    index={index}
+                    moveItem={moveItem}>
+                    <b className={`${css.work__order} f__bold`}>{index + 1}</b>
+                    <div className={`${css.work__item__poster}`}>
+                      <img
+                        src={`https://caribo.me/img/${item.img}`}
+                        alt={`${item.title} 포스터이미지`}
+                      />
+                    </div>
+                    <ul className={css.work__info__wrap}>
+                      <li className="f__medium">{item.title}</li>
+                      <li className="f__medium">{item.subTitle}</li>
+                      <li />
+                      {/* 사이트 아이콘 */}
+                    </ul>
+                    <div className={css.work__btn__wrap}>
+                      <Button
+                        variant="contained"
+                        className={`${css.modify__btn} custom__btn`}
+                        onClick={() => {
+                          // setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
+                          // openModal();
+                        }}>
+                        <svg
+                          size="24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100">
+                          <use
+                            href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#pencil`}
+                          />
+                        </svg>
+                      </Button>
+                      <Button
+                        variant="contained"
+                        className="custom__btn delete"
+                        onClick={() => {
+                          // setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
+                          // openModal();
+                        }}>
+                        <svg
+                          size="24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 100 100">
+                          <use
+                            href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#trash`}
+                          />
+                        </svg>
+                      </Button>
+                    </div>
+                  </DraggableItem>
+                ))}
+              </DndProvider>
             </div>
           </div>
         </div>
