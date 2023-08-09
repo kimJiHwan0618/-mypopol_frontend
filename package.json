@@ -44,6 +44,7 @@
     "react-datepicker": "^4.8.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
+    "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "18.1.0",
     "react-dropzone": "^14.2.3",
     "react-gravatar": "^2.6.3",

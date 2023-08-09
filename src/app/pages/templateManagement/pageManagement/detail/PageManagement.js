@@ -14,6 +14,7 @@ import { MenuItem, TextField, Button } from '@mui/material';
 import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkModal';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import { updatePageTem } from '../store/PageTemplateSlice';
 import { setSearchedFlag } from '../store/PageTemplatesSlice';
 
@@ -48,23 +49,7 @@ const DraggableItem = ({ id, index, moveItem, children }) => {
 };
 
 function PageManagement() {
-  // const routeParams = useParams();
-  const initialList = [
-    {
-      workSeq: 0,
-      title: '어망결에 로맨스',
-      subTitle: '내 짝남의 비밀을 알아버렸다...? 좀 많이 위에서 온 짝남과의 학원 로코',
-      img: 'poster1/poster.png',
-    },
-    {
-      workSeq: 1,
-      title: '제3경호팀',
-      subTitle:
-        '최고의 경호팀에 예사롭지 않은 신참이 들어왔다. 생사를 넘나드는 치열한 현장에서 겪는 경호팀의 활약상.',
-      img: 'poster2/poster.png',
-    },
-  ];
-  const [list, setList] = useState(initialList);
+  const [list, setList] = useState([]);
   const moveItem = (fromIndex, toIndex) => {
     const updatedList = [...list];
     const [movedItem] = updatedList.splice(fromIndex, 1);
@@ -84,6 +69,9 @@ function PageManagement() {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [popInfo, setPopInfo] = useState({});
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
@@ -163,7 +151,11 @@ function PageManagement() {
     const param = {
       fields: {
         ...getValues(),
-        ...{ userId: user.userId, ptId: location.state.template.ptId, userKey: user.userKey },
+        ...{
+          userId: user.userId,
+          ptId: location.state.template.popolInfo.ptId,
+          userKey: user.userKey,
+        },
         snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(clone),
       },
       files: {
@@ -219,9 +211,9 @@ function PageManagement() {
           toast.error(error);
           return;
         }
-        console.log(file);
 
         const loadComplate = () => {
+          console.log(file);
           setImgFile(file);
           // profileSection.current.style.height = 'auto';
           // popolSection.current.style.height = 'auto';
@@ -245,7 +237,7 @@ function PageManagement() {
       ptId,
       icon,
       sns,
-    } = location.state.template;
+    } = location.state.template.popolInfo;
     setValue('popolName', popolName, activeOption);
     setValue('mainColor', mainColor, activeOption);
     setValue('fakeName', fakeName, activeOption);
@@ -257,6 +249,7 @@ function PageManagement() {
     setValue('icon', icon, activeOption);
     setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
     setImgFile(profile, 'profileOld', setProfileImg, ptId);
+    setList(location.state.template.worksInfo);
     if (sns !== null && sns !== '' && sns !== undefined) {
       setSnsList(JSON.parse(sns));
       const snsListLocal = JSON.parse(sns);
@@ -676,7 +669,7 @@ function PageManagement() {
                   className="custom__btn"
                   style={{ width: '100%' }}
                   onClick={() => {
-                    setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
+                    setPopInfo({ ptId: location.state.template.popolInfo.ptId, state: '추가' });
                     openModal();
                   }}>
                   <span className="f__medium">작품 추가</span>
@@ -691,7 +684,7 @@ function PageManagement() {
                   </svg>
                 </Button>
               </div>
-              <DndProvider backend={HTML5Backend}>
+              <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
                 {list.map((item, index) => (
                   <DraggableItem
                     key={item.workSeq}
@@ -702,7 +695,7 @@ function PageManagement() {
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
                       <img
-                        src={`https://caribo.me/img/${item.img}`}
+                        src={`https://site.mypopol.com/${location.state.template.popolInfo.ptId}/${user.userId}/img/${item.poster}`}
                         alt={`${item.title} 포스터이미지`}
                       />
                     </div>
@@ -717,8 +710,12 @@ function PageManagement() {
                         variant="contained"
                         className={`${css.modify__btn} custom__btn`}
                         onClick={() => {
-                          // setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
-                          // openModal();
+                          setPopInfo({
+                            ptId: location.state.template.popolInfo.ptId,
+                            state: '수정',
+                            workInfo: item,
+                          });
+                          openModal();
                         }}>
                         <svg
                           size="24"
@@ -734,7 +731,7 @@ function PageManagement() {
                         variant="contained"
                         className="custom__btn delete"
                         onClick={() => {
-                          // setPopInfo({ ptId: location.state.template.ptId, state: '추가' });
+                          // setPopInfo({ ptId: location.state.template.popolInfo.ptId, state: '추가' });
                           // openModal();
                         }}>
                         <svg

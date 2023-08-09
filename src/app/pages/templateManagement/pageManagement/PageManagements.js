@@ -15,6 +15,7 @@ import {
   setPageTemplates,
   setSearchedFlag,
 } from './store/PageTemplatesSlice';
+import { getPopolInfo } from './store/PageTemplateSlice';
 
 function PageManagements() {
   const searchedFlag = useSelector(selectSearchedFlag);
@@ -32,6 +33,7 @@ function PageManagements() {
         .then(({ payload }) => {
           if (payload.data.response.code === 200) {
             dispatch(setPageTemplates(payload.data.response.response));
+            console.log(payload.data.response.response);
             dispatch(setSearchedFlag(true));
             toast.success('템플릿 정보를 새로 조회하였습니다.');
           }
@@ -60,15 +62,29 @@ function PageManagements() {
                   variant="contained"
                   className="custom__btn"
                   onClick={() => {
-                    navigate(`/template/page/${user.userId}?ptId=${obj.ptId}`, {
-                      state: {
-                        detailLink: {
-                          title: '수정',
-                          goBackUrl: '/template/page',
-                        },
-                        template: obj,
-                      },
-                    });
+                    setPopolLoading(true);
+                    const params = { ...user, ptId: obj.ptId };
+                    dispatch(getPopolInfo(params))
+                      .then(({ payload }) => {
+                        if (payload.data.code === 200) {
+                          navigate(`/template/page/${user.userId}?ptId=${obj.ptId}`, {
+                            state: {
+                              detailLink: {
+                                title: '수정',
+                                goBackUrl: '/template/page',
+                              },
+                              template: payload.data.response,
+                            },
+                          });
+                        }
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                        toast.error('포폴 데이터 조회에 실패하였습니다.');
+                      })
+                      .finally(() => {
+                        setPopolLoading(false);
+                      });
                   }}>
                   <svg
                     size="24"
@@ -98,11 +114,18 @@ function PageManagements() {
                       <dl>
                         <dt className="f__medium">링크</dt>
                         <dd>
-                          :&nbsp;&nbsp;&nbsp;site.mypopol.com/{obj.ptId}/{user.userId}
+                          :&nbsp;&nbsp;&nbsp;
+                          {obj.domain
+                            ? `https://${obj.domain}`
+                            : `site.mypopol.com/${obj.ptId}/${user.userId}`}
                         </dd>
                       </dl>
                       <a
-                        href={`https://site.mypopol.com/${obj.ptId}/${user.userId}`}
+                        href={
+                          obj.domain
+                            ? `https://${obj.domain}`
+                            : `site.mypopol.com/${obj.ptId}/${user.userId}`
+                        }
                         target="_blank"
                         className={css.link__icon}
                         rel="noreferrer">

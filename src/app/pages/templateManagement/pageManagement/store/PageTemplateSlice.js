@@ -1,6 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+export const getPopolInfo = createAsyncThunk(
+  'site/popolInfo',
+  async (param, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}site/popolInfo`, param);
+      return await response;
+    } catch (error) {
+      if (!error.response.data) {
+        return rejectWithValue(error);
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const updatePageTem = createAsyncThunk(
   'templateManage/page/update',
   async (param, { dispatch, rejectWithValue }) => {

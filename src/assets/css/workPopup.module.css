@@ -196,6 +196,41 @@
   width: 90%;
   height: 90%;
 }
+
+.ptid01__banner__box {
+  border: 1px solid rgb(219, 219, 219);
+  background: #fafafa;
+  box-sizing: border-box;
+  height: 361px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.ptid01__title__box {
+  border: 1px solid rgb(219, 219, 219);
+  background: #fafafa;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.ptid01__title__box > img {
+  min-width: 240px;
+  max-width: 240px;
+  /* min-height: 346px;
+  max-height: 346px; */
+  margin: 0 auto;
+}
+
+.ptid01__banner__box > img {
+  min-width: 245px;
+  max-width: 245px;
+  min-height: 346px;
+  max-height: 346px;
+  margin: 0 auto;
+}
 @media (max-width: 600px) {
   .wrap__inner {
     min-width: 336px;
