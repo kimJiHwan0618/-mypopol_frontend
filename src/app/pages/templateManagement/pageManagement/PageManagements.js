@@ -66,7 +66,8 @@ function PageManagements() {
                     const params = { ...user, ptId: obj.ptId };
                     dispatch(getPopolInfo(params))
                       .then(({ payload }) => {
-                        if (payload.data.code === 200) {
+                        console.log(payload);
+                        if (payload.status === 200) {
                           navigate(`/template/page/${user.userId}?ptId=${obj.ptId}`, {
                             state: {
                               detailLink: {
