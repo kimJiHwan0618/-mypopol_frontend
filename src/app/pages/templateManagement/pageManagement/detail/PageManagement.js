@@ -695,7 +695,7 @@ function PageManagement() {
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
                       <img
-                        src={`https://site.mypopol.com/${location.state.template.popolInfo.ptId}/${user.userId}/img/${item.poster}`}
+                        src={`https://site.mypopol.com/${location.state.template.popolInfo.ptId}/${user.userId}/img/poster${item.workSeq}/${item.poster}`}
                         alt={`${item.title} 포스터이미지`}
                       />
                     </div>

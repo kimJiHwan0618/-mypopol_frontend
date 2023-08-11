@@ -121,17 +121,17 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
       setValue('title', popInfo.workInfo.title, activeOption);
       setValue('subTitle', popInfo.workInfo.subTitle, activeOption);
       setValue('summary', popInfo.workInfo.summary, activeOption);
-      setValue('ptId01Banner', popInfo.workInfo.poster.split('/')[1], activeOption);
-      setValue('ptId01Logo', JSON.parse(popInfo.workInfo.etc).logo.split('/')[1], activeOption);
+      setValue('ptId01Banner', popInfo.workInfo.poster, activeOption);
+      setValue('ptId01Logo', popInfo.workInfo.logo, activeOption);
       setImgFile(
-        popInfo.workInfo.poster.split('/')[1],
+        popInfo.workInfo.poster,
         'banner01ImgOld',
         setBanner01Img,
         popInfo.ptId,
         popInfo.workInfo.workSeq
       );
       setImgFile(
-        JSON.parse(popInfo.workInfo.etc).logo.split('/')[1],
+        popInfo.workInfo.logo,
         'title01Old',
         setTitle01Img,
         popInfo.ptId,
@@ -424,9 +424,8 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
             <span className="f__medium">작품 {popInfo.state}</span>
             <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
               <use
-                href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
-                  popInfo.state === '추가' ? 'plus' : 'pencil'
-                }`}
+                href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
+                  }`}
               />
             </svg>
           </Button>
