@@ -15,8 +15,8 @@ import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkM
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { updatePageTem } from '../store/PageTemplateSlice';
-import { setSearchedFlag } from '../store/PageTemplatesSlice';
+import { updatePageTem } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
+import { setSearchedFlag } from 'app/pages/templateManagement/pageManagement/store/PageTemplatesSlice';
 
 const ListItemTypes = {
   ITEM: 'item',
@@ -56,7 +56,7 @@ function PageManagement() {
     updatedList.splice(toIndex, 0, movedItem);
     setList(updatedList);
   };
-  //
+
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const location = useLocation();
@@ -669,7 +669,7 @@ function PageManagement() {
                   className="custom__btn"
                   style={{ width: '100%' }}
                   onClick={() => {
-                    setPopInfo({ ptId: location.state.template.popolInfo.ptId, state: '추가' });
+                    setPopInfo({ ptId: location.state.template.popolInfo.ptId, popolSeq: location.state.template.popolInfo.popolSeq, state: '추가' });
                     openModal();
                   }}>
                   <span className="f__medium">작품 추가</span>
@@ -687,15 +687,15 @@ function PageManagement() {
               <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
                 {list.map((item, index) => (
                   <DraggableItem
-                    key={item.workSeq}
-                    id={item.workSeq}
+                    key={item.order}
+                    id={item.order}
                     data={item}
                     index={index}
                     moveItem={moveItem}>
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
                       <img
-                        src={`https://site.mypopol.com/${location.state.template.popolInfo.ptId}/${user.userId}/img/poster${item.workSeq}/${item.poster}`}
+                        src={`https://site.mypopol.com/${location.state.template.popolInfo.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
                         alt={`${item.title} 포스터이미지`}
                       />
                     </div>
@@ -712,6 +712,7 @@ function PageManagement() {
                         onClick={() => {
                           setPopInfo({
                             ptId: location.state.template.popolInfo.ptId,
+                            popolSeq: location.state.template.popolInfo.popolSeq,
                             state: '수정',
                             workInfo: item,
                           });

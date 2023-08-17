@@ -43,6 +43,33 @@ export const updatePageTem = createAsyncThunk(
   }
 );
 
+export const addOrUpdateWork = createAsyncThunk(
+  'templateManage/page/work/addOrUpdate',
+  async (param, { dispatch, rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('fields', JSON.stringify(param.fields));
+      formData.append('titleImg', param.files.titleImg);
+      formData.append('posterImg', param.files.posterImg);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_HOST}/templateManage/page/work/addOrUpdate`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      return await response;
+    } catch (error) {
+      if (!error.response.data) {
+        return rejectWithValue(error);
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   // userRole: "",
   // userId: "",

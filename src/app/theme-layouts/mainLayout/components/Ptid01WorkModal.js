@@ -9,26 +9,30 @@ import { Controller, useForm } from 'react-hook-form';
 import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploader';
 import { toast } from 'react-toastify';
 import convertFile from 'app/utils/convertFile';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
+import { addOrUpdateWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
+import _ from '@lodash';
 
 const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   const siteListData = [
-    { name: '레진코믹스', value: 'lezhin' },
-    { name: '카카오페이지', value: 'kakao' },
-    { name: '네이버웹툰', value: 'naver' },
-    { name: '리디', value: 'ridi' },
-    { name: '네이버 시리즈', value: 'series' },
-    { name: '봄툰', value: 'bomtoon' },
-    { name: '케이툰', value: 'ktoon' },
+    { name: 'lezhin', title: "레진코믹스" },
+    { name: 'kakao', title: "카카오페이지" },
+    { name: 'naver', title: "네이버웹툰" },
+    { name: 'ridi', title: "리디" },
+    { name: 'series', title: "네이버시리즈" },
+    { name: 'bomtoon', title: "봄툰" },
+    { name: 'ktoon', title: "케이툰" },
     /** 예외 케이스는 추후 반영 예정 */
     // // { name: '그 외', value: 'etc' },
   ];
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const [banner01Img, setBanner01Img] = useState(null);
   const [title01Img, setTitle01Img] = useState(null);
-  const [siteSelected, setSiteSelected] = useState({ value: 'lezhin', name: '레진코믹스' });
+  const [siteSelected, setSiteSelected] = useState({ title: '레진코믹스', name: 'lezhin' });
   const [siteList, setSiteList] = useState({});
+  const [updateLoading, setUpdateLoading] = useState(false);
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
@@ -80,10 +84,10 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
     }
   };
 
-  const setImgFile = (imgFileName, backFileName, setImgFile, ptId, workSeq) => {
+  const setImgFile = (imgFileName, backFileName, setImgFile, ptId, src) => {
     if (imgFileName !== null && imgFileName !== undefined && imgFileName !== '') {
       setValue(backFileName, imgFileName, activeOption);
-      const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/poster${workSeq}/${imgFileName}`;
+      const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${src}/${imgFileName}`;
       const fileName = imgFileName;
       const imgType =
         `${imgFileName.split('.')[1]}` === 'jpg' ? 'jpeg' : `${imgFileName.split('.')[1]}`;
@@ -94,7 +98,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
         }
 
         const loadComplate = () => {
-          console.log(file);
+          // console.log(file);
           setImgFile(file);
           // profileSection.current.style.height = 'auto';
           // popolSection.current.style.height = 'auto';
@@ -106,6 +110,19 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   };
 
   useEffect(() => {
+    // delete schema.fields[`${obj}Name`];
+    // delete schema.fields[`${obj}Link`];
+    // for (let i = 0; i < Object.keys(getValues()).length; i += 1) {
+    //   const siteKey = Object.keys(getValues())[i];
+    //   if (siteKey.includes("Name") || siteKey.includes("Link")) {
+    //     console.log(siteKey)
+    //     delete schema.fields[siteKey];
+    //     console.log(getValues())
+    //   }
+    // }
+    reset();
+    setValue('popolSeq', popInfo.popolSeq, activeOption);
+    setValue('workId', 1, activeOption);
     if (popInfo.state === '추가') {
       setValue('title', '', activeOption);
       setValue('subTitle', '', activeOption);
@@ -128,14 +145,14 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
         'banner01ImgOld',
         setBanner01Img,
         popInfo.ptId,
-        popInfo.workInfo.workSeq
+        popInfo.workInfo.src
       );
       setImgFile(
         popInfo.workInfo.logo,
         'title01Old',
         setTitle01Img,
         popInfo.ptId,
-        popInfo.workInfo.workSeq
+        popInfo.workInfo.src
       );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
@@ -159,7 +176,43 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   }, [isOpen]);
 
   const workSaveClick = () => {
-    onRequestClose();
+
+    const fileObj = {}
+    if (popInfo.ptId === "ptid01") {
+      fileObj.titleImg = title01Img;
+      fileObj.posterImg = banner01Img;
+    }
+
+    const siteArray = Object.keys(siteList).map(item => ({
+      name: siteList[item].name,
+      link: `${getValues()[`${item}Link`]}`
+    }));
+
+    const param = {
+      fields: {
+        ...getValues(),
+        ...{
+          userId: user.userId,
+          ptId: popInfo.ptId,
+          userKey: user.userKey,
+        },
+        siteList: JSON.stringify({ website: siteArray }),
+        state: popInfo.state
+      },
+      files: fileObj,
+    }
+
+    dispatch(addOrUpdateWork(param))
+      .then(({ payload }) => {
+        if (payload.status === 200) {
+          console.log("굿")
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(`작품 ${popInfo.state} 실패`);
+      })
+
   };
 
   const customStyles = {
@@ -186,7 +239,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
       style={customStyles}>
       <button
         onClick={() => {
-          workSaveClick();
+          onRequestClose();
         }}
         className={css.popop__close__button}>
         {/*  */}
@@ -327,21 +380,20 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
           <div className={css.site_selector}>
             <TextField
               select
-              value={siteSelected.value}
+              value={siteSelected.name}
               label="사이트"
               variant="outlined"
               fullWidth
               onChange={(e) => {
-                console.log(e);
-                const selectedItem = siteListData.find((obj) => obj.value === e.target.value);
+                const selectedItem = siteListData.find((obj) => obj.name === e.target.value);
                 setSiteSelected({
-                  value: e.target.value,
+                  value: e.target.name,
                   name: selectedItem.name,
                 });
               }}>
               {siteListData.map((obj, idx) => (
-                <MenuItem key={obj.value} value={obj.value} name={obj.name}>
-                  {obj.name}
+                <MenuItem key={obj.name} value={obj.name} name={obj.name}>
+                  {obj.title}
                 </MenuItem>
               ))}
             </TextField>
@@ -355,21 +407,21 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
                   // siteSelected.value === 'etc'
                 ) {
                   const clone = JSON.parse(JSON.stringify(siteList));
-                  register(`${siteSelected.value}Name`, {
-                    required: `${siteSelected.value} 아이디를 입력해주세요`,
+                  register(`${siteSelected.name}Name`, {
+                    required: `${siteSelected.title} 아이디를 입력해주세요`,
                   });
-                  register(`${siteSelected.value}Link`, {
-                    required: `${siteSelected.value} 링크를 입력해주세요`,
+                  register(`${siteSelected.name}Link`, {
+                    required: `${siteSelected.title} 링크를 입력해주세요`,
                   });
-                  setValue(`${siteSelected.value}Name`, siteSelected.name, activeOption);
-                  setValue(`${siteSelected.value}Link`, '', activeOption);
-                  clone[`${siteSelected.value}`] = {
+                  setValue(`${siteSelected.name}Name`, siteSelected.name, activeOption);
+                  setValue(`${siteSelected.name}Link`, '', activeOption);
+                  clone[`${siteSelected.name}`] = {
                     name: siteSelected.name,
                     link: '',
                   };
                   setSiteList(clone);
                 } else {
-                  toast.warning(`${siteSelected.name} 사이트 바로가기는 이미 등록되있습니다.`);
+                  toast.warning(`${siteSelected.title} 사이트 바로가기는 이미 등록되있습니다.`);
                 }
               }}>
               <span className="f__medium">추가</span>
@@ -418,6 +470,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
           <Button
             variant="contained"
             className="custom__btn"
+            disabled={_.isEmpty(dirtyFields) || !isValid}
             onClick={() => {
               workSaveClick();
             }}>
