@@ -66,6 +66,7 @@ function PageManagement() {
   const [snsList, setSnsList] = useState({});
   const popolSection = useRef(null);
   const profileSection = useRef(null);
+  const workSection = useRef(null);
   const [updateLoading, setUpdateLoading] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [popInfo, setPopInfo] = useState({});
@@ -84,6 +85,21 @@ function PageManagement() {
   const openModal = () => {
     setPopOpen(true);
   };
+
+  const addWorkResult = (param) => {
+    param.etc = param.siteList;
+    const keys = Object.keys(param);
+    for (let i = 0; i < keys.length; i += 1) {
+      if (!["workSeq", "popolSeq", "workId",
+        "order", "title", "subTitle", "poster",
+        "logo", "summary", "etc", "src", "lastUpdated"].includes(keys[i])) {
+        delete param[keys[i]]
+      }
+    }
+    workSection.current.style.height = 'auto';
+    list.push(param)
+    setList(list);
+  }
 
   const schema = yup.object().shape({
     popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
@@ -274,7 +290,7 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
-        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} />
+        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} />
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
@@ -661,7 +677,7 @@ function PageManagement() {
             <p className="f__medium normal__title">작품 정보</p>
             <span className={css.arrow__btn} />
           </div>
-          <div className={`${css.section__content}`}>
+          <div ref={workSection} className={`${css.section__content}`}>
             <div className="inner">
               <div>
                 <Button

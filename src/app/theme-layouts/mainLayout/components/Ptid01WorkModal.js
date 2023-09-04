@@ -13,8 +13,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
 import { addOrUpdateWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import _ from '@lodash';
+import Lottie from 'react-lottie';
+import animationData from 'app/data/loading.json';
 
-const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
+const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => {
   const siteListData = [
     { name: 'lezhin', title: "레진코믹스" },
     { name: 'kakao', title: "카카오페이지" },
@@ -32,11 +34,11 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   const [title01Img, setTitle01Img] = useState(null);
   const [siteSelected, setSiteSelected] = useState({ title: '레진코믹스', name: 'lezhin' });
   const [siteList, setSiteList] = useState({});
-  const [updateLoading, setUpdateLoading] = useState(false);
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
   };
+  const [loading, setLoading] = useState(false);
 
   const schema = yup.object().shape({
     title: yup.string().required('작품명은 필수 정보 입니다.'),
@@ -98,10 +100,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
         }
 
         const loadComplate = () => {
-          // console.log(file);
           setImgFile(file);
-          // profileSection.current.style.height = 'auto';
-          // popolSection.current.style.height = 'auto';
         };
 
         await loadComplate();
@@ -110,16 +109,6 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   };
 
   useEffect(() => {
-    // delete schema.fields[`${obj}Name`];
-    // delete schema.fields[`${obj}Link`];
-    // for (let i = 0; i < Object.keys(getValues()).length; i += 1) {
-    //   const siteKey = Object.keys(getValues())[i];
-    //   if (siteKey.includes("Name") || siteKey.includes("Link")) {
-    //     console.log(siteKey)
-    //     delete schema.fields[siteKey];
-    //     console.log(getValues())
-    //   }
-    // }
     reset();
     setValue('popolSeq', popInfo.popolSeq, activeOption);
     setValue('workId', 1, activeOption);
@@ -176,7 +165,6 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
   }, [isOpen]);
 
   const workSaveClick = () => {
-
     const fileObj = {}
     if (popInfo.ptId === "ptid01") {
       fileObj.titleImg = title01Img;
@@ -202,17 +190,22 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
       files: fileObj,
     }
 
+    setLoading(true)
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
         if (payload.status === 200) {
-          console.log("굿")
+          addWorkResult(payload.data.response.response.reqJson);
+          onRequestClose();
+          toast.success(`작품이 ${popInfo.state}되었습니다.`);
         }
       })
       .catch((error) => {
         console.log(error);
         toast.error(`작품 ${popInfo.state} 실패`);
       })
-
+      .finally(() => {
+        setLoading(false)
+      });
   };
 
   const customStyles = {
@@ -470,17 +463,25 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo }) => {
           <Button
             variant="contained"
             className="custom__btn"
-            disabled={_.isEmpty(dirtyFields) || !isValid}
+            disabled={_.isEmpty(dirtyFields) || !isValid || loading}
             onClick={() => {
               workSaveClick();
             }}>
-            <span className="f__medium">작품 {popInfo.state}</span>
-            <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-              <use
-                href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
-                  }`}
-              />
-            </svg>
+            {
+              !loading ? (
+                <>
+                  <span className="f__medium">작품 {popInfo.state}</span>
+                  <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <use
+                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
+                        }`}
+                    />
+                  </svg>
+                </>
+              ) : (
+                <Lottie options={{ loop: true, autoplay: true, animationData }} />
+              )
+            }
           </Button>
         </div>
       </div>
