@@ -133,7 +133,7 @@
   white-space: nowrap;
 }
 
-.selector__label > input {
+.selector__label>input {
   position: absolute;
   left: -9999px;
   top: 50%;
@@ -144,7 +144,7 @@
   text-shadow: 0 0 0 #2196f3;
 }
 
-.selector__label > input:focus {
+.selector__label>input:focus {
   outline: none;
 }
 
@@ -152,14 +152,14 @@
   -webkit-transform: rotate(270deg);
 }
 
-.selector__label input:focus + ul {
+.selector__label input:focus+ul {
   top: 48px !important;
   opacity: 1;
   visibility: visible;
   z-index: 4999;
 }
 
-.selector__label > .arrow {
+.selector__label>.arrow {
   color: black;
   -webkit-transform: rotate(90deg);
   margin-left: 10px;
@@ -173,7 +173,7 @@
   display: block;
 }
 
-.selector__label > ul {
+.selector__label>ul {
   top: 60px;
   position: absolute;
   opacity: 0;
@@ -196,62 +196,62 @@
   -webkit-transition: all 0.3s linear 0s;
 }
 
-.selector__label > ul::-webkit-scrollbar {
+.selector__label>ul::-webkit-scrollbar {
   width: 7px;
   background-color: white;
   border-radius: 10px;
 }
 
-.selector__label > ul::-webkit-scrollbar-thumb {
+.selector__label>ul::-webkit-scrollbar-thumb {
   background-color: #b9b9b9;
   background-clip: padding-box;
   border: 2px solid transparent;
   border-radius: 10px;
 }
 
-header .selector__label > ul {
+header .selector__label>ul {
   width: auto;
 }
 
-.selector__label > ul > li {
+.selector__label>ul>li {
   padding: 6px 12px;
   white-space: nowrap;
   line-height: 1.5;
   color: #111827;
 }
 
-.selector__label > ul > li.selected {
+.selector__label>ul>li.selected {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-.selector__label > ul > li:hover {
+.selector__label>ul>li:hover {
   text-decoration: none;
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-.common__grid > table {
+.common__grid>table {
   border: none;
   border-spacing: 0;
   text-align: left;
   text-indent: 0;
 }
 
-.common__grid > table tr {
+.common__grid>table tr {
   color: inherit;
   display: table-row;
   vertical-align: middle;
   outline: 0px;
 }
 
-.common__grid > table tr > th:first-of-type {
+.common__grid>table tr>th:first-of-type {
   padding-left: 24px;
 }
 
-.common__grid > table thead th {
+.common__grid>table thead th {
   z-index: 50;
 }
 
-.common__grid > table tr > th {
+.common__grid>table tr>th {
   border-bottom: 1px solid rgb(226, 232, 240);
   font-weight: 500;
   padding: 16px 14px;
@@ -265,11 +265,11 @@ header .selector__label > ul {
   background: white;
 }
 
-.common__grid > table thead {
+.common__grid>table thead {
   border-top: 1px solid rgb(226, 232, 240);
 }
 
-.common__grid > table tr > th > p {
+.common__grid>table tr>th>p {
   white-space: nowrap;
   line-height: 1.5;
   color: rgb(107, 114, 128);
@@ -317,7 +317,7 @@ header .selector__label > ul {
   background: rgb(233, 24, 24);
 }
 
-.custom__btn > span {
+.custom__btn>span {
   white-space: nowrap;
 }
 
@@ -329,12 +329,12 @@ header .selector__label > ul {
   background: rgb(180, 6, 6);
 }
 
-.custom__btn > span {
+.custom__btn>span {
   margin: 0 8px;
   font-size: 1rem;
 }
 
-.custom__btn > svg {
+.custom__btn>svg {
   color: inherit;
   width: 20px;
   height: 20px;
@@ -344,7 +344,7 @@ header .selector__label > ul {
   line-height: 20;
 }
 
-.custom__btn > symbol {
+.custom__btn>symbol {
   color: inherit;
   width: 20px;
   height: 20px;
@@ -376,4 +376,18 @@ header .selector__label > ul {
 
 .custom__input:focus {
   border: 2px solid var(--main-color);
+}
+
+.custom__form__error {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  text-align: left;
+  margin-top: 3px;
+  margin-right: 14px;
+  margin-bottom: 0;
+  margin-left: 14px;
+  color: #d32f2f;
 }

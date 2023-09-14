@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import FuseMessage from '@fuse/core/FuseMessage';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import LoadingWrap from 'app/theme-layouts/mainLayout/components/LoadingWrap';
 import { Header, SideMenuBar, MainTitleBar } from './components';
 
 function MainLayout() {
@@ -23,6 +24,7 @@ function MainLayout() {
   return (
     <div id="layout">
       <ToastContainer style={{ zIndex: 99999 }} position="bottom-center" />
+      <LoadingWrap />
       {config.leftSidePanel.display && (
         <SideMenuBar menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
       )}

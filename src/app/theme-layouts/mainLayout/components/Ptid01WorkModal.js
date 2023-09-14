@@ -16,7 +16,7 @@ import _ from '@lodash';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 
-const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => {
+const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updateWorkResult }) => {
   const siteListData = [
     { name: 'lezhin', title: "레진코믹스" },
     { name: 'kakao', title: "카카오페이지" },
@@ -44,6 +44,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
     title: yup.string().required('작품명은 필수 정보 입니다.'),
     subTitle: yup.string().required('부제는 필수 정보 입니다.'),
     summary: yup.string().required('소개는 필수 정보 입니다.'),
+    ptId01Banner: yup.string().required('메인 배너 이미지는 필수 파일 입니다.'),
   });
 
   const methods = useForm({
@@ -72,10 +73,11 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
       switch (arg.name) {
         case 'ptId01Banner':
           setBanner01Img(arg.file);
-          console.log(banner01Img);
+          setValue('ptId01Banner', '', activeOption);
           break;
         case 'ptId01Logo':
           setTitle01Img(arg.file);
+          setValue('ptId01Logo', '', activeOption);
           break;
         default:
           console.log('default case');
@@ -129,16 +131,18 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
       setValue('summary', popInfo.workInfo.summary, activeOption);
       setValue('ptId01Banner', popInfo.workInfo.poster, activeOption);
       setValue('ptId01Logo', popInfo.workInfo.logo, activeOption);
+      setValue('src', popInfo.workInfo.src, activeOption);
+      setValue('workSeq', popInfo.workInfo.workSeq, activeOption);
       setImgFile(
         popInfo.workInfo.poster,
-        'banner01ImgOld',
+        'posterImgOld',
         setBanner01Img,
         popInfo.ptId,
         popInfo.workInfo.src
       );
       setImgFile(
         popInfo.workInfo.logo,
-        'title01Old',
+        'titleImgOld',
         setTitle01Img,
         popInfo.ptId,
         popInfo.workInfo.src
@@ -183,6 +187,8 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
           userId: user.userId,
           ptId: popInfo.ptId,
           userKey: user.userKey,
+          logo: fileObj.titleImg.name,
+          poster: fileObj.posterImg.name,
         },
         siteList: JSON.stringify({ website: siteArray }),
         state: popInfo.state
@@ -194,7 +200,12 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
         if (payload.status === 200) {
-          addWorkResult(payload.data.response.response.reqJson);
+          if (popInfo.state === "추가") {
+            addWorkResult(payload.data.response.response.reqJson);
+          }
+          if (popInfo.state === "수정") {
+            updateWorkResult(payload.data.response.response.reqJson);
+          }
           onRequestClose();
           toast.success(`작품이 ${popInfo.state}되었습니다.`);
         }
@@ -248,6 +259,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
                 height="361px"
                 control={control}
               />
+              <p className='custom__form__error'>메인 배너 이미지는 필수 파일 입니다.</p>
             </div>
           ) : (
             <>
@@ -263,7 +275,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
                     <span
                       onClick={(e) => {
                         setBanner01Img(null);
-                        setValue('ptId01Banner', '');
+                        setValue('ptId01Banner', '', activeOption);
                       }}
                       className={css.remove__btn}
                     />
@@ -298,7 +310,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult }) => 
                     <span
                       onClick={(e) => {
                         setTitle01Img(null);
-                        setValue('ptId01Logo', '');
+                        setValue('ptId01Logo', '', activeOption);
                       }}
                       className={css.remove__btn}
                     />

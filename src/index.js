@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import Modal from 'react-modal';
 import App from './app/App';
 import * as serviceWorker from './serviceWorker';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 // import reportWebVitals from './reportWebVitals';
 
 Modal.setAppElement('#root');

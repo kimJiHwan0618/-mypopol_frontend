@@ -15,8 +15,10 @@ import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkM
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { updatePageTem } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
+import { updatePageTem, deleteWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import { setSearchedFlag } from 'app/pages/templateManagement/pageManagement/store/PageTemplatesSlice';
+import { confirmAlert } from 'react-confirm-alert';
+import { close, open } from 'app/store/common/loadingWrap';
 
 const ListItemTypes = {
   ITEM: 'item',
@@ -49,12 +51,12 @@ const DraggableItem = ({ id, index, moveItem, children }) => {
 };
 
 function PageManagement() {
-  const [list, setList] = useState([]);
+  const [workList, setWorkList] = useState([]);
   const moveItem = (fromIndex, toIndex) => {
-    const updatedList = [...list];
+    const updatedList = [...workList];
     const [movedItem] = updatedList.splice(fromIndex, 1);
     updatedList.splice(toIndex, 0, movedItem);
-    setList(updatedList);
+    setWorkList(updatedList);
   };
 
   const dispatch = useDispatch();
@@ -97,8 +99,18 @@ function PageManagement() {
       }
     }
     workSection.current.style.height = 'auto';
-    list.push(param)
-    setList(list);
+    workList.push(param)
+    setWorkList(workList);
+  }
+
+  const updateWorkResult = (param) => {
+    param.etc = param.siteList;
+    for (let i = 0; i < workList.length; i += 1) {
+      if (workList[i].workSeq === param.workSeq && workList[i].popolSeq === param.popolSeq) {
+        workList[i] = param
+      }
+    }
+    setWorkList(workList);
   }
 
   const schema = yup.object().shape({
@@ -106,13 +118,13 @@ function PageManagement() {
     thumbnail: yup.string(), // 파일여부?
     mainColor: yup.string().notOneOf([' ', null], '메인색상을 선택해 주세요.'),
     icon: yup.string().notOneOf([' ', null], '아이콘타입을 선택해 주세요.'),
-    fakeName: yup.string(),
+    fakeName: yup.string().required('예명은 필수 정보 입니다.'),
     email: yup
       .string()
       .email('이메일 형식으로 입력해주세요.')
       .required('이메일은 필수 정보 입니다.'),
     phone: yup.string().matches(/^[0-9]{9,11}$/i, "번호는 '-' 없이 9~11자리 번호로 입력해주세요"),
-    title: yup.string(),
+    title: yup.string().required('인사글은 필수 정보 입니다.'),
     profile: yup.string(), // 파일여부?
   });
 
@@ -183,7 +195,7 @@ function PageManagement() {
     setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
-        if (payload.data.response.code === 200) {
+        if (payload.status === 200) {
           if (thumbnailImg !== null) {
             setValue('thumbnailOld', thumbnailImg.name, activeOption);
           }
@@ -202,6 +214,44 @@ function PageManagement() {
         setUpdateLoading(false);
       });
   };
+
+  const workDeleteClick = (e) => {
+    confirmAlert({
+      title: `'${e.title}' 작품을 삭제 하시겠습니까?`,
+      // message: '메세지 공간입니다.',
+      buttons: [
+        {
+          label: '예',
+          onClick: () => {
+            console.log(e)
+            dispatch(open());
+            const param = Object.assign(e, { ptId: location.state.template.popolInfo.ptId, userId: user.userId })
+            dispatch(deleteWork(param))
+              .then(({ payload }) => {
+                if (payload.status === 200) {
+                  setWorkList(payload.data.response);
+                  dispatch(setSearchedFlag(false));
+
+                  toast.success(`'${e.title}' 작품이 삭제되었습니다.`);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                toast.error(`'${e.title}' 작품 삭제 실패.`);
+              })
+              .finally(() => {
+                dispatch(close());
+                // setUpdateLoading(false);
+              });
+          },
+        },
+        {
+          label: '취소',
+          onClick: () => { },
+        },
+      ],
+    });
+  }
 
   const sectionTitleClick = (e) => {
     const el = e.currentTarget;
@@ -265,7 +315,7 @@ function PageManagement() {
     setValue('icon', icon, activeOption);
     setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
     setImgFile(profile, 'profileOld', setProfileImg, ptId);
-    setList(location.state.template.worksInfo);
+    setWorkList(location.state.template.worksInfo);
     if (sns !== null && sns !== '' && sns !== undefined) {
       setSnsList(JSON.parse(sns));
       const snsListLocal = JSON.parse(sns);
@@ -290,7 +340,7 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
-        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} />
+        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} updateWorkResult={updateWorkResult} />
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
@@ -437,6 +487,7 @@ function PageManagement() {
                       className="mb-24"
                       label="예명"
                       autoFocus
+                      required
                       type="text"
                       error={!!errors.fakeName}
                       helperText={errors?.fakeName?.message}
@@ -455,8 +506,11 @@ function PageManagement() {
                       {...field}
                       className="mb-24"
                       fullWidth
+                      required
                       label="인사글"
                       multiline
+                      error={!!errors.title}
+                      helperText={errors?.title?.message}
                       rows={3}
                       variant="outlined"
                     />
@@ -701,7 +755,7 @@ function PageManagement() {
                 </Button>
               </div>
               <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-                {list.map((item, index) => (
+                {workList.map((item, index) => (
                   <DraggableItem
                     key={item.order}
                     id={item.order}
@@ -748,8 +802,7 @@ function PageManagement() {
                         variant="contained"
                         className="custom__btn delete"
                         onClick={() => {
-                          // setPopInfo({ ptId: location.state.template.popolInfo.ptId, state: '추가' });
-                          // openModal();
+                          workDeleteClick(item);
                         }}>
                         <svg
                           size="24"

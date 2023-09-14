@@ -14,7 +14,7 @@ export const getPopolInfo = createAsyncThunk(
       return rejectWithValue(error.response.data);
     }
   }
-);
+)
 
 export const updatePageTem = createAsyncThunk(
   'templateManage/page/update',
@@ -60,6 +60,21 @@ export const addOrUpdateWork = createAsyncThunk(
           },
         }
       );
+      return await response;
+    } catch (error) {
+      if (!error.response.data) {
+        return rejectWithValue(error);
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteWork = createAsyncThunk(
+  'templateManage/page/work/delete',
+  async (param, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/templateManage/page/work/delete`, param);
       return await response;
     } catch (error) {
       if (!error.response.data) {
