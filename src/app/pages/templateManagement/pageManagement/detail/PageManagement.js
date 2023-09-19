@@ -51,7 +51,6 @@ const DraggableItem = ({ id, index, moveItem, children }) => {
 };
 
 function PageManagement() {
-  const [workList, setWorkList] = useState([]);
   const moveItem = (fromIndex, toIndex) => {
     const updatedList = [...workList];
     const [movedItem] = updatedList.splice(fromIndex, 1);
@@ -72,6 +71,8 @@ function PageManagement() {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [popInfo, setPopInfo] = useState({});
+  const [workList, setWorkList] = useState([]);
+  const [siteListData, setSiteListData] = useState([]);
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
   );
@@ -88,7 +89,7 @@ function PageManagement() {
     setPopOpen(true);
   };
 
-  const addWorkResult = (param) => {
+  const workObjUpdate = (param) => {
     param.etc = param.siteList;
     const keys = Object.keys(param);
     for (let i = 0; i < keys.length; i += 1) {
@@ -98,16 +99,20 @@ function PageManagement() {
         delete param[keys[i]]
       }
     }
+    return param;
+  }
+
+  const addWorkResult = (work) => {
     workSection.current.style.height = 'auto';
-    workList.push(param)
+    workList.push(workObjUpdate(work))
     setWorkList(workList);
   }
 
-  const updateWorkResult = (param) => {
-    param.etc = param.siteList;
+  const updateWorkResult = (work) => {
+    work = workObjUpdate(work);
     for (let i = 0; i < workList.length; i += 1) {
-      if (workList[i].workSeq === param.workSeq && workList[i].popolSeq === param.popolSeq) {
-        workList[i] = param
+      if (workList[i].workSeq === work.workSeq && workList[i].popolSeq === work.popolSeq) {
+        workList[i] = work
       }
     }
     setWorkList(workList);
@@ -195,6 +200,7 @@ function PageManagement() {
     setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
+        console.log(payload)
         if (payload.status === 200) {
           if (thumbnailImg !== null) {
             setValue('thumbnailOld', thumbnailImg.name, activeOption);
@@ -223,7 +229,6 @@ function PageManagement() {
         {
           label: '예',
           onClick: () => {
-            console.log(e)
             dispatch(open());
             const param = Object.assign(e, { ptId: location.state.template.popolInfo.ptId, userId: user.userId })
             dispatch(deleteWork(param))
@@ -241,7 +246,7 @@ function PageManagement() {
               })
               .finally(() => {
                 dispatch(close());
-                // setUpdateLoading(false);
+                workSection.current.style.height = 'auto';
               });
           },
         },
@@ -316,6 +321,14 @@ function PageManagement() {
     setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
     setImgFile(profile, 'profileOld', setProfileImg, ptId);
     setWorkList(location.state.template.worksInfo);
+    fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
+      .then(res => res.json())
+      .then(siteList => {
+        setSiteListData(siteList)
+      })
+      .catch(error => {
+        console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
+      });
     if (sns !== null && sns !== '' && sns !== undefined) {
       setSnsList(JSON.parse(sns));
       const snsListLocal = JSON.parse(sns);
@@ -340,7 +353,7 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
-        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} updateWorkResult={updateWorkResult} />
+        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} updateWorkResult={updateWorkResult} siteListData={siteListData} />
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {

@@ -22,8 +22,8 @@ export const updatePageTem = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append('fields', JSON.stringify(param.fields));
-      formData.append('profileImg', param.files.profileImg);
-      formData.append('thumbnailImg', param.files.thumbnailImg);
+      param.files.profileImg !== null && formData.append('profileImg', param.files.profileImg, encodeURIComponent(param.files.profileImg.name));
+      param.files.thumbnailImg !== null && formData.append('thumbnailImg', param.files.thumbnailImg, encodeURIComponent(param.files.thumbnailImg.name));
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templatemanage/page/update`,
         formData,
@@ -33,6 +33,7 @@ export const updatePageTem = createAsyncThunk(
           },
         }
       );
+      console.log(response)
       return await response;
     } catch (error) {
       if (!error.response.data) {
@@ -47,10 +48,11 @@ export const addOrUpdateWork = createAsyncThunk(
   'templateManage/page/work/addOrUpdate',
   async (param, { dispatch, rejectWithValue }) => {
     try {
+      console.log(param)
       const formData = new FormData();
       formData.append('fields', JSON.stringify(param.fields));
-      formData.append('titleImg', param.files.titleImg);
-      formData.append('posterImg', param.files.posterImg);
+      param.files.titleImg !== null && formData.append('titleImg', param.files.titleImg, encodeURIComponent(param.files.titleImg.name));
+      formData.append('posterImg', param.files.posterImg, encodeURIComponent(param.files.posterImg.name));
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templateManage/page/work/addOrUpdate`,
         formData,

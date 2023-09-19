@@ -16,18 +16,10 @@ import _ from '@lodash';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 
-const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updateWorkResult }) => {
-  const siteListData = [
-    { name: 'lezhin', title: "레진코믹스" },
-    { name: 'kakao', title: "카카오페이지" },
-    { name: 'naver', title: "네이버웹툰" },
-    { name: 'ridi', title: "리디" },
-    { name: 'series', title: "네이버시리즈" },
-    { name: 'bomtoon', title: "봄툰" },
-    { name: 'ktoon', title: "케이툰" },
-    /** 예외 케이스는 추후 반영 예정 */
-    // // { name: '그 외', value: 'etc' },
-  ];
+const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updateWorkResult, siteListData }) => {
+  // const siteListData = [];
+  /** 예외 케이스는 추후 반영 예정 */
+  // // { name: '그 외', value: 'etc' },
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const [banner01Img, setBanner01Img] = useState(null);
@@ -133,6 +125,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       setValue('ptId01Logo', popInfo.workInfo.logo, activeOption);
       setValue('src', popInfo.workInfo.src, activeOption);
       setValue('workSeq', popInfo.workInfo.workSeq, activeOption);
+      setValue('order', popInfo.workInfo.order, activeOption);
       setImgFile(
         popInfo.workInfo.poster,
         'posterImgOld',
@@ -140,13 +133,14 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
         popInfo.ptId,
         popInfo.workInfo.src
       );
-      setImgFile(
-        popInfo.workInfo.logo,
-        'titleImgOld',
-        setTitle01Img,
-        popInfo.ptId,
-        popInfo.workInfo.src
-      );
+      popInfo.workInfo.logo === "none" ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption) :
+        setImgFile(
+          popInfo.workInfo.logo,
+          'titleImgOld',
+          setTitle01Img,
+          popInfo.ptId,
+          popInfo.workInfo.src
+        );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
       for (let i = 0; i < siteArr.length; i += 1) {
@@ -180,6 +174,8 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       link: `${getValues()[`${item}Link`]}`
     }));
 
+    const titleImgName = fileObj.titleImg === null ? "none" : fileObj.titleImg.name;
+
     const param = {
       fields: {
         ...getValues(),
@@ -187,7 +183,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           userId: user.userId,
           ptId: popInfo.ptId,
           userKey: user.userKey,
-          logo: fileObj.titleImg.name,
+          logo: titleImgName,
           poster: fileObj.posterImg.name,
         },
         siteList: JSON.stringify({ website: siteArray }),
@@ -201,10 +197,10 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       .then(({ payload }) => {
         if (payload.status === 200) {
           if (popInfo.state === "추가") {
-            addWorkResult(payload.data.response.response.reqJson);
+            addWorkResult(payload.data.response);
           }
           if (popInfo.state === "수정") {
-            updateWorkResult(payload.data.response.response.reqJson);
+            updateWorkResult(payload.data.response);
           }
           onRequestClose();
           toast.success(`작품이 ${popInfo.state}되었습니다.`);
