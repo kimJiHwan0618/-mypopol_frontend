@@ -33,7 +33,6 @@ export const updatePageTem = createAsyncThunk(
           },
         }
       );
-      console.log(response)
       return await response;
     } catch (error) {
       if (!error.response.data) {

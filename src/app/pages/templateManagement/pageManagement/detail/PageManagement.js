@@ -55,6 +55,7 @@ function PageManagement() {
     const updatedList = [...workList];
     const [movedItem] = updatedList.splice(fromIndex, 1);
     updatedList.splice(toIndex, 0, movedItem);
+    console.log(updatedList)
     setWorkList(updatedList);
   };
 
@@ -189,6 +190,7 @@ function PageManagement() {
           ptId: location.state.template.popolInfo.ptId,
           userKey: user.userKey,
         },
+        workList,
         snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(clone),
       },
       files: {
@@ -200,7 +202,6 @@ function PageManagement() {
     setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
-        console.log(payload)
         if (payload.status === 200) {
           if (thumbnailImg !== null) {
             setValue('thumbnailOld', thumbnailImg.name, activeOption);
@@ -208,6 +209,12 @@ function PageManagement() {
           if (profileImg !== null) {
             setValue('profileOld', profileImg.name, activeOption);
           }
+          const workOrderSet = [...workList];
+          for (let i = 0; i < workOrderSet.length; i += 1) {
+            workOrderSet[i].order = i
+          }
+          console.log(workOrderSet)
+          setWorkList(workOrderSet);
           dispatch(setSearchedFlag(false));
           toast.success('포폴 정보가 업데이트 되었습니다!');
         }
@@ -284,7 +291,6 @@ function PageManagement() {
         }
 
         const loadComplate = () => {
-          console.log(file);
           setImgFile(file);
           // profileSection.current.style.height = 'auto';
           // popolSection.current.style.height = 'auto';
@@ -694,7 +700,6 @@ function PageManagement() {
                           // helperText={errors?.fakeName?.message}
                           variant="outlined"
                           fullWidth
-                          required
                         />
                       )}
                     />
@@ -708,11 +713,11 @@ function PageManagement() {
                           label="링크"
                           autoFocus
                           type="text"
+                          placeholder="https://example.com"
                           // error={!!errors.fakeName}
                           // helperText={errors?.fakeName?.message}
                           variant="outlined"
                           fullWidth
-                          required
                         />
                       )}
                     />

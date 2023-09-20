@@ -366,6 +366,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
                 className="mb-24"
                 fullWidth
                 label="소개글"
+                rows={3}
                 error={!!errors.summary}
                 helperText={errors?.summary?.message}
                 autoFocus
@@ -450,7 +451,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
                     // helperText={errors?.fakeName?.message}
                     variant="outlined"
                     fullWidth
-                    required
+                    placeholder="https://example.com"
                   />
                 )}
               />
