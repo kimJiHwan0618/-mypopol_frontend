@@ -33,7 +33,6 @@ function PageManagements() {
         .then(({ payload }) => {
           if (payload.data.response.code === 200) {
             dispatch(setPageTemplates(payload.data.response.response));
-            console.log(payload.data.response.response);
             dispatch(setSearchedFlag(true));
             toast.success('템플릿 정보를 새로 조회하였습니다.');
           }
@@ -125,7 +124,7 @@ function PageManagements() {
                         href={
                           obj.domain
                             ? `https://${obj.domain}`
-                            : `site.mypopol.com/${obj.ptId}/${user.userId}`
+                            : `https://site.mypopol.com/${obj.ptId}/${user.userId}`
                         }
                         target="_blank"
                         className={css.link__icon}
