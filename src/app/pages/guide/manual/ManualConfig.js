@@ -5,7 +5,9 @@ const Manual = lazy(() => import('./Manual'));
 const config = {
   settings: {
     layout: {
-      config: {},
+      config: {
+        enabled: false,
+      },
     },
   },
   routes: [

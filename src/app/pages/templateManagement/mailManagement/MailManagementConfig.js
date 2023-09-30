@@ -5,7 +5,9 @@ const MailManagement = lazy(() => import('./MailManagement'));
 const confg = {
   settings: {
     layout: {
-      config: {},
+      config: {
+        enabled: false,
+      },
     },
   },
   routes: [

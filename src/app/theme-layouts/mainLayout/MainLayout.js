@@ -1,14 +1,12 @@
 import FuseSuspense from '@fuse/core/FuseSuspense';
-import { memo, useContext, useState } from 'react';
-import { useRoutes, useLocation } from 'react-router-dom';
-import AppContext from 'app/AppContext';
+import { memo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { selectFuseCurrentLayoutConfig } from 'app/store/fuse/settingsSlice';
 import { useSelector } from 'react-redux';
 import FuseMessage from '@fuse/core/FuseMessage';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import LoadingWrap from 'app/theme-layouts/mainLayout/components/LoadingWrap';
-import { Header, SideMenuBar, MainTitleBar } from './components';
+import { Header, SideMenuBar, MainTitleBar, CommonPageCom, LoadingWrap, PageServiceNotice } from './components/common';
 
 function MainLayout() {
   const location = useLocation();
@@ -18,8 +16,6 @@ function MainLayout() {
   };
 
   const config = useSelector(selectFuseCurrentLayoutConfig);
-  const appContext = useContext(AppContext);
-  const { routes } = appContext;
 
   return (
     <div id="layout">
@@ -34,7 +30,7 @@ function MainLayout() {
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
         )}
         {config.toolbar.display && location.pathname.split('/')[1] !== 'apps' && <MainTitleBar />}
-        <FuseSuspense>{useRoutes(routes)}</FuseSuspense>
+        <FuseSuspense>{!config.enabled ? <PageServiceNotice /> : <CommonPageCom />}</FuseSuspense>
       </main>
       <FuseMessage />
     </div>

@@ -31,8 +31,8 @@ function PageManagements() {
       setPopolLoading(true);
       dispatch(getPageTemList(user))
         .then(({ payload }) => {
-          if (payload.data.response.code === 200) {
-            dispatch(setPageTemplates(payload.data.response.response));
+          if (payload.status === 200) {
+            dispatch(setPageTemplates(payload.data));
             dispatch(setSearchedFlag(true));
             toast.success('템플릿 정보를 새로 조회하였습니다.');
           }
@@ -55,7 +55,7 @@ function PageManagements() {
             <div className={`${css.section__inner} section__inner`}>
               <div className={css.template__top}>
                 <p>
-                  템플릿 ID :<span className="f__bold">&nbsp;{obj.ptId}</span>
+                  템플릿 설명&nbsp;&nbsp;:<span className="f__medium">&nbsp;&nbsp;{obj.description}</span>
                 </p>
                 <Button
                   variant="contained"
@@ -65,7 +65,6 @@ function PageManagements() {
                     const params = { ...user, ptId: obj.ptId };
                     dispatch(getPopolInfo(params))
                       .then(({ payload }) => {
-                        console.log(payload);
                         if (payload.status === 200) {
                           navigate(`/template/page/${user.userId}?ptId=${obj.ptId}`, {
                             state: {
@@ -186,7 +185,7 @@ function PageManagements() {
                           />
                         </svg>
                       </dt>
-                      <dd className="f__medium">25</dd>
+                      <dd className="f__medium">0</dd>
                     </dl>
                   </li>
                   <li>
@@ -202,7 +201,7 @@ function PageManagements() {
                           />
                         </svg>
                       </dt>
-                      <dd className="f__medium">25</dd>
+                      <dd className="f__medium">0</dd>
                     </dl>
                   </li>
                   <li>
@@ -218,7 +217,7 @@ function PageManagements() {
                           />
                         </svg>
                       </dt>
-                      <dd className="f__medium">125</dd>
+                      <dd className="f__medium">0</dd>
                     </dl>
                   </li>
                 </ul>

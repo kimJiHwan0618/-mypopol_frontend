@@ -12,7 +12,9 @@ const settingsConfig = {
   /*
     Default redirect url for the logged-in user,
    */
-  loginRedirectUrl: '/dashboard/template',
+  loginRedirectUrl: '/template/page',
+  // 임시로 페이지 템플릿을 메인으로 
+  // 기능 완료시 /dashboard/template
 };
 
 export default settingsConfig;

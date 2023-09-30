@@ -2,8 +2,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { DetailTitleBar } from 'app/theme-layouts/mainLayout/components';
-import { useLocation } from 'react-router-dom';
+import { DetailTitleBar } from 'app/theme-layouts/mainLayout/components/common';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import css from 'assets/css/pageManagement.module.css';
 import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploader';
@@ -60,6 +60,7 @@ function PageManagement() {
   };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector(selectUser);
   const location = useLocation();
   const [profileImg, setProfileImg] = useState(null);
@@ -302,51 +303,55 @@ function PageManagement() {
   };
 
   useEffect(() => {
-    const {
-      popolName,
-      thumbnail,
-      mainColor,
-      fakeName,
-      email,
-      phone,
-      title,
-      profileImg: profile,
-      ptId,
-      icon,
-      sns,
-    } = location.state.template.popolInfo;
-    setValue('popolName', popolName, activeOption);
-    setValue('mainColor', mainColor, activeOption);
-    setValue('fakeName', fakeName, activeOption);
-    setValue('email', email, activeOption);
-    setValue('phone', phone.replaceAll('-', ''), activeOption);
-    setValue('title', title, activeOption);
-    setValue('thumbnail', thumbnail, activeOption);
-    setValue('profile', profile, activeOption);
-    setValue('icon', icon, activeOption);
-    setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
-    setImgFile(profile, 'profileOld', setProfileImg, ptId);
-    setWorkList(location.state.template.worksInfo);
-    fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
-      .then(res => res.json())
-      .then(siteList => {
-        setSiteListData(siteList)
-      })
-      .catch(error => {
-        console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
-      });
-    if (sns !== null && sns !== '' && sns !== undefined) {
-      setSnsList(JSON.parse(sns));
-      const snsListLocal = JSON.parse(sns);
-      const snsKeys = Object.keys(snsListLocal);
-      const snsValues = Object.values(snsListLocal);
-      for (let i = 0; i < snsKeys.length; i += 1) {
-        // 필드 등록
-        register(`${snsKeys[i]}Id`, { required: `${snsKeys[i]} 아이디를 입력해주세요` });
-        register(`${snsKeys[i]}Link`, { required: `${snsKeys[i]} 링크를 입력해주세요` });
-        // 값 세팅
-        setValue(`${snsKeys[i]}Id`, snsValues[i].id, activeOption);
-        setValue(`${snsKeys[i]}Link`, snsValues[i].link, activeOption);
+    if (location.state === null) {
+      navigate('/template/page')
+    } else {
+      const {
+        popolName,
+        thumbnail,
+        mainColor,
+        fakeName,
+        email,
+        phone,
+        title,
+        profileImg: profile,
+        ptId,
+        icon,
+        sns,
+      } = location.state.template.popolInfo;
+      setValue('popolName', popolName, activeOption);
+      setValue('mainColor', mainColor, activeOption);
+      setValue('fakeName', fakeName, activeOption);
+      setValue('email', email, activeOption);
+      setValue('phone', phone.replaceAll('-', ''), activeOption);
+      setValue('title', title, activeOption);
+      setValue('thumbnail', thumbnail, activeOption);
+      setValue('profile', profile, activeOption);
+      setValue('icon', icon, activeOption);
+      setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
+      setImgFile(profile, 'profileOld', setProfileImg, ptId);
+      setWorkList(location.state.template.worksInfo);
+      fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
+        .then(res => res.json())
+        .then(siteList => {
+          setSiteListData(siteList)
+        })
+        .catch(error => {
+          console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
+        });
+      if (sns !== null && sns !== '' && sns !== undefined) {
+        setSnsList(JSON.parse(sns));
+        const snsListLocal = JSON.parse(sns);
+        const snsKeys = Object.keys(snsListLocal);
+        const snsValues = Object.values(snsListLocal);
+        for (let i = 0; i < snsKeys.length; i += 1) {
+          // 필드 등록
+          register(`${snsKeys[i]}Id`, { required: `${snsKeys[i]} 아이디를 입력해주세요` });
+          register(`${snsKeys[i]}Link`, { required: `${snsKeys[i]} 링크를 입력해주세요` });
+          // 값 세팅
+          setValue(`${snsKeys[i]}Id`, snsValues[i].id, activeOption);
+          setValue(`${snsKeys[i]}Link`, snsValues[i].link, activeOption);
+        }
       }
     }
   }, [setValue, register, setSnsList]);

@@ -5,7 +5,9 @@ const TemplatesDashboard = lazy(() => import('./TemplateDashboard'));
 const config = {
   settings: {
     layout: {
-      config: {},
+      config: {
+        enabled: false,
+      },
     },
   },
   routes: [

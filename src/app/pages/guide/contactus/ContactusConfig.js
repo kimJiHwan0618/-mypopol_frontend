@@ -5,7 +5,9 @@ const Contactus = lazy(() => import('./Contactus'));
 const config = {
   settings: {
     layout: {
-      config: {},
+      config: {
+        enabled: false,
+      },
     },
   },
   routes: [

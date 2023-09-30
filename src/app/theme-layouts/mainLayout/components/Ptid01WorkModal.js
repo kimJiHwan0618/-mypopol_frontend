@@ -246,7 +246,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       </button>
       <div className={`${css.wrap__inner} vertical__scroll`}>
         <div className={css2.list__item}>
-          <p className="f__medium">메인 배너</p>
+          <p className="f__medium">메인 배너<span>&nbsp;(1250 x 1450 px 이미지를 권장합니다.)</span></p>
           {banner01Img === null || !banner01Img.type.startsWith('image/') ? (
             <div>
               <FileUpload

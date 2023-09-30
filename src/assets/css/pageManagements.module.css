@@ -132,6 +132,7 @@
   padding: 12px;
   border-radius: 8px;
   color: white;
+  justify-content: space-between
 }
 
 .icon__wrap>li>dl dt {

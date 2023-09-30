@@ -31,7 +31,9 @@ const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
   {
     path: '/',
-    element: <Navigate to="/dashboard/template" />,
+    element: <Navigate to="/template/page" />,
+    // 임시로 페이지 템플릿을 메인으로 
+    // 기능 완료시 /dashboard/template
   },
   {
     path: 'loading',

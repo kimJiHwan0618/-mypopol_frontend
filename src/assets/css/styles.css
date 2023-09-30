@@ -156,6 +156,50 @@ main>.container {
   padding: 24px;
 }
 
+.content.service__ready,
+.content.page404 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content.service__ready>img,
+.content.page404>img {
+  width: 360px;
+  height: 360px;
+}
+
+.content.service__ready>h3 {
+  font-size: 2rem;
+}
+
+.content.page404>img {
+  margin-top: -52px;
+}
+
+.content.page404 button {
+  margin-top: -52px;
+}
+
+.content.page404 dl {
+  text-align: center;
+}
+
+.content.page404 dl dt {
+  font-size: 1.8rem;
+  margin: 22px 0;
+}
+
+.content.page404 dl dd {
+  font-size: 1rem;
+  opacity: .7;
+  line-height: 1.82;
+}
+
+.content.service__ready>h3 span {
+  color: var(--main-color);
+}
+
 .content .sub__nav .left {
   display: flex;
   align-items: center;
@@ -394,4 +438,32 @@ div#menu- {
   .section__grid__wrap.common__detail>.sub__nav>.left {
     margin-bottom: 18px;
   }
+
+  .content.service__ready>img,
+  .content.page404>img {
+    width: 220px;
+    height: 220px;
+  }
+
+  .content.service__ready>h3 {
+    font-size: 1.6rem;
+  }
+
+
+  .content.page404>img {
+    margin-top: -20px;
+  }
+
+  .content.page404 button {
+    margin-top: -20px;
+  }
+
+  .content.page404 dl dt {
+    font-size: 1.4rem;
+  }
+
+  .content.page404 dl dd {
+    opacity: .7;
+  }
+
 }
