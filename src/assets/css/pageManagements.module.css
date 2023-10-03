@@ -7,13 +7,24 @@
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
+  overflow-x: auto;
+  position: relative;
+  min-height: 40px;
+}
+
+.template__top>button {
+  margin-left: 12px;
+}
+
+.top__title__wrap {
+  width: calc(100% -84px);
+  overflow-x: auto;
 }
 
 .template__top p {
   color: #6b7280;
   font-size: 1rem;
   letter-spacing: -0.025em;
-  white-space: nowrap;
 }
 
 .content {
@@ -150,7 +161,7 @@
   font-size: 1.2rem;
 }
 
-@media (max-width: 1220px) {
+@media (max-width: 1080px) {
   .content {
     flex-direction: column;
   }
@@ -160,12 +171,12 @@
   }
 
   .right__content {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
   }
 
   .img__box {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
   }
 
@@ -174,7 +185,7 @@
   }
 
   .icon__wrap {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;

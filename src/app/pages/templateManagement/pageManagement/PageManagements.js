@@ -54,9 +54,11 @@ function PageManagements() {
           <section key={obj.userKey + obj.ptId} className={css.template__section}>
             <div className={`${css.section__inner} section__inner`}>
               <div className={css.template__top}>
-                <p>
-                  템플릿 설명&nbsp;&nbsp;:<span className="f__medium">&nbsp;&nbsp;{obj.description}</span>
-                </p>
+                <div className={css.top__title__wrap}>
+                  <p className='f__medium'>
+                    {obj.popolName}
+                  </p>
+                </div>
                 <Button
                   variant="contained"
                   className="custom__btn"
@@ -144,8 +146,8 @@ function PageManagements() {
                     </li>
                     <li>
                       <dl>
-                        <dt className="f__medium">포폴명</dt>
-                        <dd>:&nbsp;&nbsp;&nbsp;{obj.popolName}</dd>
+                        <dt className="f__medium">설명</dt>
+                        <dd>:&nbsp;&nbsp;&nbsp;{obj.description}</dd>
                       </dl>
                     </li>
                     <li>
@@ -185,7 +187,7 @@ function PageManagements() {
                           />
                         </svg>
                       </dt>
-                      <dd className="f__medium">0</dd>
+                      <dd className="f__medium">{obj.vistedCount}</dd>
                     </dl>
                   </li>
                   <li>
