@@ -30,7 +30,7 @@ const defaultValues = {
 };
 
 function SignInPage() {
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(true);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
