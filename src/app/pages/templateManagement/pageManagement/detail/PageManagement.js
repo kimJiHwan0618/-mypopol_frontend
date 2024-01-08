@@ -55,7 +55,6 @@ function PageManagement() {
     const updatedList = [...workList];
     const [movedItem] = updatedList.splice(fromIndex, 1);
     updatedList.splice(toIndex, 0, movedItem);
-    console.log(updatedList)
     setWorkList(updatedList);
   };
 
