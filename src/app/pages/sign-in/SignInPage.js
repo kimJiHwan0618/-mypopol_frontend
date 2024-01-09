@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
+import GoogleLoginBtn from 'app/pages/sign-in/snsLogin/Google';
 import jwtService from '../../auth/services/jwtService';
 import 'assets/css/signin.css';
 
@@ -16,7 +17,6 @@ import 'assets/css/signin.css';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  userKey: yup.string().required('발급키를 입력해 주세요.'),
   userId: yup.string().required('유저ID를 입력해 주세요.'),
   password: yup
     .string()
@@ -25,7 +25,6 @@ const schema = yup.object().shape({
 });
 
 const defaultValues = {
-  userKey: '',
   userId: '',
   password: '',
 };
@@ -49,17 +48,16 @@ function SignInPage() {
         shouldDirty: true,
         shouldValidate: true,
       };
-      setValue('userKey', paramUserKey == null ? '' : paramUserKey, activeOption);
-      setValue('userId', paramUserKey == null ? 'caribo1129' : paramUserKey, activeOption);
-      setValue('password', paramUserKey == null ? '12345678' : '', activeOption);
+      setValue('userId', paramUserKey == null ? '' : paramUserKey, activeOption);
+      setValue('password', paramUserKey == null ? '' : '', activeOption);
     },
     [setValue]
   );
 
-  function onSubmit({ userKey, userId, password }) {
+  function onSubmit({ userId, password }) {
     setLoginLoading(true);
     jwtService
-      .signInWithEmailAndPassword(userKey, userId, password)
+      .signInWithEmailAndPassword(userId, password)
       .then((user) => {
         // No need to do anything, user data will be set at app/auth/AuthContext
       })
@@ -90,24 +88,6 @@ function SignInPage() {
                 </Link> */}
                 </div>
                 <form name="loginForm" noValidate onSubmit={handleSubmit(onSubmit)}>
-                  {/* <Controller
-                  name="userKey"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      className="mb-24"
-                      label="발급키"
-                      autoFocus
-                      type="text"
-                      error={!!errors.userKey}
-                      helperText={errors?.userKey?.message}
-                      variant="outlined"
-                      required
-                      fullWidth
-                    />
-                  )}
-                /> */}
                   <Controller
                     name="userId"
                     control={control}
@@ -176,6 +156,9 @@ function SignInPage() {
                     </Button>
                     <NaverLoginBtn />
                   </div>
+                  <div className='sns__btn google'>
+                    <GoogleLoginBtn />
+                  </div>
                 </div>
               </div>
             </div>
@@ -205,8 +188,8 @@ function SignInPage() {
                   <circle r="234" cx="790" cy="491" />
                 </g>
               </svg>
-              {/* <h2>Mypopol Admin System</h2> */}
-              {/* <p>안녕하세요 Mypopol 관리자 시스템입니다.</p> */}
+              <h2>Mypopol Admin System</h2>
+              <p>안녕하세요 마이포폴 관리자 시스템입니다.</p>
             </div>
           </div>
         </Paper>
