@@ -20,7 +20,6 @@ import { getPopolInfo } from './store/PageTemplateSlice';
 function PageManagements() {
   const searchedFlag = useSelector(selectSearchedFlag);
   const pageTemplates = useSelector(selectAllData);
-
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const dispatch = useDispatch();

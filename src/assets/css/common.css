@@ -330,7 +330,6 @@ header .selector__label>ul {
 }
 
 .custom__btn>span {
-  margin: 0 8px;
   font-size: 1rem;
 }
 
@@ -342,6 +341,7 @@ header .selector__label>ul {
   min-height: 20px;
   font-size: 20px;
   line-height: 20;
+  margin-left: 12px;
 }
 
 .custom__btn>symbol {

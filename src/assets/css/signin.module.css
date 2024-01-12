@@ -1,0 +1,316 @@
+.signin__wrap {
+  height: 100vh;
+  background: rgb(241, 245, 249);
+}
+
+.paper {
+  border-radius: 0px;
+  box-shadow: none;
+  background: none;
+  height: 100%;
+}
+
+.signin__wrap__inner {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.signin__wrap__inner>div {
+  width: 50%;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 6rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.left__inner {
+  height: 100%;
+  max-width: 330px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.left__inner>form {
+  margin-bottom: 24px;
+}
+
+.notice__txt {
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.notice__txt:last-of-type {
+  margin-bottom: 0px;
+}
+
+.notice__txt>p {
+  color: #999;
+}
+
+.notice__txt>a {
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: .7;
+}
+
+
+.sns__login__wrap {
+  width: 100%;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.sns__btn {
+  width: 54px !important;
+  height: 54px !important;
+  border-radius: 100px;
+  overflow: hidden;
+  cursor: pointer;
+  margin-right: 12px;
+  opacity: .8;
+  position: relative;
+}
+
+.sns__btn:last-of-type {
+  margin-right: 0px;
+}
+
+.sns__btn>a img {
+  width: 100% !important;
+}
+
+.sns__btn:hover {
+  opacity: 1;
+}
+
+.sns__btn>button {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.logo__img {
+  height: 40%;
+}
+
+.logo__img>img {
+  height: 100%;
+}
+
+/* NAVER BUTTON */
+.sns__btn:first-of-type button {
+  background: #1EC800;
+  padding: 0px !important;
+  min-width: 54px !important;
+  min-height: 54px !important;
+}
+
+.sns__btn>div {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.01;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.sns__btn>div img {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* // NAVER BUTTON */
+
+/* GOOGLE BUTTON */
+.google__btn {
+  border: 1px solid #c5c5c5;
+}
+
+.google__btn button {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: none !important;
+  background: none;
+}
+
+.google__btn button>div {
+  margin: 0px !important;
+  padding: 0px !important;
+  height: 24px;
+  width: 24px;
+  -webkit-transform: scale(1.2) translateX(3px) translateY(3px);
+}
+
+.google__btn button span {
+  display: none;
+}
+
+/* // GOOGLE BUTTON */
+.main__title {
+  font-size: 2.6rem;
+  margin-bottom: 24px;
+}
+
+.left__section {
+  align-items: flex-end;
+  background: white;
+}
+
+.right__section {
+  background: rgb(30, 41, 59);
+  color: white;
+  overflow: hidden;
+  min-width: 550px;
+}
+
+.right__section>h2 {
+  font-size: 3.2rem;
+  margin-bottom: 24px;
+}
+
+.right__section>p {
+  font-size: 1.4rem;
+  opacity: 0.6;
+  line-height: 1.62;
+}
+
+.right__section>svg {
+  position: absolute;
+}
+
+.right__section>svg:first-of-type {
+  right: -64px;
+  top: -64px;
+  opacity: 0.2;
+  width: 220px;
+  height: 192px;
+  color: rgb(100, 116, 139);
+}
+
+.right__section>svg circle {
+  color: rgb(100, 116, 139);
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+.right__section>svg:nth-of-type(2) {
+  left: 0;
+  top: 0;
+}
+
+.right__section>svg>g {
+  color: rgb(100, 116, 139);
+  opacity: 0.2;
+}
+
+.left__inner>div {
+  display: flex;
+}
+
+.left__inner form>div {
+  margin-bottom: 4px;
+  min-height: 75.91px;
+}
+
+.left__inner form>div:nth-of-type(3) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left__innerft form>button {
+  width: 100%;
+}
+
+.signup__notice {
+  margin-bottom: 12px;
+}
+
+.signup__notice a {
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none !important;
+  padding: 4px 2px;
+  color: var(--main-color) !important;
+}
+
+.signup__notice a:hover {
+  text-decoration: underline !important;
+}
+
+.login__btn {
+  width: 100%;
+}
+
+@media (max-width: 1460px) {
+  .right__section>h2 {
+    font-size: 2.4rem;
+  }
+
+  .right__section>p {
+    font-size: 1.2rem;
+  }
+
+  .left__inner>h1 {
+    font-size: 2.4rem;
+  }
+
+  .signup__notice>p {
+    font-size: .9rem;
+  }
+
+  .signup__notice>a {
+    font-size: .9rem;
+  }
+
+  .signin__wrap__inner>div {
+    padding: 4rem 3rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .right__section {
+    display: none !important;
+  }
+
+  .left__inner {
+    max-width: none;
+  }
+
+  .signin__wrap__inner {
+    justify-content: center;
+    background: rgb(241, 245, 249);
+    align-items: center;
+  }
+
+  .signin__wrap__inner>div {
+    padding: 32px;
+    width: 70%;
+    background: white;
+    border-radius: 16px;
+    height: 100%;
+    min-height: 488px;
+    max-height: calc(100vh - 32px);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
+    --tw-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+  }
+}
+
+@media (max-width: 650px) {
+  .signin__wrap__inner>div {
+    max-height: none;
+    width: 100%;
+  }
+
+  .left__section {
+    align-items: center;
+  }
+}

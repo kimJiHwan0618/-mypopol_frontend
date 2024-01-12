@@ -17,7 +17,7 @@ const GoogleLoginButton = () => {
     <>
       <GoogleLogin
         clientId={clientId}
-        buttonText="구글아이디 로그인"
+        buttonText=""
         onSuccess={(res) => {
           console.log(res);
         }}

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { TextField, Button, Paper } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { TextField, Button, Paper, Typography, Link } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
 import { useState, useEffect } from 'react';
@@ -10,8 +10,8 @@ import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
 import GoogleLoginBtn from 'app/pages/sign-in/snsLogin/Google';
+import css from 'assets/css/signin.module.css';
 import jwtService from '../../auth/services/jwtService';
-import 'assets/css/signin.css';
 
 /**
  * Form Validation Schema
@@ -30,6 +30,7 @@ const defaultValues = {
 };
 
 function SignInPage() {
+  const navigate = useNavigate();
   const [loginLoading, setLoginLoading] = useState(false);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
@@ -38,7 +39,6 @@ function SignInPage() {
   });
 
   const { isValid, dirtyFields, errors } = formState;
-
   const routeParams = useParams();
   const { paramUserKey } = routeParams;
 
@@ -48,8 +48,8 @@ function SignInPage() {
         shouldDirty: true,
         shouldValidate: true,
       };
-      setValue('userId', paramUserKey == null ? '' : paramUserKey, activeOption);
-      setValue('password', paramUserKey == null ? '' : '', activeOption);
+      // setValue('userId', paramUserKey == null ? '' : paramUserKey, activeOption);
+      // setValue('password', paramUserKey == null ? '' : '', activeOption);
     },
     [setValue]
   );
@@ -75,18 +75,12 @@ function SignInPage() {
 
   return (
     <>
-      <div className="signin__wrap">
-        <Paper>
-          <div className="inner">
-            <div className="left">
-              <div className="inner__left">
-                <h1 className="f__bold">로그인</h1>
-                <div>
-                  {/* <Typography>계정이 없으신가요? </Typography> */}
-                  {/* <Link className="" to="/sign-up">
-                  회원가입
-                </Link> */}
-                </div>
+      <div className={css.signin__wrap}>
+        <Paper className={css.paper}>
+          <div className={css.signin__wrap__inner}>
+            <div className={css.left__section}>
+              <div className={css.left__inner}>
+                <h1 className={`f__bold ${css.main__title}`}>로그인</h1>
                 <form name="loginForm" noValidate onSubmit={handleSubmit(onSubmit)}>
                   <Controller
                     name="userId"
@@ -95,7 +89,7 @@ function SignInPage() {
                       <TextField
                         {...field}
                         className="mb-24"
-                        label="유저ID"
+                        label="아이디"
                         autoFocus
                         type="text"
                         error={!!errors.userId}
@@ -123,16 +117,10 @@ function SignInPage() {
                       />
                     )}
                   />
-
-                  {/* <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between">
-                  <Link className="text-md font-medium" to="/forgot-password">
-                    비밀번호 초기화
-                  </Link>
-                </div> */}
                   <Button
                     variant="contained"
                     color="secondary"
-                    className=" w-full mt-16 custom__btn f__bold"
+                    className={`custom__btn f__medium ${css.login__btn}`}
                     aria-label="Sign in"
                     disabled={_.isEmpty(dirtyFields) || !isValid || loginLoading}
                     type="submit"
@@ -144,25 +132,34 @@ function SignInPage() {
                     )}
                   </Button>
                 </form>
-                <div className='sns__login__wrap'>
-                  <div className='sns__btn'>
-                    <Button
-                      className=" w-full mt-16 custom__btn f__bold"
-                    >
-                      <span className='logo__img'>
+                <div className={css.signup__notice}>
+                  <Typography className="f__regular">계정이 없으신가요?&nbsp;</Typography>
+                  <Link className="f__medium" onClick={() => { navigate("/sign-up/1") }}>
+                    계정 생성
+                  </Link>
+                </div>
+                <div className={css.signup__notice}>
+                  <Typography className="f__regular">비밀번호를 잊어버리셨나요?&nbsp;</Typography>
+                  <Link className="f__medium" onClick={() => { navigate("/sign-up") }}>
+                    비밀번호 찾기
+                  </Link>
+                </div>
+                <div className={css.sns__login__wrap}>
+                  <div className={css.sns__btn}>
+                    <Button className=" w-full mt-16 f__bold">
+                      <span className={css.logo__img}>
                         <img src={require('assets/img/sign-in/logo__naver.png')} alt="네이버 로고" />
                       </span>
-                      <span className="mx-8 text-white font-bold">네이버 아이디 로그인</span>
                     </Button>
                     <NaverLoginBtn />
                   </div>
-                  <div className='sns__btn google'>
+                  <div className={`${css.sns__btn} ${css.google__btn}`}>
                     <GoogleLoginBtn />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="right">
+            <div className={css.right__section}>
               <svg viewBox="0 0 220 192" fill="none">
                 <defs>
                   <pattern
@@ -189,7 +186,7 @@ function SignInPage() {
                 </g>
               </svg>
               <h2>Mypopol Admin System</h2>
-              <p>안녕하세요 마이포폴 관리자 시스템입니다.</p>
+              <p>안녕하세요. 마이포폴 관리자 시스템에 오신걸 환영합니다!</p>
             </div>
           </div>
         </Paper>

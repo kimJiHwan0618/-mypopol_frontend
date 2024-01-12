@@ -29,6 +29,10 @@ const SignUpConfig = {
       path: 'sign-up',
       element: <SignUpPage />,
     },
+    {
+      path: 'sign-up/:step',
+      element: <SignUpPage />,
+    },
   ],
 };
 
