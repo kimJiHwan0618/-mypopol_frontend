@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import css from 'assets/css/pageManagements.module.css';
 import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -54,9 +55,7 @@ function PageManagements() {
             <div className={`${css.section__inner} section__inner`}>
               <div className={css.template__top}>
                 <div className={css.top__title__wrap}>
-                  <p className='f__medium'>
-                    {obj.popolName}
-                  </p>
+                  <p className="f__medium">{obj.popolName}</p>
                 </div>
                 <Button
                   variant="contained"

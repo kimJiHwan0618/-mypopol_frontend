@@ -1,20 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm } from 'react-hook-form';
-import { TextField, Button, Paper, Typography, Link } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { Button, Paper, Typography, Link, TextField } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { Email, Smartphone } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import _ from '@lodash';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import Lottie from 'react-lottie';
-import animationData from 'app/data/loading.json';
 import css from 'assets/css/signup.module.css';
-import jwtService from '../../auth/services/jwtService';
+import { getAuthCode } from './store/SingUpSlice';
 
-/**
- * Form Validation Schema
- */
 const schema = yup.object().shape({
   userId: yup.string().required('유저ID를 입력해 주세요.'),
   password: yup
@@ -31,7 +26,8 @@ const defaultValues = {
 function SignUpPage() {
   const { step } = useParams();
   const navigate = useNavigate();
-  const [loginLoading, setLoginLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [authStep, setAuthStep] = useState(1);
   // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
   const [authType, setAuthType] = useState(null);
@@ -47,45 +43,61 @@ function SignUpPage() {
   const { isValid, dirtyFields, errors } = formState;
 
   const authTypeClick = (type) => {
-    setAuthType(type)
-    navigate("/sign-up/2")
-  }
+    setAuthType(type);
+    navigate('/sign-up/2');
+  };
 
   const resetPage = () => {
-    navigate("/sign-up/1")
-    setAuthStep(1)
-  }
+    navigate('/sign-up/1');
+    setAuthStep(1);
+  };
 
   const authCheck = (param) => {
     if (param === 2) {
       if (!authType) {
-        toast.warning("인증방법을 선택해주세요.")
-        resetPage()
+        toast.warning('인증방법을 선택해주세요.');
+        resetPage();
       }
     } else if (param === 3) {
       if (!authFlag) {
-        toast.warning("본인인증을 진행해주세요.")
-        resetPage()
+        toast.warning('본인인증을 진행해주세요.');
+        resetPage();
       }
     }
-  }
+  };
+
+  const authCodeSend = () => {
+    setLoading(true);
+    dispatch(getAuthCode({ email: 'wlghks0106@naver.com' }))
+      .then(({ payload }) => {
+        if (payload.status === 200) {
+          toast.success('템플릿 정보를 새로 조회하였습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    setAuthStep(Number(step))
+    setAuthStep(Number(step));
     if (step && step >= 1 && step <= 3) {
-      switch (step) {
+      switch (Number(step)) {
         case 1:
           break;
         case 2:
-          authCheck(2)
+          authCheck(2);
           break;
         case 3:
-          authCheck(3)
+          authCheck(3);
           break;
         default:
       }
     } else {
-      resetPage()
+      resetPage();
     }
   }, [step]);
 
@@ -97,53 +109,80 @@ function SignUpPage() {
             <div className={css.left__section}>
               <div className={css.left__inner}>
                 <h1 className={`f__bold ${css.main__title}`}>
-                  {
-                    authStep === 1 && '본인 인증'
-                  }
-                  {
-                    authStep === 2 && `${authType} 인증`
-                  }
-                  {
-                    authStep === 3 && `계정 정보 입력`
-                  }
+                  {authStep === 1 && '본인 인증'}
+                  {authStep === 2 && `${authType} 인증`}
+                  {authStep === 3 && `계정 정보 입력`}
                 </h1>
                 <div className={css.content}>
-                  {
-                    authStep === 1 && (
-                      <div className={css.auth__type__btn}>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          className='custom__btn f__medium'
-                          size="large"
-                          onClick={() => { authTypeClick("휴대폰") }}
-                        >
-                          <span className="mx-8 text-white font-bold">휴대폰 인증</span>
-                          <Smartphone />
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          className='custom__btn f__medium'
-                          size="large"
-                          onClick={() => { authTypeClick("이메일") }}
-                        >
-                          <span className="mx-8 text-white font-bold">이메일 인증</span>
-                          <Email />
-                        </Button>
-                      </div>
-                    )
-                  }
+                  {authStep === 1 && (
+                    <div className={css.auth__type__btn}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="custom__btn f__medium"
+                        size="large"
+                        onClick={() => {
+                          authTypeClick('휴대폰');
+                        }}>
+                        <span className="mx-8 text-white font-bold">휴대폰 인증</span>
+                        <Smartphone />
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="custom__btn f__medium"
+                        size="large"
+                        onClick={() => {
+                          authTypeClick('이메일');
+                        }}>
+                        <span className="mx-8 text-white font-bold">이메일 인증</span>
+                        <Email />
+                      </Button>
+                    </div>
+                  )}
+                  {authStep === 2 && authType === '이메일' && (
+                    <div className={css.auth__item}>
+                      <TextField
+                        className="mb-24"
+                        placeholder="ex) mypopol@naver.com"
+                        label="이메일"
+                        type="email"
+                        variant="outlined"
+                        required
+                        fullWidth
+                      />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="custom__btn f__medium"
+                        size="large"
+                        onClick={() => {
+                          authCodeSend();
+                        }}>
+                        <span className="mx-8 text-white font-bold">인증번호 받기</span>
+                      </Button>
+                    </div>
+                  )}
                 </div>
                 <div className={css.signin__notice}>
-                  <Typography className="f__regular">이전 페이지로 돌아가시겠어요?&nbsp;</Typography>
-                  <Link className="f__medium" onClick={() => { navigate(-1) }}>
+                  <Typography className="f__regular">
+                    이전 페이지로 돌아가시겠어요?&nbsp;
+                  </Typography>
+                  <Link
+                    className="f__medium"
+                    onClick={() => {
+                      navigate(-1);
+                    }}>
                     뒤로가기
                   </Link>
                 </div>
                 <div className={css.signin__notice}>
                   <Typography className="f__regular">계정이 있으신가요?&nbsp;</Typography>
-                  <Link className="f__medium" onClick={() => { navigate("/sign-in") }}>
+                  <Link
+                    className="f__medium"
+                    onClick={() => {
+                      navigate('/sign-in');
+                    }}>
                     로그인
                   </Link>
                 </div>

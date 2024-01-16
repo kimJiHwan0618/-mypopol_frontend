@@ -75,8 +75,7 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
                         break;
                       default:
                     }
-                  }}
-                >
+                  }}>
                   <div className="sub__title">
                     {/* 아이콘 */}
                     <span className="icon">
@@ -95,12 +94,10 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
                         />
                       </svg> */}
                       <svg
-
                         size="24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 100 100"
-                      >
+                        viewBox="0 0 100 100">
                         <use
                           href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${obj.icon}`}
                         />
@@ -127,8 +124,7 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
                             key={obj2.id}
                             onClick={(e) => {
                               e.stopPropagation();
-                            }}
-                          >
+                            }}>
                             <NavLink to={obj2.url}>
                               <p className="f__medium">{obj2.title}</p>
                             </NavLink>

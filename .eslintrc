@@ -11,25 +11,37 @@
       "presets": ["@babel/preset-react"]
     }
   },
-  "extends": [
-    "react-app",
-    "airbnb",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": [
-    "prettier",
-    "unused-imports"
-  ],
+  "extends": ["react-app", "airbnb", "plugin:prettier/recommended"],
+  "plugins": ["prettier", "unused-imports"],
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ]
+        "paths": ["src"]
       }
     }
   },
   "rules": {
+    "jsx-a11y/control-has-associated-label": [
+      2,
+      {
+        "labelAttributes": ["label"],
+        "controlComponents": ["CustomComponent"],
+        "ignoreElements": ["audio", "canvas", "embed", "input", "textarea", "tr", "video"],
+        "ignoreRoles": [
+          "grid",
+          "listbox",
+          "menu",
+          "menubar",
+          "radiogroup",
+          "row",
+          "tablist",
+          "toolbar",
+          "tree",
+          "treegrid"
+        ],
+        "depth": 3
+      }
+    ],
     // Prettier configs based on airbnb guide
     "prettier/prettier": [
       "warn",
@@ -52,18 +64,15 @@
     "react/jsx-filename-extension": [
       "warn",
       {
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
+        "extensions": [".js", ".jsx"]
       }
     ],
-    "import/no-extraneous-dependencies": ["warn", {"devDependencies": true}],
+    "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }],
     "no-unused-vars": "off",
     "no-use-before-define": "off",
     "no-param-reassign": "off", // mutating redux state in redux-toolkit.
-    "no-unused-expressions" : "off",
-    "no-shadow" : "off",
+    "no-unused-expressions": "off",
+    "no-shadow": "off",
     "import/no-unresolved": "off", // raw-loader
     "global-require": "off", // raw-loader
     "react/no-unescaped-entities": "off",
@@ -94,9 +103,9 @@
     "comma-dangle": "off",
     "consistent-return": "off",
     "operator-linebreak": "off",
-    "react/function-component-definition" : "off",
-    "jsx-a11y/no-noninteractive-element-interactions" : "off",
-    "jsx-a11y/click-events-have-key-events" : "off",
-    "jsx-a11y/no-static-element-interactions" : "off"
+    "react/function-component-definition": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off"
   }
 }
