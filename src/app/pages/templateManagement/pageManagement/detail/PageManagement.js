@@ -15,7 +15,10 @@ import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkM
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
-import { updatePageTem, deleteWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
+import {
+  updatePageTem,
+  deleteWork,
+} from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import { setSearchedFlag } from 'app/pages/templateManagement/pageManagement/store/PageTemplatesSlice';
 import { confirmAlert } from 'react-confirm-alert';
 import { close, open } from 'app/store/common/loadingWrap';
@@ -94,30 +97,43 @@ function PageManagement() {
     param.etc = param.siteList;
     const keys = Object.keys(param);
     for (let i = 0; i < keys.length; i += 1) {
-      if (!["workSeq", "popolSeq", "workId",
-        "order", "title", "subTitle", "poster",
-        "logo", "summary", "etc", "src", "lastUpdated"].includes(keys[i])) {
-        delete param[keys[i]]
+      if (
+        ![
+          'workSeq',
+          'popolSeq',
+          'workId',
+          'order',
+          'title',
+          'subTitle',
+          'poster',
+          'logo',
+          'summary',
+          'etc',
+          'src',
+          'lastUpdated',
+        ].includes(keys[i])
+      ) {
+        delete param[keys[i]];
       }
     }
     return param;
-  }
+  };
 
   const addWorkResult = (work) => {
     workSection.current.style.height = 'auto';
-    workList.push(workObjUpdate(work))
+    workList.push(workObjUpdate(work));
     setWorkList(workList);
-  }
+  };
 
   const updateWorkResult = (work) => {
     work = workObjUpdate(work);
     for (let i = 0; i < workList.length; i += 1) {
       if (workList[i].workSeq === work.workSeq && workList[i].popolSeq === work.popolSeq) {
-        workList[i] = work
+        workList[i] = work;
       }
     }
     setWorkList(workList);
-  }
+  };
 
   const schema = yup.object().shape({
     popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
@@ -211,17 +227,16 @@ function PageManagement() {
           }
           const workOrderSet = [...workList];
           for (let i = 0; i < workOrderSet.length; i += 1) {
-            workOrderSet[i].order = i
+            workOrderSet[i].order = i;
           }
-          console.log(workOrderSet)
           setWorkList(workOrderSet);
           dispatch(setSearchedFlag(false));
-          toast.success('포폴 정보가 업데이트 되었습니다!');
+          toast.success('포폴 정보가 업데이트 되었습니다.');
         }
       })
       .catch((error) => {
         console.log(error);
-        toast.error('포폴 업데이트 실패');
+        toast.error('포폴 업데이트중 에러가 발생하였습니다.');
       })
       .finally(() => {
         setUpdateLoading(false);
@@ -237,7 +252,10 @@ function PageManagement() {
           label: '예',
           onClick: () => {
             dispatch(open());
-            const param = Object.assign(e, { ptId: location.state.template.popolInfo.ptId, userId: user.userId })
+            const param = Object.assign(e, {
+              ptId: location.state.template.popolInfo.ptId,
+              userId: user.userId,
+            });
             dispatch(deleteWork(param))
               .then(({ payload }) => {
                 if (payload.status === 200) {
@@ -259,11 +277,11 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
-  }
+  };
 
   const sectionTitleClick = (e) => {
     const el = e.currentTarget;
@@ -303,7 +321,7 @@ function PageManagement() {
 
   useEffect(() => {
     if (location.state === null) {
-      navigate('/template/page')
+      navigate('/template/page');
     } else {
       const {
         popolName,
@@ -331,11 +349,11 @@ function PageManagement() {
       setImgFile(profile, 'profileOld', setProfileImg, ptId);
       setWorkList(location.state.template.worksInfo);
       fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
-        .then(res => res.json())
-        .then(siteList => {
-          setSiteListData(siteList)
+        .then((res) => res.json())
+        .then((siteList) => {
+          setSiteListData(siteList);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
         });
       if (sns !== null && sns !== '' && sns !== undefined) {
@@ -363,7 +381,14 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
-        <Ptid01WorkModal isOpen={popOpen} onRequestClose={closeModal} popInfo={popInfo} addWorkResult={addWorkResult} updateWorkResult={updateWorkResult} siteListData={siteListData} />
+        <Ptid01WorkModal
+          isOpen={popOpen}
+          onRequestClose={closeModal}
+          popInfo={popInfo}
+          addWorkResult={addWorkResult}
+          updateWorkResult={updateWorkResult}
+          siteListData={siteListData}
+        />
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
@@ -761,7 +786,11 @@ function PageManagement() {
                   className="custom__btn"
                   style={{ width: '100%' }}
                   onClick={() => {
-                    setPopInfo({ ptId: location.state.template.popolInfo.ptId, popolSeq: location.state.template.popolInfo.popolSeq, state: '추가' });
+                    setPopInfo({
+                      ptId: location.state.template.popolInfo.ptId,
+                      popolSeq: location.state.template.popolInfo.popolSeq,
+                      state: '추가',
+                    });
                     openModal();
                   }}>
                   <span className="f__medium">작품 추가</span>

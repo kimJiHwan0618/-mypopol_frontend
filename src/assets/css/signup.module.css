@@ -118,6 +118,7 @@
 
 .left__inner > div {
   display: flex;
+  flex-direction: column;
 }
 
 .content > div {
@@ -135,8 +136,13 @@
   width: 100%;
 }
 
+.auth__key__btn {
+  margin-bottom: 12px;
+}
+
 .signin__notice {
   margin-bottom: 12px;
+  flex-direction: row !important;
 }
 
 .signin__notice a {

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Email, Smartphone } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import css from 'assets/css/signup.module.css';
 import { getAuthCode } from './store/SingUpSlice';
@@ -28,12 +28,13 @@ function SignUpPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const [authStep, setAuthStep] = useState(1);
-  // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
-  const [authType, setAuthType] = useState(null);
-  // 휴대폰, 이메일
-  const [authFlag, setAuthFlag] = useState(false);
-  // 본인인증 결과
+  const [authStep, setAuthStep] = useState(1); // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
+  const [authType, setAuthType] = useState(null); // 휴대폰, 이메일
+  const [authKey, setAuthKey] = useState(null);
+  const [authFlag, setAuthFlag] = useState(false); // 본인인증 결과
+  const authEmailRef = useRef(null);
+  const authKeyRef = useRef(null);
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -66,20 +67,37 @@ function SignUpPage() {
     }
   };
 
-  const authCodeSend = () => {
+  const authKeyCheckBtnClick = () => {
+    const authKeyVal = authKeyRef.current.querySelector('input').value;
+    if (authKeyVal === authKey) {
+      setAuthFlag(true);
+      navigate('/sign-up/3');
+    } else {
+      setAuthFlag(false);
+      toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+    }
+  };
+
+  const getAuthCodeSend = () => {
     setLoading(true);
-    dispatch(getAuthCode({ email: 'wlghks0106@naver.com' }))
-      .then(({ payload }) => {
-        if (payload.status === 200) {
-          toast.success('템플릿 정보를 새로 조회하였습니다.');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    const emailVal = authEmailRef.current.querySelector('input').value;
+    if (emailRegex.test(emailVal)) {
+      dispatch(getAuthCode({ email: emailVal }))
+        .then(({ payload }) => {
+          if (payload.status === 200) {
+            setAuthKey(payload.data.authKey);
+          }
+        })
+        .catch((error) => {
+          toast.success('인증코드 발급중 에러가 발생하였습니다.');
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      toast.warning('이메일 형식을 확인해주세요.');
+    }
   };
 
   useEffect(() => {
@@ -90,6 +108,7 @@ function SignUpPage() {
           break;
         case 2:
           authCheck(2);
+          setAuthKey(null);
           break;
         case 3:
           authCheck(3);
@@ -147,6 +166,7 @@ function SignUpPage() {
                         placeholder="ex) mypopol@naver.com"
                         label="이메일"
                         type="email"
+                        ref={authEmailRef}
                         variant="outlined"
                         required
                         fullWidth
@@ -156,12 +176,37 @@ function SignUpPage() {
                         color="secondary"
                         className="custom__btn f__medium"
                         size="large"
+                        disabled={authKey}
                         onClick={() => {
-                          authCodeSend();
+                          getAuthCodeSend();
                         }}>
                         <span className="mx-8 text-white font-bold">인증번호 받기</span>
                       </Button>
                     </div>
+                  )}
+                  {authStep === 2 && authKey && (
+                    <>
+                      <TextField
+                        className="mb-24"
+                        placeholder="8자리 인증코드 ex)16258725"
+                        label="인증코드"
+                        type="text"
+                        ref={authKeyRef}
+                        variant="outlined"
+                        required
+                        fullWidth
+                      />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={`custom__btn f__medium ${css.auth__key__btn}`}
+                        size="large"
+                        onClick={() => {
+                          authKeyCheckBtnClick();
+                        }}>
+                        <span className="mx-8 text-white font-bold">인증 확인</span>
+                      </Button>
+                    </>
                   )}
                 </div>
                 <div className={css.signin__notice}>
