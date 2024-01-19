@@ -3,11 +3,11 @@ import axios from 'axios';
 
 export const getPageTemList = createAsyncThunk(
   'templateManage/page/list',
-  async (param, { dispatch, rejectWithValue }) => {
+  async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templatemanage/page/list`,
-        param
+        params
       );
       return await response;
     } catch (error) {

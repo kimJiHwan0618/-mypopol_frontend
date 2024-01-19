@@ -3,9 +3,9 @@ import axios from 'axios';
 
 export const sftpTest = createAsyncThunk(
   'dasobard/test',
-  async (param, { dispatch, rejectWithValue }) => {
+  async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/common/sftpTest`, param);
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/common/sftpTest`, params);
       return await response;
     } catch (error) {
       if (!error.response.data) {

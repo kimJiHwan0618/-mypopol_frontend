@@ -1,45 +1,59 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button, Paper, Typography, Link, TextField } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { Email, Smartphone } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
+import Lottie from 'react-lottie';
+import animationData from 'app/data/loading.json';
 import * as yup from 'yup';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import css from 'assets/css/signup.module.css';
-import { getAuthCode } from './store/SingUpSlice';
-
-const schema = yup.object().shape({
-  userId: yup.string().required('유저ID를 입력해 주세요.'),
-  password: yup
-    .string()
-    .required('비밀번호를 입력해 주세요.')
-    .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.'),
-});
-
-const defaultValues = {
-  userId: '',
-  password: '',
-};
+import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome'
+import { postAuthCode, getUser } from './store/SingUpSlice';
 
 function SignUpPage() {
   const { step } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); // 유저 인증코드 api
+  const [loading2, setLoading2] = useState(false); // id 중복체크 api
   const [authStep, setAuthStep] = useState(1); // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
   const [authType, setAuthType] = useState(null); // 휴대폰, 이메일
   const [authKey, setAuthKey] = useState(null);
-  const [authFlag, setAuthFlag] = useState(false); // 본인인증 결과
-  const authEmailRef = useRef(null);
-  const authKeyRef = useRef(null);
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  const { control, formState, handleSubmit, setError, setValue } = useForm({
+  const [userIdCheck, setUserIdCheck] = useState(false);
+  const schema = yup.object().shape({
+    userId: yup.string().required('유저ID를 입력해 주세요.').max(12, '아이디는 12자 이하로 입력해주세요.'),
+    userEmail: yup.string().required('이메일을 입력해주세요.').email('올바른 이메일 형식이 아닙니다.'),
+    authKey: yup.string().required('인증번호를 입력해주세요.').min(8, '인증번호는 8자 입니다.').max(8, '인증번호는 8자 입니다.'),
+    password: yup
+      .string()
+      .required('비밀번호를 입력해 주세요.')
+      .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.'),
+  });
+
+  const activeOption = {
+    shouldDirty: true,
+    shouldValidate: true,
+  };
+  const methods = useForm({
     mode: 'onChange',
-    defaultValues,
     resolver: yupResolver(schema),
   });
+
+  const {
+    register,
+    reset,
+    watch,
+    control,
+    getValues,
+    setValue,
+    onChange,
+    setError,
+    formState,
+    trigger,
+  } = methods;
 
   const { isValid, dirtyFields, errors } = formState;
 
@@ -60,7 +74,7 @@ function SignUpPage() {
         resetPage();
       }
     } else if (param === 3) {
-      if (!authFlag) {
+      if (!authKey) {
         toast.warning('본인인증을 진행해주세요.');
         resetPage();
       }
@@ -68,36 +82,57 @@ function SignUpPage() {
   };
 
   const authKeyCheckBtnClick = () => {
-    const authKeyVal = authKeyRef.current.querySelector('input').value;
-    if (authKeyVal === authKey) {
-      setAuthFlag(true);
+    if (getValues().authKey === authKey) {
       navigate('/sign-up/3');
     } else {
-      setAuthFlag(false);
       toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
     }
   };
 
-  const getAuthCodeSend = () => {
-    setLoading(true);
-    const emailVal = authEmailRef.current.querySelector('input').value;
-    if (emailRegex.test(emailVal)) {
-      dispatch(getAuthCode({ email: emailVal }))
-        .then(({ payload }) => {
-          if (payload.status === 200) {
-            setAuthKey(payload.data.authKey);
+  const userIdReset = () => {
+    setUserIdCheck(false)
+  }
+
+  const handleGetUser = () => {
+    setLoading2(true);
+    dispatch(getUser({ userId: getValues().userId }))
+      .then(({ payload }) => {
+        if (payload.status === 200) {
+          if (payload.data.users.length === 0) {
+            toast.info("사용가능한 ID입니다.")
+            setUserIdCheck(true);
+          } else {
+            toast.warning("사용중인 ID입니다.")
           }
-        })
-        .catch((error) => {
-          toast.success('인증코드 발급중 에러가 발생하였습니다.');
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      toast.warning('이메일 형식을 확인해주세요.');
-    }
+        }
+      })
+      .catch((error) => {
+        toast.error('유저ID 조회중 에러가 발생하였습니다.');
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading2(false);
+      });
+  }
+
+  const handlePostAuthCode = () => {
+    setLoading(true);
+    dispatch(postAuthCode({ email: getValues().userEmail }))
+      .then(({ payload }) => {
+        if (payload.status === 200) {
+          setAuthKey(payload.data.authKey)
+          toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
+        } else {
+          toast.error('인증코드 발급중 에러가 발생하였습니다.');
+        }
+      })
+      .catch((error) => {
+        toast.error('인증코드 발급중 에러가 발생하였습니다.');
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -107,10 +142,15 @@ function SignUpPage() {
         case 1:
           break;
         case 2:
+          setAuthKey(null)
+          setValue("userEmail", "", activeOption)
+          setValue("authKey", "", activeOption)
           authCheck(2);
-          setAuthKey(null);
           break;
         case 3:
+          setUserIdCheck(false);
+          setValue("userId", "", activeOption)
+          setValue("password", "", activeOption)
           authCheck(3);
           break;
         default:
@@ -160,47 +200,70 @@ function SignUpPage() {
                     </div>
                   )}
                   {authStep === 2 && authType === '이메일' && (
-                    <div className={css.auth__item}>
-                      <TextField
-                        className="mb-24"
-                        placeholder="ex) mypopol@naver.com"
-                        label="이메일"
-                        type="email"
-                        ref={authEmailRef}
-                        variant="outlined"
-                        required
-                        fullWidth
-                      />
+                    <div className={css.sign__up__item}>
+                      <Controller
+                        name="userEmail"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="mb-24"
+                            placeholder="ex) mypopol@naver.com"
+                            label="이메일"
+                            autoFocus
+                            type="email"
+                            error={!!errors.userEmail}
+                            helperText={errors?.userEmail?.message}
+                            variant="outlined"
+                            required
+                            fullWidth
+                          />
+                        )} />
                       <Button
                         variant="contained"
                         color="secondary"
                         className="custom__btn f__medium"
                         size="large"
-                        disabled={authKey}
+                        disabled={!!errors.userEmail || loading}
                         onClick={() => {
-                          getAuthCodeSend();
+                          handlePostAuthCode();
                         }}>
-                        <span className="mx-8 text-white font-bold">인증번호 받기</span>
+                        {
+                          loading ? (
+                            <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                          ) : (
+                            <span className="mx-8 text-white font-bold">인증번호 받기</span>
+                          )
+                        }
                       </Button>
                     </div>
                   )}
                   {authStep === 2 && authKey && (
                     <>
-                      <TextField
-                        className="mb-24"
-                        placeholder="8자리 인증코드 ex)16258725"
-                        label="인증코드"
-                        type="text"
-                        ref={authKeyRef}
-                        variant="outlined"
-                        required
-                        fullWidth
-                      />
+                      <Controller
+                        name="authKey"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="mb-24"
+                            placeholder="8자리 인증코드 ex)16258725"
+                            label="인증코드"
+                            type="text"
+                            autoFocus
+                            error={!!errors.authKey}
+                            helperText={errors?.authKey?.message}
+                            variant="outlined"
+                            required
+                            fullWidth
+                          />
+                        )} />
                       <Button
                         variant="contained"
                         color="secondary"
-                        className={`custom__btn f__medium ${css.auth__key__btn}`}
+                        className={`custom__btn f__medium ${css.signup__item__btn}`}
                         size="large"
+                        disabled={!!errors.authKey}
                         onClick={() => {
                           authKeyCheckBtnClick();
                         }}>
@@ -208,6 +271,65 @@ function SignUpPage() {
                       </Button>
                     </>
                   )}
+                  {
+                    authStep === 3 && authKey && (
+                      <>
+                        <div className={css.sign__up__item}>
+                          <Controller
+                            name="userId"
+                            control={control}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                className="mb-24"
+                                label="유저ID"
+                                type="text"
+                                InputProps={{
+                                  readOnly: userIdCheck,
+                                  className: userIdCheck ? "custom__input__readonly" : ""
+                                }}
+                                error={!!errors.userId}
+                                helperText={errors?.userId?.message}
+                                variant="outlined"
+                                required
+                                fullWidth
+                              />
+                            )} />
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className="custom__btn f__medium"
+                            size="large"
+                            disabled={!!errors.userId || loading2 || userIdCheck}
+                            onClick={() => {
+                              handleGetUser();
+                            }}>
+                            {
+                              loading2 ? (
+                                <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                              ) : (
+                                <span className="mx-8 text-white font-bold">중복 확인</span>
+                              )
+                            }
+                          </Button>
+                        </div>
+                        {
+                          userIdCheck && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              className={`custom__btn f__medium ${css.signup__item__btn}`}
+                              size="large"
+                              onClick={() => {
+                                userIdReset();
+                              }}>
+                              <span className="mx-8 text-white font-bold">유저ID 재입력</span>
+                            </Button>
+                          )
+                        }
+                      </>
+                    )
+                  }
                 </div>
                 <div className={css.signin__notice}>
                   <Typography className="f__regular">
@@ -234,33 +356,7 @@ function SignUpPage() {
               </div>
             </div>
             <div className={css.right__section}>
-              <svg viewBox="0 0 220 192" fill="none">
-                <defs>
-                  <pattern
-                    id="837c3e70-6c3a-44e6-8854-cc48c737b659"
-                    x="0"
-                    y="0"
-                    width="20"
-                    height="20"
-                    patternUnits="userSpaceOnUse">
-                    <rect x="0" y="0" width="4" height="4" fill="currentColor" />
-                  </pattern>
-                </defs>
-                <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" />
-              </svg>
-              <svg
-                viewBox="0 0 960 540"
-                width="100%"
-                height="100%"
-                preserveAspectRatio="xMidYMax slice"
-                xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" stroke="currentColor" strokeWidth="100">
-                  <circle r="234" cx="196" cy="23" />
-                  <circle r="234" cx="790" cy="491" />
-                </g>
-              </svg>
-              <h2>Mypopol Admin System</h2>
-              <p>안녕하세요. 마이포폴 관리자 시스템에 오신걸 환영합니다!</p>
+              <Welcome />
             </div>
           </div>
         </Paper>

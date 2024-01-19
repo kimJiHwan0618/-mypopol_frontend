@@ -378,6 +378,10 @@ header .selector__label>ul {
   border: 2px solid var(--main-color);
 }
 
+.custom__input__readonly {
+  background: #e7e7e7;
+}
+
 .custom__form__error {
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;

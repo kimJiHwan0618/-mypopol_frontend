@@ -16,7 +16,7 @@ import {
   setPageTemplates,
   setSearchedFlag,
 } from './store/PageTemplatesSlice';
-import { getPopolInfo } from './store/PageTemplateSlice';
+import { postPopolInfo } from './store/PageTemplateSlice';
 
 function PageManagements() {
   const searchedFlag = useSelector(selectSearchedFlag);
@@ -63,7 +63,7 @@ function PageManagements() {
                   onClick={() => {
                     setPopolLoading(true);
                     const params = { ...user, ptId: obj.ptId };
-                    dispatch(getPopolInfo(params))
+                    dispatch(postPopolInfo(params))
                       .then(({ payload }) => {
                         if (payload.status === 200) {
                           navigate(`/template/page/${user.userId}?ptId=${obj.ptId}`, {

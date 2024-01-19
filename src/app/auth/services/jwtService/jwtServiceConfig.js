@@ -1,7 +1,7 @@
 const jwtServiceConfig = {
-  signIn: '/auth/login',
+  signIn: '/auth/post/login',
   signUp: '/auth/signUp',
-  accessToken: '/auth/accessToken',
+  accessToken: '/auth/post/accessToken',
   updateUser: '/auth/user/update',
 };
 
