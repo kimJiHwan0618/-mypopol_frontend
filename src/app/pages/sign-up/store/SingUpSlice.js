@@ -6,7 +6,7 @@ export const postAuthCode = createAsyncThunk(
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/auth/post/signUpCode`,
+        `${process.env.REACT_APP_API_HOST}/auth/post/signup-code`,
         params
       );
       return await response;
@@ -23,10 +23,9 @@ export const getUser = createAsyncThunk(
   'auth/get/user',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/auth/get/user`,
-        { params }
-      );
+      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/auth/get/user`, {
+        params,
+      });
       return await response;
     } catch (error) {
       if (!error.response.data) {
