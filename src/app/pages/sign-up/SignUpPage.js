@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import * as yup from 'yup';
+import _ from '@lodash';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import css from 'assets/css/signup.module.css';
@@ -31,6 +32,11 @@ function SignUpPage() {
       .string()
       .required('비밀번호를 입력해 주세요.')
       .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.'),
+    passwordCheck: yup
+      .string()
+      .required('비밀번호를 입력해 주세요.')
+      .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.')
+      .oneOf([yup.ref('password')], '비밀번호를 확인해주세요'),
   });
 
   const activeOption = {
@@ -99,7 +105,9 @@ function SignUpPage() {
       .then(({ payload }) => {
         if (payload.status === 200) {
           if (payload.data.users.length === 0) {
-            toast.info("사용가능한 ID입니다.")
+            toast.info("사용가능한 ID입니다.");
+            setValue("password", "", activeOption)
+            setValue("passwordCheck", "", activeOption)
             setUserIdCheck(true);
           } else {
             toast.warning("사용중인 ID입니다.")
@@ -151,6 +159,7 @@ function SignUpPage() {
           setUserIdCheck(false);
           setValue("userId", "", activeOption)
           setValue("password", "", activeOption)
+          setValue("passwordCheck", "", activeOption)
           authCheck(3);
           break;
         default:
@@ -171,6 +180,7 @@ function SignUpPage() {
                   {authStep === 1 && '본인 인증'}
                   {authStep === 2 && `${authType} 인증`}
                   {authStep === 3 && `계정 정보 입력`}
+                  {authStep === 4 && `템플릿 선택하기`}
                 </h1>
                 <div className={css.content}>
                   {authStep === 1 && (
@@ -219,23 +229,26 @@ function SignUpPage() {
                             fullWidth
                           />
                         )} />
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className="custom__btn f__medium"
-                        size="large"
-                        disabled={!!errors.userEmail || loading}
-                        onClick={() => {
-                          handlePostAuthCode();
-                        }}>
-                        {
-                          loading ? (
-                            <Lottie options={{ loop: true, autoplay: true, animationData }} />
-                          ) : (
-                            <span className="mx-8 text-white font-bold">인증번호 받기</span>
-                          )
-                        }
-                      </Button>
+                      <div className={css.signup__btn__wrap}>
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          className="custom__btn f__medium"
+                          size="large"
+                          fullWidth
+                          disabled={!!errors.userEmail || loading}
+                          onClick={() => {
+                            handlePostAuthCode();
+                          }}>
+                          {
+                            loading ? (
+                              <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                            ) : (
+                              <span className="mx-8 text-white font-bold">인증번호 받기</span>
+                            )
+                          }
+                        </Button>
+                      </div>
                     </div>
                   )}
                   {authStep === 2 && authKey && (
@@ -261,8 +274,9 @@ function SignUpPage() {
                       <Button
                         variant="contained"
                         color="secondary"
-                        className={`custom__btn f__medium ${css.signup__item__btn}`}
+                        className='custom__btn f__medium'
                         size="large"
+                        style={{ marginBottom: 12 }}
                         disabled={!!errors.authKey}
                         onClick={() => {
                           authKeyCheckBtnClick();
@@ -295,38 +309,98 @@ function SignUpPage() {
                                 fullWidth
                               />
                             )} />
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            className="custom__btn f__medium"
-                            size="large"
-                            disabled={!!errors.userId || loading2 || userIdCheck}
-                            onClick={() => {
-                              handleGetUser();
-                            }}>
-                            {
-                              loading2 ? (
-                                <Lottie options={{ loop: true, autoplay: true, animationData }} />
-                              ) : (
-                                <span className="mx-8 text-white font-bold">중복 확인</span>
-                              )
-                            }
-                          </Button>
-                        </div>
-                        {
-                          userIdCheck && (
+                          <div className={css.signup__btn__wrap}>
                             <Button
                               variant="contained"
                               color="secondary"
-                              className={`custom__btn f__medium ${css.signup__item__btn}`}
+                              className="custom__btn f__medium"
                               size="large"
+                              fullWidth
+                              disabled={!!errors.userId || loading2 || userIdCheck}
                               onClick={() => {
-                                userIdReset();
+                                handleGetUser();
                               }}>
-                              <span className="mx-8 text-white font-bold">유저ID 재입력</span>
+                              {
+                                loading2 ? (
+                                  <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                                ) : (
+                                  <span className="mx-8 text-white font-bold">중복 확인</span>
+                                )
+                              }
                             </Button>
-                          )
-                        }
+                            {
+                              userIdCheck && (
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  className={`custom__btn f__medium ${css.signup__item__btn}`}
+                                  size="large"
+                                  fullWidth
+                                  onClick={() => {
+                                    userIdReset();
+                                  }}>
+                                  <span className="mx-8 text-white font-bold">유저ID 재입력</span>
+                                </Button>
+                              )
+                            }
+                          </div>
+                          {
+                            userIdCheck && (
+                              <>
+                                <Controller
+                                  name="password"
+                                  control={control}
+                                  render={({ field }) => (
+                                    <TextField
+                                      {...field}
+                                      className="mb-24"
+                                      label="비밀번호"
+                                      autoFocus
+                                      style={{ marginBottom: 12 }}
+                                      type="password"
+                                      error={!!errors.password}
+                                      helperText={errors?.password?.message}
+                                      variant="outlined"
+                                      required
+                                      fullWidth
+                                    />
+                                  )} />
+                                <Controller
+                                  name="passwordCheck"
+                                  control={control}
+                                  render={({ field }) => (
+                                    <TextField
+                                      {...field}
+                                      className="mb-24"
+                                      label="비밀번호 확인"
+                                      autoFocus
+                                      style={{ marginBottom: 12 }}
+                                      type="password"
+                                      error={!!errors.passwordCheck}
+                                      helperText={errors?.passwordCheck?.message}
+                                      variant="outlined"
+                                      required
+                                      fullWidth
+                                    />
+                                  )} />
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  className="custom__btn f__medium"
+                                  size="large"
+                                  style={{ marginBottom: 12 }}
+                                  disabled={_.isEmpty(dirtyFields) || !isValid}
+                                  fullWidth
+                                  onClick={() => {
+                                    console.log(getValues())
+                                    setAuthStep(4);
+                                  }}>
+                                  <span className="mx-8 text-white font-bold">템플릿 선택하기</span>
+                                </Button>
+                              </>
+                            )
+                          }
+                        </div>
                       </>
                     )
                   }

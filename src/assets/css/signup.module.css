@@ -137,7 +137,7 @@
 }
 
 .signup__item__btn {
-  margin-bottom: 12px !important;
+  margin-left: 12px !important;
 }
 
 .signin__notice {
@@ -163,15 +163,22 @@
 
 .sign__up__item {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 8px !important;
 }
 
 .sign__up__item>button {
-  margin-left: 16px;
   min-width: 118px;
+}
+
+.signup__btn__wrap {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 12px 0;
 }
 
 @media (max-width: 1460px) {
