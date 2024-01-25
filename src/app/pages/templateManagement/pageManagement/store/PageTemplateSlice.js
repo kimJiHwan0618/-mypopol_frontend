@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const postPopolInfo = createAsyncThunk(
-  'site/post/popolInfo',
+  'site/post/popol-info',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/site/post/popolInfo`, params);
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/site/post/popol-info`, params);
       return await response;
     } catch (error) {
       if (!error.response.data) {
@@ -17,7 +17,7 @@ export const postPopolInfo = createAsyncThunk(
 )
 
 export const updatePageTem = createAsyncThunk(
-  'templateManage/page/update',
+  'templateManage/post/page/update',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -25,7 +25,7 @@ export const updatePageTem = createAsyncThunk(
       params.files.profileImg !== null && formData.append('profileImg', params.files.profileImg, encodeURIComponent(params.files.profileImg.name));
       params.files.thumbnailImg !== null && formData.append('thumbnailImg', params.files.thumbnailImg, encodeURIComponent(params.files.thumbnailImg.name));
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templatemanage/page/update`,
+        `${process.env.REACT_APP_API_HOST}/templatemanage/post/page/update`,
         formData,
         {
           headers: {
@@ -44,7 +44,7 @@ export const updatePageTem = createAsyncThunk(
 );
 
 export const addOrUpdateWork = createAsyncThunk(
-  'templateManage/page/work/addOrUpdate',
+  'templateManage/post/page/work/add-update',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -52,7 +52,7 @@ export const addOrUpdateWork = createAsyncThunk(
       params.files.titleImg !== null && formData.append('titleImg', params.files.titleImg, encodeURIComponent(params.files.titleImg.name));
       formData.append('posterImg', params.files.posterImg, encodeURIComponent(params.files.posterImg.name));
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templateManage/page/work/addOrUpdate`,
+        `${process.env.REACT_APP_API_HOST}/templateManage/post/page/work/add-update`,
         formData,
         {
           headers: {
@@ -71,10 +71,10 @@ export const addOrUpdateWork = createAsyncThunk(
 );
 
 export const deleteWork = createAsyncThunk(
-  'templateManage/page/work/delete',
+  'templateManage/delete/page/work',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/templateManage/page/work/delete`, params);
+      const response = await axios.delete(`${process.env.REACT_APP_API_HOST}/templateManage/delete/page/work`, params);
       return await response;
     } catch (error) {
       if (!error.response.data) {

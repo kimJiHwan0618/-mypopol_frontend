@@ -59,7 +59,7 @@ function SignInPage() {
   function onSubmit({ userId, password }) {
     setLoginLoading(true);
     jwtService
-      .signInWithEmailAndPassword(userId, password)
+      .signInWithEmailAndPassword(userId, password, setLoginLoading)
       .then((user) => {
         // No need to do anything, user data will be set at app/auth/AuthContext
       })

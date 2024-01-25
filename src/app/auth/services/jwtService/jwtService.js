@@ -62,16 +62,15 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  signInWithEmailAndPassword = (userKey, userId, password) => {
+  signInWithEmailAndPassword = (userId, password, setLoginLoading) => {
     return new Promise((resolve, reject) => {
       axios
         .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, {
-          userKey,
           userId,
           password,
         })
         .then((response) => {
-          if (response.data.code === 200) {
+          if (response.status === 200) {
             const data = response.data.response;
             this.setSession(data.accessToken);
             resolve(data);
@@ -79,12 +78,14 @@ class JwtService extends FuseUtils.EventEmitter {
           }
         })
         .catch((error) => {
-          console.log(error);
-          if (error.response.data?.code === 401) {
+          if (error.status === 401) {
             reject(error.response.data);
           } else {
             this.emit('onAutoLogout', error.response.data);
           }
+        })
+        .finally(() => {
+          setLoginLoading(false);
         });
     });
   };
