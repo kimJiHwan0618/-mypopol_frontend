@@ -74,7 +74,9 @@ export const deleteWork = createAsyncThunk(
   'templateManage/delete/page/work',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_HOST}/templateManage/delete/page/work`, params);
+      const response = await axios.delete(`${process.env.REACT_APP_API_HOST}/templateManage/delete/page/work`, {
+        params,
+      });
       return await response;
     } catch (error) {
       if (!error.response.data) {
