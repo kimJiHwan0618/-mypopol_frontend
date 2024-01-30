@@ -21,6 +21,7 @@ function SignUpPage() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false); // 유저 인증코드 api
   const [loading2, setLoading2] = useState(false); // id 중복체크 api
+  const [loading3, setLoading3] = useState(false); // 유저생성 api
   const [authStep, setAuthStep] = useState(1); // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
   const [authType, setAuthType] = useState(null); // 휴대폰, 이메일
   const [authKey, setAuthKey] = useState(null);
@@ -133,6 +134,23 @@ function SignUpPage() {
       .finally(() => {
         setLoading2(false);
       });
+  };
+
+  const handleSignUpUser = () => {
+    setLoading3(true);
+    // dispatch(getUser({ userId: getValues().userId }))
+    //   .then(({ payload }) => {
+    //     if (payload.status === 200) {
+
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     toast.error('유저ID 조회중 에러가 발생하였습니다.');
+    //     console.log(error);
+    //   })
+    //   .finally(() => {
+    //     setLoading3(false);
+    //   });
   };
 
   const handlePostAuthCode = () => {
@@ -441,7 +459,11 @@ function SignUpPage() {
                           disabled={templateId === 'none'}
                           fullWidth
                           onClick={() => {
-                            // handlePostAuthCode();
+                            window.open(
+                              `${templatesJson.filter((obj) => obj.id === templateId)[0]?.link}`,
+                              '_blank',
+                              'noopener,noreferrer'
+                            );
                           }}>
                           <LinkIcon />
                         </Button>
@@ -460,11 +482,16 @@ function SignUpPage() {
                         className="custom__btn f__medium"
                         size="large"
                         fullWidth
+                        style={{ marginBottom: 12 }}
                         disabled={templateId === 'none'}
                         onClick={() => {
-                          // handleGetUser();
+                          handleSignUpUser();
                         }}>
-                        <span className="mx-8 text-white font-bold">유저 생성</span>
+                        {loading3 ? (
+                          <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                        ) : (
+                          <span className="mx-8 text-white font-bold">유저 생성</span>
+                        )}
                       </Button>
                     </>
                   )}
