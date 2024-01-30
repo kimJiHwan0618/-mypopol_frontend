@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import { MenuItem, Button, TextField } from '@mui/material';
@@ -150,7 +151,7 @@ function DashBoard() {
                   <dt className="f__medium">링크</dt>
                   <dd>site.mypopol.com/ptid01/caribo</dd>
                 </dl>
-                <a href="http://caribo.me" target="_blank" className={css.icon} rel="noreferrer">
+                <a href="https://caribo.me" target="_blank" className={css.icon} rel="noreferrer">
                   <svg
                     id="external-link"
                     xmlns="http://www.w3.org/2000/svg"
