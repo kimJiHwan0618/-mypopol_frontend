@@ -13,7 +13,9 @@ import { toast } from 'react-toastify';
 import css from 'assets/css/signup.module.css';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import templatesJson from 'app/data/signUp/templates.json';
-import { postAuthCode, getUser } from './store/SingUpSlice';
+import dateParser from 'app/utils/dateParser';
+import classnames from 'classnames';
+import { postAuthCode, getUser, postUser } from './store/SingUpSlice';
 
 function SignUpPage() {
   const { step } = useParams();
@@ -28,10 +30,17 @@ function SignUpPage() {
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [templateId, setTemplateId] = useState('none');
   const schema = yup.object().shape({
+    userName: yup
+      .string()
+      .required('유저명은 필수정보입니다.')
+      .min(2, '유저명은 2자 이상으로 입력해주세요.')
+      .max(6, '유저명은 6자 이하로 입력해주세요'),
     userId: yup
       .string()
       .required('유저ID를 입력해 주세요.')
-      .max(12, '아이디는 12자 이하로 입력해주세요.'),
+      .min(6, '아이디는 6자 이상으로 입력해주세요.')
+      .max(12, '아이디는 12자 이하로 입력해주세요.')
+      .matches(/^[A-Za-z0-9]+$/, '유저ID는 영문 + 숫자 조합으로 입력해주세요.'),
     userEmail: yup
       .string()
       .required('이메일을 입력해주세요.')
@@ -44,11 +53,11 @@ function SignUpPage() {
     password: yup
       .string()
       .required('비밀번호를 입력해 주세요.')
-      .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.'),
+      .min(8, '비밀번호는 최소 6자 이상으로 입력해 주세요.')
+      .max(12, '비밀번호는 최소 12자 이하로 입력해 주세요.'),
     passwordCheck: yup
       .string()
-      .required('비밀번호를 입력해 주세요.')
-      .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.')
+      .required('비밀번호를 확인해주세요.')
       .oneOf([yup.ref('password')], '비밀번호를 확인해주세요'),
   });
 
@@ -112,65 +121,68 @@ function SignUpPage() {
     setUserIdCheck(false);
   };
 
-  const handleGetUser = () => {
+  const handleGetUser = async () => {
     setLoading2(true);
-    dispatch(getUser({ userId: getValues().userId }))
-      .then(({ payload }) => {
-        if (payload.status === 200) {
-          if (payload.data.users.length === 0) {
-            toast.info('사용가능한 ID입니다.');
-            setValue('password', '', activeOption);
-            setValue('passwordCheck', '', activeOption);
-            setUserIdCheck(true);
-          } else {
-            toast.warning('사용중인 ID입니다.');
-          }
-        }
-      })
-      .catch((error) => {
-        toast.error('유저ID 조회중 에러가 발생하였습니다.');
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading2(false);
-      });
-  };
-
-  const handleSignUpUser = () => {
-    setLoading3(true);
-    // dispatch(getUser({ userId: getValues().userId }))
-    //   .then(({ payload }) => {
-    //     if (payload.status === 200) {
-
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     toast.error('유저ID 조회중 에러가 발생하였습니다.');
-    //     console.log(error);
-    //   })
-    //   .finally(() => {
-    //     setLoading3(false);
-    //   });
-  };
-
-  const handlePostAuthCode = () => {
-    setLoading(true);
-    dispatch(postAuthCode({ email: getValues().userEmail }))
-      .then(({ payload }) => {
-        if (payload.status === 200) {
-          setAuthKey(payload.data.authKey);
-          toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
+    try {
+      const { payload } = await dispatch(getUser({ userId: getValues().userId }))
+      console.log(payload)
+      if (payload.status === 200) {
+        if (payload.data.users.length === 0) {
+          toast.info('사용가능한 ID입니다.');
+          setValue('password', '', activeOption);
+          setValue('passwordCheck', '', activeOption);
+          setUserIdCheck(true);
         } else {
-          toast.error('인증코드 발급중 에러가 발생하였습니다.');
+          toast.warning('사용중인 ID입니다.');
         }
-      })
-      .catch((error) => {
+      }
+    } catch (error) {
+      toast.error('유저ID 조회중 에러가 발생하였습니다.');
+      console.log(error);
+    } finally {
+      setLoading2(false);
+    }
+  };
+
+  const handleSignUpUser = async () => {
+    setLoading3(true);
+    try {
+      const params = {
+        ...getValues(),
+        templateId,
+        popolName: templatesJson.filter((obj) => obj.id === templateId)[0]?.popolName,
+        title: templatesJson.filter((obj) => obj.id === templateId)[0]?.title,
+        userKey: dateParser(new Date()).replaceAll(":", "").replaceAll("-", " ").replaceAll(" ", "").trim()
+      }
+      const { payload } = await dispatch(postUser(params));
+      if (payload.status === 200) {
+        // 성공적으로 처리된 경우
+        // 여기에서 추가적인 로직을 수행할 수 있습니다.
+      }
+    } catch (error) {
+      toast.error('유저 생성중에 에러가 발생하였습니다.');
+      console.log(error);
+    } finally {
+      setLoading3(false);
+    }
+  };
+
+  const handlePostAuthCode = async () => {
+    setLoading(true);
+    try {
+      const { payload } = await dispatch(postAuthCode({ email: getValues().userEmail }))
+      if (payload.status === 200) {
+        setAuthKey(payload.data.authKey);
+        toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
+      } else {
         toast.error('인증코드 발급중 에러가 발생하였습니다.');
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      }
+    } catch (error) {
+      toast.error('인증코드 발급중 에러가 발생하였습니다.');
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -187,6 +199,7 @@ function SignUpPage() {
           break;
         case 3:
           setUserIdCheck(false);
+          setValue('userName', '', activeOption);
           setValue('userId', '', activeOption);
           setValue('password', '', activeOption);
           setValue('passwordCheck', '', activeOption);
@@ -206,9 +219,12 @@ function SignUpPage() {
     <>
       <div className={`${css.signin__wrap} vertical__scroll`}>
         <Paper className={css.paper}>
-          <div className={css.signin__wrap__inner}>
-            <div className={css.left__section}>
-              <div className={css.left__inner}>
+          <div className={`${css.signin__wrap__inner} vertical__scroll`}>
+            <div className={`${css.left__section} vertical__scroll`}>
+              <div className={classnames([
+                `${css.left__inner}`,
+                { [css.step3__content__wrap]: authStep === 3 }
+              ])}>
                 <h1 className={`f__bold ${css.main__title}`}>
                   {authStep === 1 && '본인 인증'}
                   {authStep === 2 && `${authType} 인증`}
@@ -321,6 +337,28 @@ function SignUpPage() {
                   {authStep === 3 && authKey && (
                     <>
                       <div className={css.sign__up__item}>
+                        {
+                          userIdCheck && (
+                            <Controller
+                              name="userName"
+                              control={control}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  className="mb-24"
+                                  style={{ marginBottom: 12 }}
+                                  label="유저명"
+                                  type="text"
+                                  error={!!errors.userName}
+                                  helperText={errors?.userName?.message}
+                                  variant="outlined"
+                                  required
+                                  fullWidth
+                                />
+                              )}
+                            />
+                          )
+                        }
                         <Controller
                           name="userId"
                           control={control}
@@ -343,27 +381,31 @@ function SignUpPage() {
                           )}
                         />
                         <div className={css.signup__btn__wrap}>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            className="custom__btn f__medium"
-                            size="large"
-                            fullWidth
-                            disabled={!!errors.userId || loading2 || userIdCheck}
-                            onClick={() => {
-                              handleGetUser();
-                            }}>
-                            {loading2 ? (
-                              <Lottie options={{ loop: true, autoplay: true, animationData }} />
-                            ) : (
-                              <span className="mx-8 text-white font-bold">중복 확인</span>
-                            )}
-                          </Button>
+                          {
+                            !userIdCheck && (
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                className="custom__btn f__medium"
+                                size="large"
+                                fullWidth
+                                disabled={!!errors.userId || loading2 || userIdCheck}
+                                onClick={() => {
+                                  handleGetUser();
+                                }}>
+                                {loading2 ? (
+                                  <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                                ) : (
+                                  <span className="mx-8 text-white font-bold">중복 확인</span>
+                                )}
+                              </Button>
+                            )
+                          }
                           {userIdCheck && (
                             <Button
                               variant="contained"
                               color="secondary"
-                              className={`custom__btn f__medium ${css.signup__item__btn}`}
+                              className="custom__btn f__medium"
                               size="large"
                               fullWidth
                               onClick={() => {
@@ -448,7 +490,7 @@ function SignUpPage() {
                           </MenuItem>
                           {templatesJson.map((obj, idx) => (
                             <MenuItem key={obj.id} value={obj.id}>
-                              {obj.title}
+                              {obj.popolName}
                             </MenuItem>
                           ))}
                         </TextField>

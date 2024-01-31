@@ -17,15 +17,15 @@ export const postPopolInfo = createAsyncThunk(
 )
 
 export const updatePageTem = createAsyncThunk(
-  'templateManage/post/page/update',
+  'templateManage/put/page/update',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append('fields', JSON.stringify(params.fields));
       params.files.profileImg !== null && formData.append('profileImg', params.files.profileImg, encodeURIComponent(params.files.profileImg.name));
       params.files.thumbnailImg !== null && formData.append('thumbnailImg', params.files.thumbnailImg, encodeURIComponent(params.files.thumbnailImg.name));
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templatemanage/post/page/update`,
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_HOST}/templatemanage/put/page/update`,
         formData,
         {
           headers: {

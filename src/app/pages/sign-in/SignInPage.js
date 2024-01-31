@@ -12,7 +12,7 @@ import animationData from 'app/data/loading.json';
 import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
 import GoogleLoginBtn from 'app/pages/sign-in/snsLogin/Google';
 import css from 'assets/css/signin.module.css';
-import jwtService from '../../auth/services/jwtService';
+import jwtService from 'app/auth/services/jwtService';
 
 /**
  * Form Validation Schema

@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const getPageTemList = createAsyncThunk(
-  'templateManage/post/page/list',
+  'templateManage/get/page/list',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templatemanage/post/page/list`,
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_HOST}/templatemanage/get/page/list`,
         params
       );
       return await response;
