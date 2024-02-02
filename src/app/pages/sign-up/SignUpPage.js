@@ -96,16 +96,12 @@ function SignUpPage() {
   };
 
   const authCheck = (param) => {
-    if (param === 2) {
-      if (!authType) {
-        toast.warning('인증방법을 선택해주세요.');
-        resetPage();
-      }
-    } else if (param === 3) {
-      if (!authKey) {
-        toast.warning('본인인증을 진행해주세요.');
-        resetPage();
-      }
+    if (param === 2 && !authType) {
+      toast.warning('인증방법을 선택해주세요.');
+      resetPage();
+    } else if (param === 3 && !authKey) {
+      toast.warning('본인인증을 진행해주세요.');
+      resetPage();
     }
   };
 
@@ -125,9 +121,8 @@ function SignUpPage() {
     setLoading2(true);
     try {
       const { payload } = await dispatch(getUser({ userId: getValues().userId }))
-      console.log(payload)
       if (payload.status === 200) {
-        if (payload.data.users.length === 0) {
+        if (payload.data) {
           toast.info('사용가능한 ID입니다.');
           setValue('password', '', activeOption);
           setValue('passwordCheck', '', activeOption);
@@ -135,6 +130,8 @@ function SignUpPage() {
         } else {
           toast.warning('사용중인 ID입니다.');
         }
+      } else {
+        toast.error(payload)
       }
     } catch (error) {
       toast.error('유저ID 조회중 에러가 발생하였습니다.');
@@ -146,18 +143,35 @@ function SignUpPage() {
 
   const handleSignUpUser = async () => {
     setLoading3(true);
+    let authVal1;
+    let authVal2;
+    switch (authType) {
+      case '휴대폰':
+        authVal1 = "phone"
+        authVal2 = "" // 휴대폰 번호 인증시 휴대전화 번호
+        break;
+      case '이메일':
+        authVal1 = "email"
+        authVal2 = getValues().userEmail;
+        break;
+      default:
+        break;
+    }
     try {
       const params = {
         ...getValues(),
         templateId,
         popolName: templatesJson.filter((obj) => obj.id === templateId)[0]?.popolName,
         title: templatesJson.filter((obj) => obj.id === templateId)[0]?.title,
-        userKey: dateParser(new Date()).replaceAll(":", "").replaceAll("-", " ").replaceAll(" ", "").trim()
+        userKey: dateParser(new Date()).replaceAll(":", "").replaceAll("-", " ").replaceAll(" ", "").trim(),
+        authType: authVal1,
+        authValue: authVal2,
+        phone: authType === "휴대폰" ? "" : "", // 휴대폰 번호 인증시 휴대전화 번호
+        email: authType === "이메일" ? getValues().userEmail : "",
       }
       const { payload } = await dispatch(postUser(params));
       if (payload.status === 200) {
-        // 성공적으로 처리된 경우
-        // 여기에서 추가적인 로직을 수행할 수 있습니다.
+        toast.success("유저 생성이 완료되었습니다!")
       }
     } catch (error) {
       toast.error('유저 생성중에 에러가 발생하였습니다.');
@@ -170,12 +184,16 @@ function SignUpPage() {
   const handlePostAuthCode = async () => {
     setLoading(true);
     try {
-      const { payload } = await dispatch(postAuthCode({ email: getValues().userEmail }))
+      const { payload } = await dispatch(postAuthCode({ userEmail: getValues().userEmail }))
       if (payload.status === 200) {
-        setAuthKey(payload.data.authKey);
-        toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
+        if (payload.data) {
+          setAuthKey(payload.data.authKey);
+          toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
+        } else {
+          toast.warning('유저 계정에서 사용중인 이메일입니다. 다른메일을 입력해주세요.');
+        }
       } else {
-        toast.error('인증코드 발급중 에러가 발생하였습니다.');
+        toast.error(payload);
       }
     } catch (error) {
       toast.error('인증코드 발급중 에러가 발생하였습니다.');
@@ -510,6 +528,9 @@ function SignUpPage() {
                           <LinkIcon />
                         </Button>
                       </div>
+                      <p className={css.template__licenses__txt}>
+                        템플릿은 계정생성시 1개 생성 가능합니다.
+                      </p>
                       {templateId !== 'none' && (
                         <dl className={`f__regular ${css.template__notice}`}>
                           <dt>설명</dt>
