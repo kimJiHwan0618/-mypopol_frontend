@@ -166,7 +166,7 @@ function SignUpPage() {
         userKey: dateParser(new Date()).replaceAll(":", "").replaceAll("-", " ").replaceAll(" ", "").trim(),
         authType: authVal1,
         authValue: authVal2,
-        phone: authType === "휴대폰" ? "" : "", // 휴대폰 번호 인증시 휴대전화 번호
+        phone: authType === "휴대폰" ? "" : "010-0000-0000", // 휴대폰 번호 인증시 휴대전화 번호
         email: authType === "이메일" ? getValues().userEmail : "",
       }
       const { payload } = await dispatch(postUser(params));
@@ -546,7 +546,7 @@ function SignUpPage() {
                         size="large"
                         fullWidth
                         style={{ marginBottom: 12 }}
-                        disabled={templateId === 'none'}
+                        disabled={templateId === 'none' || loading3}
                         onClick={() => {
                           handleSignUpUser();
                         }}>

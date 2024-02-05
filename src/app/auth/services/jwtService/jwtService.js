@@ -69,9 +69,9 @@ class JwtService extends FuseUtils.EventEmitter {
           userId,
           password,
         })
-        .then((response) => {
-          if (response.status === 200) {
-            const data = response.data.response;
+        .then((res) => {
+          if (res.status === 200) {
+            const { data } = res;
             this.setSession(data.accessToken);
             resolve(data);
             this.emit('onLogin', data);
@@ -96,9 +96,9 @@ class JwtService extends FuseUtils.EventEmitter {
         .put(process.env.REACT_APP_API_HOST + jwtServiceConfig.accessToken, {
           access_token: this.getAccessToken(),
         })
-        .then((response) => {
-          const data = response.data.response;
-          if (response.data.code === 200) {
+        .then((res) => {
+          const { data } = res;
+          if (res.status === 200) {
             this.setSession(data.accessToken);
             resolve(data);
           } else {

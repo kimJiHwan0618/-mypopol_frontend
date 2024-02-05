@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { TextField, Button, Paper, Typography, Link } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import _ from '@lodash';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -36,6 +37,7 @@ const defaultValues = {
 };
 
 function SignInPage() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loginLoading, setLoginLoading] = useState(false);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
@@ -47,6 +49,39 @@ function SignInPage() {
   const { isValid, dirtyFields, errors } = formState;
   const routeParams = useParams();
   const { paramUserKey } = routeParams;
+
+  const getSnsUserInfo = ({ name, res }) => {
+    switch (name) {
+      case "naver":
+        handleGetSnsUser(res.user.email)
+        break;
+      case "google":
+        handleGetSnsUser(res.wt.cu)
+        break;
+      default:
+        break;
+    }
+  }
+
+  const handleGetSnsUser = async (userEmail) => {
+    try {
+      // const { payload } = await dispatch(postSnsUser({ userEmail }));
+      // if (payload.status === 200) {
+      //   if (payload.data) {
+      //     // 회원있을시 로그인
+      //   } else {
+      //     // 회원 없을시 이메일 들고 유저가입 3단계
+      //   }
+      // } else {
+      //   // 에러 토스트 메시지
+      // }
+    } catch (err) {
+      toast.error('SNS 유저 조회중 에러가 발생하였습니다.');
+      console.log(err);
+    } finally {
+      // 
+    }
+  }
 
   useEffect(
     (paramUserKey) => {
@@ -153,10 +188,10 @@ function SignInPage() {
                         <img src={require('assets/img/sign-in/logo__naver.png')} alt="네이버 로고" />
                       </span>
                     </Button>
-                    <NaverLoginBtn />
+                    <NaverLoginBtn getSnsUserInfo={getSnsUserInfo} />
                   </div>
                   <div className={`${css.sns__btn} ${css.google__btn}`}>
-                    <GoogleLoginBtn />
+                    <GoogleLoginBtn getSnsUserInfo={getSnsUserInfo} />
                   </div>
                 </div>
               </div>

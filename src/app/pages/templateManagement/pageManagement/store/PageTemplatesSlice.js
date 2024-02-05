@@ -7,7 +7,7 @@ export const getPageTemList = createAsyncThunk(
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_HOST}/templatemanage/get/page/list`,
-        params
+        { params }
       );
       return await response;
     } catch (error) {

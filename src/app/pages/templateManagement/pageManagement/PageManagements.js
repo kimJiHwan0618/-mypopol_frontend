@@ -29,6 +29,7 @@ function PageManagements() {
   useEffect(() => {
     if (!searchedFlag) {
       setPopolLoading(true);
+      console.log(user)
       dispatch(getPageTemList(user))
         .then(({ payload }) => {
           if (payload.status === 200) {
