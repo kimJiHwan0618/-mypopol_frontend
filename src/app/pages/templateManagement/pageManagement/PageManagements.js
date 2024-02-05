@@ -29,7 +29,7 @@ function PageManagements() {
   useEffect(() => {
     if (!searchedFlag) {
       setPopolLoading(true);
-      console.log(user)
+      console.log(user);
       dispatch(getPageTemList(user))
         .then(({ payload }) => {
           if (payload.status === 200) {
@@ -52,7 +52,7 @@ function PageManagements() {
     <div className="section__grid__wrap content">
       {!popolLoading ? (
         pageTemplates.map((obj, idx) => (
-          <section key={obj.userKey + obj.ptId} className={css.template__section}>
+          <section key={obj.ptId} className={css.template__section}>
             <div className={`${css.section__inner} section__inner`}>
               <div className={css.template__top}>
                 <div className={css.top__title__wrap}>
@@ -227,10 +227,7 @@ function PageManagements() {
           </section>
         ))
       ) : (
-        <Lottie
-          style={{ gridColumn: 'span 4 / span 4', maxHeight: '80px', marginTop: '20px' }}
-          options={{ loop: true, autoplay: true, animationData }}
-        />
+        <Lottie options={{ loop: true, autoplay: true, animationData }} />
       )}
     </div>
   );

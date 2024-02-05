@@ -8,12 +8,12 @@ const settingsConfig = {
    To make whole app accessible without authorization by default set defaultAuth: null
    *** The individual route configs which has auth option won't be overridden.
    */
-  defaultAuth: ['ROLE_ADMIN', 'ROLE_MEMBER', 'ROLE_USER'],
+  defaultAuth: ['SUPER', 'PREMIUM', 'BASIC', 'FREE'],
   /*
     Default redirect url for the logged-in user,
    */
   loginRedirectUrl: '/template/page',
-  // 임시로 페이지 템플릿을 메인으로 
+  // 임시로 페이지 템플릿을 메인으로
   // 기능 완료시 /dashboard/template
 };
 

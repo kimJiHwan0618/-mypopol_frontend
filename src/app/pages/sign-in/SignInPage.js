@@ -8,12 +8,13 @@ import _ from '@lodash';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Lottie from 'react-lottie';
-import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome'
+import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import animationData from 'app/data/loading.json';
 import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
 import GoogleLoginBtn from 'app/pages/sign-in/snsLogin/Google';
 import css from 'assets/css/signin.module.css';
 import jwtService from 'app/auth/services/jwtService';
+import { confirmAlert } from 'react-confirm-alert';
 
 /**
  * Form Validation Schema
@@ -52,36 +53,52 @@ function SignInPage() {
 
   const getSnsUserInfo = ({ name, res }) => {
     switch (name) {
-      case "naver":
-        handleGetSnsUser(res.user.email)
+      case 'naver':
+        handleGetSnsUser(res.user.email, name);
         break;
-      case "google":
-        handleGetSnsUser(res.wt.cu)
+      case 'google':
+        handleGetSnsUser(res.wt.cu, name);
         break;
       default:
         break;
     }
-  }
+  };
 
-  const handleGetSnsUser = async (userEmail) => {
+  const handleGetSnsUser = async (userEmail, name) => {
     try {
-      // const { payload } = await dispatch(postSnsUser({ userEmail }));
-      // if (payload.status === 200) {
-      //   if (payload.data) {
-      //     // 회원있을시 로그인
-      //   } else {
-      //     // 회원 없을시 이메일 들고 유저가입 3단계
-      //   }
-      // } else {
-      //   // 에러 토스트 메시지
-      // }
+      jwtService
+        .signInWithEmailAndPassword({ userEmail }, setLoginLoading)
+        .then((res) => {
+          !res &&
+            confirmAlert({
+              title: `가입된 유저가 없습니다. 유저 생성으로 이동하시겠습니까 ?`,
+              // message: '메세지 공간입니다.',
+              buttons: [
+                {
+                  label: '예',
+                  onClick: () => {
+                    navigate('/sign-up/3', { state: { sns: name, userEmail } });
+                  },
+                },
+                {
+                  label: '취소',
+                },
+              ],
+            });
+        })
+        .catch((_error) => {
+          toast.error(_error.message);
+        })
+        .finally(() => {
+          //
+        });
     } catch (err) {
       toast.error('SNS 유저 조회중 에러가 발생하였습니다.');
       console.log(err);
     } finally {
-      // 
+      //
     }
-  }
+  };
 
   useEffect(
     (paramUserKey) => {
@@ -94,15 +111,11 @@ function SignInPage() {
   function onSubmit({ userId, password }) {
     setLoginLoading(true);
     jwtService
-      .signInWithEmailAndPassword(userId, password, setLoginLoading)
-      .then((user) => {
-        // No need to do anything, user data will be set at app/auth/AuthContext
+      .signInWithEmailAndPassword({ userId, password }, setLoginLoading)
+      .then((res) => {
+        !res && toast.warning('아이디와 비밀번호를 확인해주세요.');
       })
       .catch((_error) => {
-        // setError('userKey', {
-        //   type: 'manual',
-        //   message: _error.message,
-        // });
         toast.error(_error.message);
       })
       .finally(() => {
@@ -171,13 +184,21 @@ function SignInPage() {
                 </form>
                 <div className={css.signup__notice}>
                   <Typography className="f__regular">계정이 없으신가요?&nbsp;</Typography>
-                  <Link className="f__medium" onClick={() => { navigate("/sign-up/1") }}>
+                  <Link
+                    className="f__medium"
+                    onClick={() => {
+                      navigate('/sign-up/1');
+                    }}>
                     계정 생성
                   </Link>
                 </div>
                 <div className={css.signup__notice}>
                   <Typography className="f__regular">비밀번호를 잊어버리셨나요?&nbsp;</Typography>
-                  <Link className="f__medium" onClick={() => { navigate("/sign-up") }}>
+                  <Link
+                    className="f__medium"
+                    onClick={() => {
+                      navigate('/sign-up');
+                    }}>
                     비밀번호 찾기
                   </Link>
                 </div>
@@ -185,7 +206,10 @@ function SignInPage() {
                   <div className={css.sns__btn}>
                     <Button className=" w-full mt-16 f__bold">
                       <span className={css.logo__img}>
-                        <img src={require('assets/img/sign-in/logo__naver.png')} alt="네이버 로고" />
+                        <img
+                          src={require('assets/img/sign-in/logo__naver.png')}
+                          alt="네이버 로고"
+                        />
                       </span>
                     </Button>
                     <NaverLoginBtn getSnsUserInfo={getSnsUserInfo} />

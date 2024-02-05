@@ -62,19 +62,18 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  signInWithEmailAndPassword = (userId, password, setLoginLoading) => {
+  signInWithEmailAndPassword = (params, setLoginLoading) => {
     return new Promise((resolve, reject) => {
       axios
-        .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, {
-          userId,
-          password,
-        })
+        .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, params)
         .then((res) => {
           if (res.status === 200) {
             const { data } = res;
             this.setSession(data.accessToken);
             resolve(data);
             this.emit('onLogin', data);
+          } else if (res.status === 204) {
+            resolve(false);
           }
         })
         .catch((error) => {
@@ -85,7 +84,7 @@ class JwtService extends FuseUtils.EventEmitter {
           }
         })
         .finally(() => {
-          setLoginLoading(false);
+          setLoginLoading && setLoginLoading(false);
         });
     });
   };
@@ -125,6 +124,8 @@ class JwtService extends FuseUtils.EventEmitter {
       axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
     } else {
       localStorage.removeItem('jwt_access_token');
+      localStorage.removeItem('com.naver.nid.oauth.state_token');
+      localStorage.removeItem('com.naver.nid.access_token');
       delete axios.defaults.headers.common.Authorization;
     }
   };

@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Paper, Typography, Link, TextField, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { Email, Smartphone, OpenInNew as LinkIcon } from '@mui/icons-material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import * as yup from 'yup';
@@ -15,12 +15,14 @@ import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import templatesJson from 'app/data/signUp/templates.json';
 import dateParser from 'app/utils/dateParser';
 import classnames from 'classnames';
+import jwtService from 'app/auth/services/jwtService';
 import { postAuthCode, getUser, postUser } from './store/SingUpSlice';
 
 function SignUpPage() {
   const { step } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [loading, setLoading] = useState(false); // 유저 인증코드 api
   const [loading2, setLoading2] = useState(false); // id 중복체크 api
   const [loading3, setLoading3] = useState(false); // 유저생성 api
@@ -95,11 +97,11 @@ function SignUpPage() {
     setAuthStep(1);
   };
 
-  const authCheck = (param) => {
+  const authCheck = (param, snsAuthKey) => {
     if (param === 2 && !authType) {
       toast.warning('인증방법을 선택해주세요.');
       resetPage();
-    } else if (param === 3 && !authKey) {
+    } else if (param === 3 && !authKey && !snsAuthKey) {
       toast.warning('본인인증을 진행해주세요.');
       resetPage();
     }
@@ -120,7 +122,7 @@ function SignUpPage() {
   const handleGetUser = async () => {
     setLoading2(true);
     try {
-      const { payload } = await dispatch(getUser({ userId: getValues().userId }))
+      const { payload } = await dispatch(getUser({ userId: getValues().userId }));
       if (payload.status === 200) {
         if (payload.data) {
           toast.info('사용가능한 ID입니다.');
@@ -131,7 +133,7 @@ function SignUpPage() {
           toast.warning('사용중인 ID입니다.');
         }
       } else {
-        toast.error(payload)
+        toast.error(payload);
       }
     } catch (error) {
       toast.error('유저ID 조회중 에러가 발생하였습니다.');
@@ -147,11 +149,11 @@ function SignUpPage() {
     let authVal2;
     switch (authType) {
       case '휴대폰':
-        authVal1 = "phone"
-        authVal2 = "" // 휴대폰 번호 인증시 휴대전화 번호
+        authVal1 = 'phone';
+        authVal2 = ''; // 휴대폰 번호 인증시 휴대전화 번호
         break;
       case '이메일':
-        authVal1 = "email"
+        authVal1 = 'email';
         authVal2 = getValues().userEmail;
         break;
       default:
@@ -163,15 +165,21 @@ function SignUpPage() {
         templateId,
         popolName: templatesJson.filter((obj) => obj.id === templateId)[0]?.popolName,
         title: templatesJson.filter((obj) => obj.id === templateId)[0]?.title,
-        userKey: dateParser(new Date()).replaceAll(":", "").replaceAll("-", " ").replaceAll(" ", "").trim(),
+        userKey: dateParser(new Date())
+          .replaceAll(':', '')
+          .replaceAll('-', ' ')
+          .replaceAll(' ', '')
+          .trim(),
         authType: authVal1,
         authValue: authVal2,
-        phone: authType === "휴대폰" ? "" : "010-0000-0000", // 휴대폰 번호 인증시 휴대전화 번호
-        email: authType === "이메일" ? getValues().userEmail : "",
-      }
+        phone: authType === '휴대폰' ? '' : '010-0000-0000', // 휴대폰 번호 인증시 휴대전화 번호
+        email: authType === '이메일' ? getValues().userEmail : '',
+      };
       const { payload } = await dispatch(postUser(params));
       if (payload.status === 200) {
-        toast.success("유저 생성이 완료되었습니다!")
+        jwtService.setSession(payload.data.accessToken);
+        jwtService.emit('onLogin', payload.data);
+        toast.success('유저 생성이 완료되었습니다!');
       }
     } catch (error) {
       toast.error('유저 생성중에 에러가 발생하였습니다.');
@@ -184,7 +192,7 @@ function SignUpPage() {
   const handlePostAuthCode = async () => {
     setLoading(true);
     try {
-      const { payload } = await dispatch(postAuthCode({ userEmail: getValues().userEmail }))
+      const { payload } = await dispatch(postAuthCode({ userEmail: getValues().userEmail }));
       if (payload.status === 200) {
         if (payload.data) {
           setAuthKey(payload.data.authKey);
@@ -205,6 +213,7 @@ function SignUpPage() {
 
   useEffect(() => {
     setAuthStep(Number(step));
+    const userEmail = location.state?.userEmail;
     if (step && step >= 1 && step <= 3) {
       switch (Number(step)) {
         case 1:
@@ -216,12 +225,21 @@ function SignUpPage() {
           authCheck(2);
           break;
         case 3:
-          setUserIdCheck(false);
           setValue('userName', '', activeOption);
           setValue('userId', '', activeOption);
           setValue('password', '', activeOption);
           setValue('passwordCheck', '', activeOption);
-          authCheck(3);
+          setUserIdCheck(false);
+          if (userEmail) {
+            const snsAuthKey = String(new Date().getTime()).slice(-8);
+            setValue('userEmail', userEmail, activeOption);
+            setValue('authKey', snsAuthKey, activeOption);
+            setAuthKey(snsAuthKey);
+            setAuthType('이메일');
+            authCheck(3, snsAuthKey);
+          } else {
+            authCheck(3);
+          }
           break;
         case 4:
           setTemplateId('none');
@@ -239,10 +257,11 @@ function SignUpPage() {
         <Paper className={css.paper}>
           <div className={`${css.signin__wrap__inner} vertical__scroll`}>
             <div className={`${css.left__section} vertical__scroll`}>
-              <div className={classnames([
-                `${css.left__inner}`,
-                { [css.step3__content__wrap]: authStep === 3 }
-              ])}>
+              <div
+                className={classnames([
+                  `${css.left__inner}`,
+                  { [css.step3__content__wrap]: authStep === 3 },
+                ])}>
                 <h1 className={`f__bold ${css.main__title}`}>
                   {authStep === 1 && '본인 인증'}
                   {authStep === 2 && `${authType} 인증`}
@@ -355,28 +374,26 @@ function SignUpPage() {
                   {authStep === 3 && authKey && (
                     <>
                       <div className={css.sign__up__item}>
-                        {
-                          userIdCheck && (
-                            <Controller
-                              name="userName"
-                              control={control}
-                              render={({ field }) => (
-                                <TextField
-                                  {...field}
-                                  className="mb-24"
-                                  style={{ marginBottom: 12 }}
-                                  label="유저명"
-                                  type="text"
-                                  error={!!errors.userName}
-                                  helperText={errors?.userName?.message}
-                                  variant="outlined"
-                                  required
-                                  fullWidth
-                                />
-                              )}
-                            />
-                          )
-                        }
+                        {userIdCheck && (
+                          <Controller
+                            name="userName"
+                            control={control}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                className="mb-24"
+                                style={{ marginBottom: 12 }}
+                                label="유저명"
+                                type="text"
+                                error={!!errors.userName}
+                                helperText={errors?.userName?.message}
+                                variant="outlined"
+                                required
+                                fullWidth
+                              />
+                            )}
+                          />
+                        )}
                         <Controller
                           name="userId"
                           control={control}
@@ -399,26 +416,24 @@ function SignUpPage() {
                           )}
                         />
                         <div className={css.signup__btn__wrap}>
-                          {
-                            !userIdCheck && (
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                className="custom__btn f__medium"
-                                size="large"
-                                fullWidth
-                                disabled={!!errors.userId || loading2 || userIdCheck}
-                                onClick={() => {
-                                  handleGetUser();
-                                }}>
-                                {loading2 ? (
-                                  <Lottie options={{ loop: true, autoplay: true, animationData }} />
-                                ) : (
-                                  <span className="mx-8 text-white font-bold">중복 확인</span>
-                                )}
-                              </Button>
-                            )
-                          }
+                          {!userIdCheck && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              className="custom__btn f__medium"
+                              size="large"
+                              fullWidth
+                              disabled={!!errors.userId || loading2 || userIdCheck}
+                              onClick={() => {
+                                handleGetUser();
+                              }}>
+                              {loading2 ? (
+                                <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                              ) : (
+                                <span className="mx-8 text-white font-bold">중복 확인</span>
+                              )}
+                            </Button>
+                          )}
                           {userIdCheck && (
                             <Button
                               variant="contained"
@@ -566,7 +581,11 @@ function SignUpPage() {
                   <Link
                     className="f__medium"
                     onClick={() => {
-                      navigate(-1);
+                      if (Number(step) === 1) {
+                        navigate(`/sign-in`);
+                      } else {
+                        navigate(`/sign-up/${Number(step) - 1}`);
+                      }
                     }}>
                     뒤로가기
                   </Link>
