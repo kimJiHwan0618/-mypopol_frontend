@@ -9,9 +9,11 @@ import DashboardConfig from 'app/pages/dashboard/templateDashboard/TemplateDashb
 import MailManagementConfig from 'app/pages/templateManagement/mailManagement/MailManagementConfig';
 import PageManagementConfig from 'app/pages/templateManagement/pageManagement/PageManagementConfig';
 import ContactusConfig from 'app/pages/guide/contactus/ContactusConfig';
+import ForgotPwConfig from 'app/pages/forgot-password/ForgotPwConfig';
 import ManualConfig from 'app/pages/guide/manual/ManualConfig';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/pages/404/Error404Page';
+import Error404PageConfig from 'app/pages/404/Error404PageConfig';
 
 // 페이지 별 Router 설정
 const routeConfigs = [
@@ -23,7 +25,9 @@ const routeConfigs = [
   MailManagementConfig,
   PageManagementConfig,
   ContactusConfig,
-  ManualConfig
+  Error404PageConfig,
+  ForgotPwConfig,
+  ManualConfig,
 ];
 
 const routes = [
@@ -32,7 +36,7 @@ const routes = [
   {
     path: '/',
     element: <Navigate to="/template/page" />,
-    // 임시로 페이지 템플릿을 메인으로 
+    // 임시로 페이지 템플릿을 메인으로
     // 기능 완료시 /dashboard/template
   },
   {

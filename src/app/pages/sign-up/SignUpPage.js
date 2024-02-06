@@ -276,6 +276,7 @@ function SignUpPage() {
                         color="secondary"
                         className="custom__btn f__medium"
                         size="large"
+                        disabled
                         onClick={() => {
                           authTypeClick('휴대폰');
                         }}>

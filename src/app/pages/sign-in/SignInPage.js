@@ -197,7 +197,7 @@ function SignInPage() {
                   <Link
                     className="f__medium"
                     onClick={() => {
-                      navigate('/sign-up');
+                      navigate('/forgot-password/1');
                     }}>
                     비밀번호 찾기
                   </Link>
