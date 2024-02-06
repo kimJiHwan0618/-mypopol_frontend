@@ -5,20 +5,25 @@ import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
+import _ from '@lodash';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import css from 'assets/css/signup.module.css';
+import { postAuthCode } from 'app/pages/sign-up/store/SingUpSlice';
+import { putUserPassword } from './store/ForgotPwSlice';
 
 function SignInPage() {
   const { step } = useParams();
-  const [loading, setLoading] = useState(false); // 유저 인증코드 api
+  const [loading, setLoading] = useState(false); // 인증번호 발급 api loading state
+  const [loading2, setLoading2] = useState(false); // 새 비밀번호 적용 api loading state
   const [userIdCheck, setUserIdCheck] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loginLoading, setLoginLoading] = useState(false);
   const [authStep, setAuthStep] = useState(1);
-  const [authValue, setAuthValue] = useState(null);
+  const [authValue, setAuthValue] = useState(null); // 이메일 or 휴대폰번호
+  const [authKey, setAuthKey] = useState(null); // 인증번호 발급후 set
   const schema = yup.object().shape({
     userId: yup
       .string()
@@ -46,16 +51,125 @@ function SignInPage() {
       .required('비밀번호를 확인해주세요.')
       .oneOf([yup.ref('password')], '비밀번호를 확인해주세요'),
   });
-
-  const { control, formState, handleSubmit, setError, setValue } = useForm({
+  const activeOption = {
+    shouldDirty: true,
+    shouldValidate: true,
+  };
+  const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
+  const {
+    register,
+    reset,
+    watch,
+    control,
+    getValues,
+    setValue,
+    onChange,
+    setError,
+    formState,
+    trigger,
+  } = methods;
   const { isValid, dirtyFields, errors } = formState;
 
+  const updateUserPassword = async () => {
+    setLoading2(true);
+    try {
+      const { userId, password } = getValues();
+      const { payload } = await dispatch(putUserPassword({ userId, password }));
+      if (payload.status === 200) {
+        if (payload.data) {
+          toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
+          navigate('/sign-in');
+        }
+      } else {
+        toast.error('비밀번호 변경중 에러가 발생하였습니다.');
+      }
+    } catch (err) {
+      toast.error('비밀번호 변경중 에러가 발생하였습니다.');
+      console.log(err);
+    } finally {
+      setLoading2(false);
+    }
+  };
+
+  const handleAuthKeyCheck = () => {
+    if (getValues().authKey === authKey) {
+      navigate('/forgot-password/3');
+    } else {
+      toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+    }
+  };
+
+  const handleResetPage = () => {
+    navigate('/forgot-password/1');
+    setAuthStep(1);
+  };
+
+  const handleAuthCheck = (param) => {
+    if (param === 2 && !authValue) {
+      toast.warning('유저정보를 입력해주세요.');
+      handleResetPage();
+    } else if (param === 3 && (getValues().authKey !== authKey || !authKey)) {
+      toast.warning('인증번호 발급을 통한 인증을 진행해주세요.');
+      handleResetPage();
+    }
+  };
+
+  const createtAuthCode = async () => {
+    setLoading(true);
+    try {
+      const { userId, userName } = getValues();
+      const { payload } = await dispatch(postAuthCode({ userId, userName, forgotPw: true }));
+      if (payload.status === 200) {
+        if (payload.data) {
+          setAuthKey(payload.data.authKey);
+          setAuthValue(payload.data.authValue);
+          navigate('/forgot-password/2');
+          toast.info(
+            `인증코드를 전송했습니다. ${
+              payload.data.authType === 'email' ? '이메일' : '휴대폰'
+            }을 확인해주세요`
+          );
+        } else {
+          toast.warning('입력하신 유저정보와 일치하는 계정이 없습니다.');
+        }
+      } else {
+        toast.error(payload);
+      }
+    } catch (error) {
+      toast.error('인증코드 발급중 에러가 발생하였습니다.');
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    console.log(step);
+    setAuthStep(Number(step));
+    if (step && step >= 1 && step <= 3) {
+      switch (Number(step)) {
+        case 1:
+          setValue('userId', '', activeOption);
+          setValue('userName', '', activeOption);
+          break;
+        case 2:
+          setValue('authKey', '', activeOption);
+          handleAuthCheck(2);
+          break;
+        case 3:
+          setValue('password', '', activeOption);
+          setValue('passwordCheck', '', activeOption);
+          handleAuthCheck(3);
+          break;
+        default:
+        //
+      }
+    } else {
+      handleResetPage();
+    }
   }, [step]);
 
   return (
@@ -65,7 +179,11 @@ function SignInPage() {
           <div className={css.signin__wrap__inner}>
             <div className={css.left__section}>
               <div className={css.left__inner}>
-                <h1 className={`f__bold ${css.main__title}`}>비밀번호 찾기</h1>
+                <h1 className={`f__bold ${css.main__title}`}>
+                  {authStep === 1 && '유저 정보 입력'}
+                  {authStep === 2 && '본인 인증 번호 입력'}
+                  {authStep === 3 && '비밀번호 재설정'}
+                </h1>
                 <div className={css.content}>
                   {authStep === 1 && (
                     <>
@@ -116,7 +234,7 @@ function SignInPage() {
                           fullWidth
                           disabled={!!errors.userName || !!errors.userId || loading}
                           onClick={() => {
-                            // handlePostAuthCode();
+                            createtAuthCode();
                           }}>
                           {loading ? (
                             <Lottie options={{ loop: true, autoplay: true, animationData }} />
@@ -125,6 +243,100 @@ function SignInPage() {
                           )}
                         </Button>
                       </div>
+                    </>
+                  )}
+                  {authStep === 2 && (
+                    <>
+                      <Controller
+                        name="authKey"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="mb-24"
+                            placeholder="8자리 인증코드 ex)16258725"
+                            label="인증코드"
+                            type="text"
+                            autoFocus
+                            error={!!errors.authKey}
+                            helperText={errors?.authKey?.message}
+                            variant="outlined"
+                            required
+                            fullWidth
+                          />
+                        )}
+                      />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="custom__btn f__medium"
+                        size="large"
+                        style={{ marginBottom: 12 }}
+                        disabled={!!errors.authKey}
+                        onClick={() => {
+                          handleAuthKeyCheck();
+                        }}>
+                        <span className="mx-8 text-white font-bold">인증 확인</span>
+                      </Button>
+                    </>
+                  )}
+                  {authStep === 3 && (
+                    <>
+                      <Controller
+                        name="password"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="mb-24"
+                            label="새 비밀번호"
+                            autoFocus
+                            style={{ marginBottom: 12 }}
+                            type="password"
+                            error={!!errors.password}
+                            helperText={errors?.password?.message}
+                            variant="outlined"
+                            required
+                            fullWidth
+                          />
+                        )}
+                      />
+                      <Controller
+                        name="passwordCheck"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            className="mb-24"
+                            label="새 비밀번호 확인"
+                            autoFocus
+                            style={{ marginBottom: 12 }}
+                            type="password"
+                            error={!!errors.passwordCheck}
+                            helperText={errors?.passwordCheck?.message}
+                            variant="outlined"
+                            required
+                            fullWidth
+                          />
+                        )}
+                      />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="custom__btn f__medium"
+                        size="large"
+                        style={{ marginBottom: 12 }}
+                        disabled={_.isEmpty(dirtyFields) || !isValid || loading2}
+                        fullWidth
+                        onClick={() => {
+                          updateUserPassword();
+                        }}>
+                        {loading2 ? (
+                          <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                        ) : (
+                          <span className="mx-8 text-white font-bold">확인</span>
+                        )}
+                      </Button>
                     </>
                   )}
                 </div>
@@ -138,7 +350,7 @@ function SignInPage() {
                       if (Number(step) === 1) {
                         navigate(`/sign-in`);
                       } else {
-                        navigate(`/sign-up/${Number(step) - 1}`);
+                        navigate(`/forgot-password/${Number(step) - 1}`);
                       }
                     }}>
                     뒤로가기
