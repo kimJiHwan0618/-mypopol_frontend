@@ -65,8 +65,6 @@ function SignInPage() {
   };
 
   const handleGetSnsUser = async (userEmail, name) => {
-    console.log(userEmail)
-    console.log(name)
     try {
       jwtService
         .signInWithEmailAndPassword({ userEmail }, setLoginLoading)

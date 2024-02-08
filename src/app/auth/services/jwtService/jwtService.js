@@ -122,7 +122,7 @@ class JwtService extends FuseUtils.EventEmitter {
   setSession = (access_token) => {
     if (access_token) {
       localStorage.setItem('jwt_access_token', access_token);
-      axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+      axios.defaults.headers.common.Authorization = `${access_token}`;
     } else {
       localStorage.removeItem('jwt_access_token');
       localStorage.removeItem('com.naver.nid.oauth.state_token');

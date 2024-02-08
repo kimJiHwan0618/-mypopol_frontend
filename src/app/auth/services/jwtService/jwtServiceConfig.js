@@ -1,8 +1,7 @@
 const jwtServiceConfig = {
-  signIn: '/auth/post/login',
-  signUp: '/auth/signUp',
+  signIn: '/common/post/login',
   accessToken: '/auth/put/access-token',
-  updateUser: '/auth/user/update',
+  updateUser: '/auth/user/update', // 아직 미개발
 };
 
 export default jwtServiceConfig;
