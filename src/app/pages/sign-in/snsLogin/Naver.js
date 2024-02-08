@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 
 const NaverLogin = ({ getSnsUserInfo }) => {
   const { naver } = window
-  const NAVER_CLIENT_ID = 'dHmuCXsB6Rq2P_yLa8Z5'
-  const NAVER_CALLBACK_URL = 'ttp://localhost:3000/sign-in'
+  // const NAVER_CLIENT_ID = 'dHmuCXsB6Rq2P_yLa8Z5'
+  // const NAVER_CALLBACK_URL = 'ttp://localhost:3000/sign-in'
 
   const initializeNaverLogin = () => {
     const naverLogin = new naver.LoginWithNaverId({
       clientId: 'dHmuCXsB6Rq2P_yLa8Z5',
-      callbackUrl: 'http://localhost:3000/sign-in',
+      callbackUrl: process.env.REACT_APP_NAVER_CALLBACK_URL,
       // 팝업창으로 로그인을 진행할 것인지?           
       isPopup: false,
       // 버튼 타입 ( 색상, 타입, 크기 변경 가능 )

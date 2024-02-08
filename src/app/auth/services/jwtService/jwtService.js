@@ -67,6 +67,7 @@ class JwtService extends FuseUtils.EventEmitter {
       axios
         .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, params)
         .then((res) => {
+          console.log(res)
           if (res.status === 200) {
             const { data } = res;
             this.setSession(data.accessToken);
