@@ -19,10 +19,6 @@ import { confirmAlert } from 'react-confirm-alert';
 /**
  * Form Validation Schema
  */
-const activeOption = {
-  shouldDirty: true,
-  shouldValidate: true,
-};
 
 const schema = yup.object().shape({
   userId: yup.string().required('유저ID를 입력해 주세요.'),
@@ -49,7 +45,6 @@ function SignInPage() {
 
   const { isValid, dirtyFields, errors } = formState;
   const routeParams = useParams();
-  const { paramUserKey } = routeParams;
 
   const getSnsUserInfo = ({ name, res }) => {
     switch (name) {
@@ -99,14 +94,6 @@ function SignInPage() {
       //
     }
   };
-
-  useEffect(
-    (paramUserKey) => {
-      // setValue('userId', paramUserKey == null ? '' : paramUserKey, activeOption);
-      // setValue('password', paramUserKey == null ? '' : '', activeOption);
-    },
-    [setValue]
-  );
 
   function onSubmit({ userId, password }) {
     setLoginLoading(true);
