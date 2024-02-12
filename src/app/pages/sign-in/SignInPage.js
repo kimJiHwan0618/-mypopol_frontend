@@ -25,7 +25,6 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .required('비밀번호를 입력해 주세요.')
-    .min(8, '비밀번호는 최소 8자 이상 입력해 주세요.'),
 });
 
 const defaultValues = {
