@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import css from 'assets/css/pageManagements.module.css';
 import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
@@ -120,6 +119,7 @@ function PageManagements() {
                         </dd>
                       </dl>
                       <a
+                        aria-label="사이트 링크 아이콘"
                         href={
                           obj.domain
                             ? `https://${obj.domain}`

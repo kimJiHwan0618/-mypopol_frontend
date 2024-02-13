@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import classnames from 'classnames';
@@ -30,7 +29,7 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
             <h1 className="f__medium">Mypopol</h1>
             <p className="f__medium">Mypopol 관리자 시스템</p>
           </div>
-          <button id="menuOff" onClick={menuHideClick}>
+          <button aria-label="햄버거 메뉴 아이콘" id="menuOff" onClick={menuHideClick}>
             <svg viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
@@ -106,7 +105,7 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
                     </span>
                     {/* // 아이콘 */}
                     <p className="f__medium txt">{obj.title}</p>
-                    <button className="arrow__btn">
+                    <button className="arrow__btn" aria-label="arrow_icon">
                       <svg viewBox="0 0 24 24" stroke="currentColor">
                         <path
                           strokeLinecap="round"

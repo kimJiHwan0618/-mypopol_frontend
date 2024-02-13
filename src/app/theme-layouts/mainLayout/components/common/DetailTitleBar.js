@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Lottie from 'react-lottie';
@@ -17,7 +16,7 @@ function DetailTitleBar({ saveBtnClick, isValid, dirtyFields, updateLoading }) {
   return (
     <div className="sub__nav">
       <div className="left">
-        <button onClick={historyBack}>
+        <button aria-label="히스토리 백 아이콘" onClick={historyBack}>
           <svg viewBox="0 0 24 24" stroke="white">
             <path
               strokeLinecap="round"

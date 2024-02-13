@@ -79,11 +79,9 @@ function SignInPage() {
     try {
       const { userId, password } = getValues();
       const { payload } = await dispatch(putUserPassword({ userId, password }));
-      if (payload.status === 200) {
-        if (payload.data) {
-          toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
-          navigate('/sign-in');
-        }
+      if (payload.status === 200 && payload?.data) {
+        toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
+        navigate('/sign-in');
       } else {
         toast.error('비밀번호 변경중 에러가 발생하였습니다.');
       }

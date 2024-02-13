@@ -1,32 +1,163 @@
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
-import { MenuItem, Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ArrowRight } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
+import { toast } from 'react-toastify';
+import { selectUser } from 'app/store/userSlice';
+import initDataRangeList from 'app/utils/initDataRangeList';
+import {
+  getPopols,
+  getWorks,
+  getVistors,
+  getMails,
+  selectSearchedFlag,
+  setPopols,
+  setWorks,
+  setMails,
+  setSearchedFlag,
+  selectPopols,
+  selectWorks,
+  selectVistors,
+  selectMails,
+  setVistors,
+} from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 
 function DashBoard() {
-  // const user = useSelector(selectUser);
+  const user = useSelector(selectUser);
+  const searchedFlag = useSelector(selectSearchedFlag);
+  const popols = useSelector(selectPopols);
+  const works = useSelector(selectWorks);
+  const vistors = useSelector(selectVistors);
+  const mails = useSelector(selectMails);
   const dispatch = useDispatch();
-  const [term, setTerm] = useState(0);
-  const [countType, setCountType] = useState(0);
-  const [mailHistory, setMailHistory] = useState([]);
+  const [chartData, setChartData] = useState();
+  const [term, setTerm] = useState(0); // 0: 주별 or 1: 월별
+  const [countType, setCountType] = useState(0); // 0: 방문자 or 1: 메일
 
-  // const handleGetDataCount = () => {
+  const handleGetPopols = async () => {
+    try {
+      const { payload } = await dispatch(getPopols({ userKey: user.userKey }));
+      if (payload.status === 200 && payload?.data) {
+        dispatch(setPopols(payload.data));
+        dispatch(setSearchedFlag({ popols: true }));
+      } else {
+        toast.error('포폴 데이터 조회 에러');
+      }
+    } catch (err) {
+      toast.error('포폴 데이터 조회 에러');
+      console.log(err);
+    } finally {
+      //
+    }
+  };
+  const handleGetWorks = async () => {
+    try {
+      const { payload } = await dispatch(getWorks({ userKey: user.userKey }));
+      if (payload.status === 200 && payload?.data) {
+        dispatch(setWorks(payload.data));
+        dispatch(setSearchedFlag({ works: true }));
+      } else {
+        toast.error('작품 데이터 조회 에러');
+      }
+    } catch (err) {
+      toast.error('작품 데이터 조회 에러');
+      console.log(err);
+    } finally {
+      //
+    }
+  };
 
-  // }
+  const handleGetVistors = async () => {
+    try {
+      const { payload } = await dispatch(getVistors({ userId: user.userId }));
+      if (payload.status === 200 && payload?.data) {
+        dispatch(setVistors(payload.data));
+        dispatch(setSearchedFlag({ vistors: true }));
+      } else {
+        toast.error('방문자 이력 데이터 조회 에러');
+      }
+    } catch (err) {
+      toast.error('방문자 이력 데이터 조회 에러');
+      console.log(err);
+    } finally {
+      //
+    }
+  };
+
+  const handleGetMails = async () => {
+    try {
+      const { payload } = await dispatch(getMails({ userId: user.userId }));
+      if (payload.status === 200 && payload?.data) {
+        dispatch(setMails(payload.data));
+        dispatch(setSearchedFlag({ mails: true }));
+      } else {
+        toast.error('메일 이력 데이터 조회 에러');
+      }
+    } catch (err) {
+      toast.error('메일 이력 데이터 조회 에러');
+      console.log(err);
+    } finally {
+      //
+    }
+  };
 
   useEffect(() => {
-    // dispatch(sftpTest({ gd: "test" })).then(({ payload }) => {
-    //   console.log(payload)
-    // })
-    //   .catch((error) => {
-    //     toast.error("sftp api 에러입니다.");
-    //     console.log(error)
-    //   })
+    const { popols, works, vistors, mails } = searchedFlag;
+    if (!popols) {
+      handleGetPopols();
+    }
+    if (!works) {
+      handleGetWorks();
+    }
+    if (!vistors) {
+      handleGetVistors();
+    }
+    if (!mails) {
+      handleGetMails();
+    }
   }, []);
+
+  const isWithin7DaysRange = (text1, text2) => {
+    const year = text1.slice(2, 4);
+    const month = text1.slice(5, 7);
+    const day = text1.slice(8, 10);
+    const date1 = new Date(`20${year}-${month}-${day}`).getTime();
+    const date2 = new Date(`20${text2.replace('~ ', '')}`).getTime();
+
+    // 현재 날짜에서 7일 이전의 날짜
+    const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7)).getTime();
+    return date1 >= sevenDaysAgo && date1 <= date2;
+  };
+
+  const handleTrendChart = (xcategories) => {
+    console.log(xcategories);
+    const seriesData = [];
+    if (!countType) {
+      if (!term) {
+        xcategories.forEach((obj, idx) => {
+          const cnt = vistors.filter((vistor) => isWithin7DaysRange(vistor.vistedTime, obj)).length;
+          seriesData.push(cnt);
+        });
+      } else {
+        xcategories.forEach((obj, idx) => {
+          const cnt = vistors.filter((vistor) => vistor.vistedTime.substring(2, 7) === obj).length;
+          seriesData.push(cnt);
+        });
+      }
+      console.log(seriesData);
+    } else {
+      console.log(mails);
+    }
+  };
+
+  useEffect(() => {
+    const xcategories = initDataRangeList(!term ? '주별' : '월별');
+    handleTrendChart(xcategories);
+  }, [countType, term]);
 
   return (
     <div className="section__grid__wrap content">
@@ -35,7 +166,7 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">포폴</p>
-            <button>
+            <button aria-label="button">
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -47,7 +178,7 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">1</dt>
+            <dt className="f__medium">{popols.length}</dt>
             <dd className="f__medium">전체 포폴</dd>
           </dl>
         </div>
@@ -58,7 +189,7 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">작품</p>
-            <button>
+            <button aria-label="button">
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -70,7 +201,7 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">105</dt>
+            <dt className="f__medium">{works.length}</dt>
             <dd className="f__medium">전체 작품</dd>
           </dl>
         </div>
@@ -81,7 +212,7 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">방문자</p>
-            <button>
+            <button aria-label="button">
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -93,7 +224,7 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">35</dt>
+            <dt className="f__medium">{vistors.length}</dt>
             <dd className="f__medium">전체 방문자</dd>
           </dl>
         </div>
@@ -104,7 +235,7 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">메일</p>
-            <button>
+            <button aria-label="button">
               <svg viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -116,7 +247,7 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">105</dt>
+            <dt className="f__medium">{mails.length}</dt>
             <dd className="f__medium">전체 메일</dd>
           </dl>
         </div>
@@ -127,30 +258,32 @@ function DashBoard() {
           <div className="mail__grid">
             <div className={css.status__top2}>
               <p className="normal__title f__medium">최근 메일</p>
-              <Button
-                disabled={mailHistory.length <= 0}
-                variant="contained"
-                className="custom__btn">
+              <Button disabled={mails.length <= 0} variant="contained" className="custom__btn">
                 <span className="f__medium">더 보기</span>
                 <ArrowRight />
               </Button>
             </div>
             <div className={css.grid__wrap}>
               <DataGrid
-                rows={mailHistory}
+                rows={mails.slice(0, 10)}
                 // className='data__grid common__content'
                 // loading={gridLoadingFlag}
                 columns={[
-                  { headerName: '이메일', field: 'email', width: 200, },
+                  { headerName: '이메일', field: 'email', width: 200 },
                   {
-                    headerName: '제목', field: 'title', width: 250,
+                    headerName: '제목',
+                    field: 'title',
+                    width: 250,
                   },
                   {
-                    headerName: '시간', field: 'tmstamp', width: 200,
-                    valueFormatter: ({ value }) => value !== null ? value.replace("T", " ") : "-"
+                    headerName: '시간',
+                    field: 'timestamp',
+                    width: 200,
+                    valueFormatter: ({ value }) =>
+                      value ? value.replace('T', ' ').replace('Z', '') : '-',
                   },
                 ]}
-                getRowId={(data) => data.idx}
+                getRowId={(data) => data.seq}
                 pageSize={10}
               />
             </div>
@@ -167,7 +300,7 @@ function DashBoard() {
             </div>
             <div className={css.select__list__wrap}>
               <div className={css.select__list}>
-                {['일별', '주별'].map((obj, idx) => (
+                {['주별', '월별'].map((obj, idx) => (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -243,4 +376,3 @@ function DashBoard() {
 }
 
 export default DashBoard;
-// export default React.memo(DashBoard);

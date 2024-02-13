@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
@@ -27,6 +26,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               {/* <!-- 메뉴 토글 --> */}
               <button
                 id="menuOn"
+                aria-label="햄버거 메뉴"
                 onClick={menuHideClick}
                 className={menuBarStatus === 'hide' ? 'icon__link' : 'icon__link hide'}>
                 <div>
@@ -42,7 +42,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               </button>
               {/* <!-- // 메뉴 토글 --> */}
               {/* <!-- 캘린더 --> */}
-              <a href="#" className="icon__link hide">
+              <a href="#" className="icon__link hide" aria-label="캘린터">
                 <div>
                   <svg
                     id="view-grid"
