@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import Lottie from 'react-lottie';

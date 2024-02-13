@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import classnames from 'classnames';
