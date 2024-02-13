@@ -12,8 +12,8 @@ const navigationAdapter = createEntityAdapter();
 const emptyInitialState = {};
 const initialState = navigationAdapter.upsertMany(emptyInitialState, []);
 
-export const getSideMenus = createAsyncThunk('common/get/side-menus', async (user) => {
-  const response = await axios.get(`${process.env.REACT_APP_API_HOST}/common/get/side-menus?roleId=${user.roleId}`);
+export const getSideMenus = createAsyncThunk('auth/get/side-menus', async (user) => {
+  const response = await axios.get(`${process.env.REACT_APP_API_HOST}/auth/get/side-menus?roleId=${user.roleId}`);
   const data = await response.data;
   return JSON.parse(data.response.menuJson);
 });

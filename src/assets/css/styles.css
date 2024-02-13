@@ -82,6 +82,7 @@ main {
   flex: 1 1 auto;
   min-height: 100%;
   z-index: 10;
+  padding-top: 64px;
   position: relative;
   min-width: 0;
 }
@@ -409,11 +410,11 @@ div#menu- {
 }
 
 @media (max-width: 1200px) {
-  .main__nav+.modal__bg {
+  .main__nav~.modal__bg {
     display: block;
   }
 
-  .main__nav.hide+.modal__bg {
+  .main__nav.hide~.modal__bg {
     display: none;
   }
 }

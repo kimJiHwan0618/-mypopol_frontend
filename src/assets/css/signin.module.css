@@ -1,6 +1,7 @@
 .signin__wrap {
   height: 100vh;
   background: rgb(241, 245, 249);
+  margin-top: -64px;
 }
 
 .paper {
@@ -16,7 +17,7 @@
   height: 100%;
 }
 
-.signin__wrap__inner > div {
+.signin__wrap__inner>div {
   width: 50%;
   box-sizing: border-box;
   height: 100%;
@@ -35,7 +36,7 @@
   justify-content: center;
 }
 
-.left__inner > form {
+.left__inner>form {
   margin-bottom: 24px;
 }
 
@@ -48,11 +49,11 @@
   margin-bottom: 0px;
 }
 
-.notice__txt > p {
+.notice__txt>p {
   color: #999;
 }
 
-.notice__txt > a {
+.notice__txt>a {
   font-size: 1rem;
   cursor: pointer;
   text-decoration: none;
@@ -80,7 +81,7 @@
   margin-right: 0px;
 }
 
-.sns__btn > a img {
+.sns__btn>a img {
   width: 100% !important;
 }
 
@@ -88,7 +89,7 @@
   opacity: 1;
 }
 
-.sns__btn > button {
+.sns__btn>button {
   width: 100% !important;
   height: 100% !important;
 }
@@ -97,7 +98,7 @@
   height: 40%;
 }
 
-.logo__img > img {
+.logo__img>img {
   height: 100%;
 }
 
@@ -109,7 +110,7 @@
   min-height: 54px !important;
 }
 
-.sns__btn > div {
+.sns__btn>div {
   position: absolute;
   left: 0;
   top: 0;
@@ -118,7 +119,7 @@
   height: 100% !important;
 }
 
-.sns__btn > div img {
+.sns__btn>div img {
   width: 100% !important;
   height: 100% !important;
 }
@@ -138,7 +139,7 @@
   background: none;
 }
 
-.google__btn button > div {
+.google__btn button>div {
   margin: 0px !important;
   padding: 0px !important;
   height: 24px;
@@ -168,22 +169,22 @@
   min-width: 550px;
 }
 
-.right__section > h2 {
+.right__section>h2 {
   font-size: 3.2rem;
   margin-bottom: 24px;
 }
 
-.right__section > p {
+.right__section>p {
   font-size: 1.4rem;
   opacity: 0.6;
   line-height: 1.62;
 }
 
-.right__section > svg {
+.right__section>svg {
   position: absolute;
 }
 
-.right__section > svg:first-of-type {
+.right__section>svg:first-of-type {
   right: -64px;
   top: -64px;
   opacity: 0.2;
@@ -192,42 +193,42 @@
   color: rgb(100, 116, 139);
 }
 
-.right__section > svg circle {
+.right__section>svg circle {
   color: rgb(100, 116, 139);
   -webkit-tap-highlight-color: transparent;
   text-rendering: optimizeLegibility;
 }
 
-.right__section > svg:nth-of-type(2) {
+.right__section>svg:nth-of-type(2) {
   left: 0;
   top: 0;
 }
 
-.right__section > svg > g {
+.right__section>svg>g {
   color: rgb(100, 116, 139);
   opacity: 0.2;
 }
 
-.left__inner > div {
+.left__inner>div {
   display: flex;
 }
 
-.left__inner > div p {
+.left__inner>div p {
   opacity: 0.6;
 }
 
-.left__inner form > div {
+.left__inner form>div {
   margin-bottom: 4px;
   min-height: 75.91px;
 }
 
-.left__inner form > div:nth-of-type(3) {
+.left__inner form>div:nth-of-type(3) {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.left__innerft form > button {
+.left__innerft form>button {
   width: 100%;
 }
 
@@ -252,27 +253,27 @@
 }
 
 @media (max-width: 1460px) {
-  .right__section > h2 {
+  .right__section>h2 {
     font-size: 2.4rem;
   }
 
-  .right__section > p {
+  .right__section>p {
     font-size: 1.2rem;
   }
 
-  .left__inner > h1 {
+  .left__inner>h1 {
     font-size: 2.4rem;
   }
 
-  .signup__notice > p {
+  .signup__notice>p {
     font-size: 0.9rem;
   }
 
-  .signup__notice > a {
+  .signup__notice>a {
     font-size: 0.9rem;
   }
 
-  .signin__wrap__inner > div {
+  .signin__wrap__inner>div {
     padding: 4rem 3rem;
   }
 }
@@ -292,7 +293,7 @@
     align-items: center;
   }
 
-  .signin__wrap__inner > div {
+  .signin__wrap__inner>div {
     padding: 32px;
     width: 70%;
     background: white;
@@ -308,7 +309,7 @@
 }
 
 @media (max-width: 650px) {
-  .signin__wrap__inner > div {
+  .signin__wrap__inner>div {
     max-height: none;
     width: 100%;
   }

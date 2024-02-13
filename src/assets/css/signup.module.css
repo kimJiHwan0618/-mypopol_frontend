@@ -1,6 +1,7 @@
 .signin__wrap {
   height: 100vh;
   background: rgb(241, 245, 249);
+  margin-top: -64px;
 }
 
 .paper {

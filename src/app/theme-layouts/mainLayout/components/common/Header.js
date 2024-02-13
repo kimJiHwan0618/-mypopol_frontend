@@ -151,7 +151,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               <div className="profile__wrap">
                 <dl>
                   <dt className="name f__medium">{user.username}</dt>
-                  <dd className="role f__medium">{user.role}</dd>
+                  <dd className="role f__medium">권한&nbsp;:&nbsp;{user.role}</dd>
                 </dl>
                 <div className="user__img">
                   <img src={require('assets/img/profile.jpg')} alt="프로필 이미지" />
