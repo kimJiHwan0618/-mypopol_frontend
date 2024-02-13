@@ -18,7 +18,7 @@ header {
     var(--tw-shadow);
 }
 
-.main__nav.hide+main>header {
+.main__nav.hide~main>header {
   left: 0;
   width: 100%;
 }
@@ -251,6 +251,7 @@ header>.header__inner>.right>.icon>label>.profile__wrap dl dt {
 header>.header__inner>.right>.icon>label>.profile__wrap dl dd {
   font-size: 0.8rem;
   margin-top: -4px;
+  opacity: .6;
 }
 
 header>.header__inner>.right>.icon>label>.profile__wrap .user__img {
@@ -316,4 +317,10 @@ header>.header__inner>.right>.icon>label>ul>li>a>.icon>img {
   .header__inner>.left>.wrap>div>.menuOn.hide {
     display: block;
   }
+
+  header {
+    left: 0;
+    width: 100%;
+  }
+
 }

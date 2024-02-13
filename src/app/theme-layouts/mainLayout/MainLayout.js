@@ -21,10 +21,10 @@ function MainLayout() {
     <div id="layout">
       <ToastContainer style={{ zIndex: 99999 }} position="bottom-center" />
       <LoadingWrap />
-      <div className="modal__bg" />
       {config.leftSidePanel.display && (
         <SideMenuBar menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
       )}
+      <div className="modal__bg" />
       <main>
         {config.toolbar.display && (
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />

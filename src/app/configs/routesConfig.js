@@ -5,7 +5,7 @@ import SignInConfig from 'app/pages/sign-in/SignInConfig';
 import SignOutConfig from 'app/pages/sign-out/SignOutConfig';
 import signUpConfig from 'app/pages/sign-up/SignUpConfig';
 import LandingPageConfig from 'app/pages/landing/LandingPageConfig';
-import DashboardConfig from 'app/pages/dashboard/templateDashboard/TemplateDashboardConfig';
+import TemplateDashboardConfig from 'app/pages/dashboard/templateDashboard/TemplateDashboardConfig';
 import MailManagementConfig from 'app/pages/templateManagement/mailManagement/MailManagementConfig';
 import PageManagementConfig from 'app/pages/templateManagement/pageManagement/PageManagementConfig';
 import ContactusConfig from 'app/pages/guide/contactus/ContactusConfig';
@@ -21,7 +21,7 @@ const routeConfigs = [
   SignInConfig,
   SignOutConfig,
   signUpConfig,
-  DashboardConfig,
+  TemplateDashboardConfig,
   MailManagementConfig,
   PageManagementConfig,
   ContactusConfig,
@@ -35,7 +35,7 @@ const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
   {
     path: '/',
-    element: <Navigate to="/template/page" />,
+    element: <Navigate to="/dashboard/home" />,
     // 임시로 페이지 템플릿을 메인으로
     // 기능 완료시 /dashboard/template
   },

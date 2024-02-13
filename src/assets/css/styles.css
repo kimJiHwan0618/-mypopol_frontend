@@ -410,11 +410,11 @@ div#menu- {
 }
 
 @media (max-width: 1200px) {
-  .main__nav+.modal__bg {
+  .main__nav~.modal__bg {
     display: block;
   }
 
-  .main__nav.hide+.modal__bg {
+  .main__nav.hide~.modal__bg {
     display: none;
   }
 }

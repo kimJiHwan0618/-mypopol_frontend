@@ -6,13 +6,13 @@ const config = {
   settings: {
     layout: {
       config: {
-        enabled: false,
+        enabled: true,
       },
     },
   },
   routes: [
     {
-      path: 'dashboard/template',
+      path: 'dashboard/home',
       element: <TemplatesDashboard />,
     },
   ],

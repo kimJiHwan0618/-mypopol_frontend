@@ -1,16 +1,22 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import { MenuItem, Button, TextField } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
+import { ArrowRight } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
+import { DataGrid } from '@mui/x-data-grid';
 
 function DashBoard() {
   // const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const [term, setTerm] = useState(0);
   const [countType, setCountType] = useState(0);
+  const [mailHistory, setMailHistory] = useState([]);
+
+  // const handleGetDataCount = () => {
+
+  // }
 
   useEffect(() => {
     // dispatch(sftpTest({ gd: "test" })).then(({ payload }) => {
@@ -25,25 +31,29 @@ function DashBoard() {
   return (
     <div className="section__grid__wrap content">
       {/* <!-- 총 포폴수 --> */}
-      <div className={css.selector__wrap}>
-        <TextField
-          select
-          value="카리보페이지"
-          label="포폴명"
-          id="searchGroupId"
-          variant="outlined"
-          fullWidth
-          // onChange={(e) => {
-          //   handleGroupComboChange(e.target.value);
-          // }}
-        >
-          {[{ name: '카리보페이지' }].map((obj, idx) => (
-            <MenuItem key={obj.name} value={obj.name}>
-              {obj.name}
-            </MenuItem>
-          ))}
-        </TextField>
-      </div>
+      <section className={css.status__box}>
+        <div className={`${css.status__box__inner} section__inner`}>
+          <div className={`${css.status__top}`}>
+            <p className="f__medium">포폴</p>
+            <button>
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
+          </div>
+          <dl>
+            <dt className="f__medium">1</dt>
+            <dd className="f__medium">전체 포폴</dd>
+          </dl>
+        </div>
+      </section>
+      {/* <!-- // 총 포폴수 --> */}
+      {/* <!-- 전체 작품 수 --> */}
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
@@ -60,13 +70,13 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">1</dt>
-            <dd className="f__medium">전체 작품 수</dd>
+            <dt className="f__medium">105</dt>
+            <dd className="f__medium">전체 작품</dd>
           </dl>
         </div>
       </section>
-      {/* <!-- // 총 포폴수 --> */}
-      {/* <!-- 방문자 --> */}
+      {/* <!-- // 전체 작품 수 --> */}
+      {/* <!-- 전체 방문자 --> */}
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
@@ -83,13 +93,13 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">105</dt>
+            <dt className="f__medium">35</dt>
             <dd className="f__medium">전체 방문자</dd>
           </dl>
         </div>
       </section>
-      {/* <!-- // 방문자 --> */}
-      {/* <!-- 메일 --> */}
+      {/* <!-- // 전체 방문자 --> */}
+      {/* <!-- 전체 메일 --> */}
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
@@ -106,183 +116,48 @@ function DashBoard() {
             </button>
           </div>
           <dl>
-            <dt className="f__medium">35</dt>
+            <dt className="f__medium">105</dt>
             <dd className="f__medium">전체 메일</dd>
           </dl>
         </div>
       </section>
-      {/* <!-- // 메일 --> */}
-      {/* <!-- 응원 --> */}
-      <section className={css.status__box}>
-        <div className={`${css.status__box__inner} section__inner`}>
-          <div className={`${css.status__top}`}>
-            <p className="f__medium">댓글</p>
-            <button>
-              <svg viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
-                />
-              </svg>
-            </button>
-          </div>
-          <dl>
-            <dt className="f__medium">105</dt>
-            <dd className="f__medium">전체 댓글</dd>
-          </dl>
-        </div>
-      </section>
-      {/* <!-- // 응원 --> */}
-      {/* 포폴 정보 & 한줄 댓글 */}
+      {/* <!-- // 최근 메일 --> */}
       <section className={css.fw__section}>
-        <div className={`${css.template__info__wrap} section__inner`}>
-          <div className="template__info">
+        <div className="section__inner">
+          <div className="mail__grid">
             <div className={css.status__top2}>
-              <p className="normal__title f__medium">포폴 정보</p>
-            </div>
-            <div className={css.img__box}>
-              <img src={require('assets/img/thumbnail.jpg')} alt="썸네일 이미지 테스트" />
-            </div>
-            <ul>
-              <li>
-                <dl>
-                  <dt className="f__medium">링크</dt>
-                  <dd>site.mypopol.com/ptid01/caribo</dd>
-                </dl>
-                <a href="https://caribo.me" target="_blank" className={css.icon} rel="noreferrer">
-                  <svg
-                    id="external-link"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                    />
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <dl>
-                  <dt className="f__medium">페이지 템플릿</dt>
-                  <dd>ptid01</dd>
-                </dl>
-              </li>
-              <li>
-                <dl>
-                  <dt className="f__medium">메일 템플릿</dt>
-                  <dd>mtid01</dd>
-                </dl>
-              </li>
-              <li>
-                <dl>
-                  <dt className="f__medium">남은기한</dt>
-                  <dd>340일</dd>
-                </dl>
-              </li>
-              <li>
-                <dl>
-                  <dt className="f__medium">마지막 수정일시</dt>
-                  <dd>05-17 17:48</dd>
-                </dl>
-              </li>
-            </ul>
-          </div>
-          <div className="cheering__grid">
-            <div className={css.status__top2}>
-              <p className="normal__title f__medium">한줄 댓글</p>
-              <Button variant="contained" className="custom__btn">
-                <span className="f__medium">더보기</span>
+              <p className="normal__title f__medium">최근 메일</p>
+              <Button
+                disabled={mailHistory.length <= 0}
+                variant="contained"
+                className="custom__btn">
+                <span className="f__medium">더 보기</span>
+                <ArrowRight />
               </Button>
             </div>
-            <div className={`${css.gird__wrap} vertical__scroll common__grid`}>
-              <table className={css.table}>
-                <thead>
-                  <tr>
-                    <th>
-                      <p className="f__medium">발생일시</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">내용</p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className={css.tbody}>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th>
-                      <p className="f__medium">05-16 14:00</p>
-                    </th>
-                    <th>
-                      <p className="f__medium">다음 작품이 기대되요!</p>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
+            <div className={css.grid__wrap}>
+              <DataGrid
+                rows={mailHistory}
+                // className='data__grid common__content'
+                // loading={gridLoadingFlag}
+                columns={[
+                  { headerName: '이메일', field: 'email', width: 200, },
+                  {
+                    headerName: '제목', field: 'title', width: 250,
+                  },
+                  {
+                    headerName: '시간', field: 'tmstamp', width: 200,
+                    valueFormatter: ({ value }) => value !== null ? value.replace("T", " ") : "-"
+                  },
+                ]}
+                getRowId={(data) => data.idx}
+                pageSize={10}
+              />
             </div>
           </div>
         </div>
       </section>
-      {/* // 포폴 정보 & 한줄 댓글 */}
+      {/* <!-- // 최근 메일 --> */}
       {/* 차트 웹 */}
       <section className={css.fw__section}>
         <div className="section__inner">
@@ -290,7 +165,7 @@ function DashBoard() {
             <div className={css.status__top2}>
               <p className="normal__title f__medium">트렌드 차트</p>
             </div>
-            <div>
+            <div className={css.select__list__wrap}>
               <div className={css.select__list}>
                 {['일별', '주별'].map((obj, idx) => (
                   <div
@@ -306,7 +181,7 @@ function DashBoard() {
                 <div style={{ left: 8 + 82 * term }} className={css.selected__tab} />
               </div>
               <div className={css.select__list}>
-                {['방문자', '메일', '한줄 댓글'].map((obj, idx) => (
+                {['방문자', '메일'].map((obj, idx) => (
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
@@ -321,7 +196,7 @@ function DashBoard() {
               </div>
             </div>
           </div>
-          <div className="chart__wrap" style={{ marginTop: 24 }}>
+          <div className={css.chart__wrap}>
             <ReactApexChart
               options={{
                 chart: {
@@ -357,7 +232,7 @@ function DashBoard() {
                 },
               ]}
               type="bar"
-              height={350}
+              height={407}
             />
           </div>
         </div>
