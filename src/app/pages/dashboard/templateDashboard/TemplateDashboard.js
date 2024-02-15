@@ -25,6 +25,7 @@ import {
   selectMails,
   setVistors,
 } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+import _ from '@lodash';
 
 function DashBoard() {
   const user = useSelector(selectUser);
@@ -34,7 +35,8 @@ function DashBoard() {
   const vistors = useSelector(selectVistors);
   const mails = useSelector(selectMails);
   const dispatch = useDispatch();
-  const [chartData, setChartData] = useState();
+  const [series, setSeries] = useState([]);
+  const [xLabels, setXLabels] = useState([]);
   const [term, setTerm] = useState(0); // 0: 주별 or 1: 월별
   const [countType, setCountType] = useState(0); // 0: 방문자 or 1: 메일
 
@@ -121,43 +123,47 @@ function DashBoard() {
     }
   }, []);
 
-  const isWithin7DaysRange = (text1, text2) => {
+  const handleGetTermCount = (text1, text2) => {
     const year = text1.slice(2, 4);
     const month = text1.slice(5, 7);
     const day = text1.slice(8, 10);
     const date1 = new Date(`20${year}-${month}-${day}`).getTime();
     const date2 = new Date(`20${text2.replace('~ ', '')}`).getTime();
-
-    // 현재 날짜에서 7일 이전의 날짜
-    const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7)).getTime();
-    return date1 >= sevenDaysAgo && date1 <= date2;
+    const today = new Date(date2);
+    const sevenDaysAgo = new Date(today);
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    const test = sevenDaysAgo.getTime();
+    return date1 >= test && date1 <= date2;
   };
 
-  const handleTrendChart = (xcategories) => {
-    console.log(xcategories);
-    const seriesData = [];
-    if (!countType) {
-      if (!term) {
-        xcategories.forEach((obj, idx) => {
-          const cnt = vistors.filter((vistor) => isWithin7DaysRange(vistor.vistedTime, obj)).length;
-          seriesData.push(cnt);
-        });
-      } else {
-        xcategories.forEach((obj, idx) => {
-          const cnt = vistors.filter((vistor) => vistor.vistedTime.substring(2, 7) === obj).length;
-          seriesData.push(cnt);
-        });
-      }
-      console.log(seriesData);
+  const handleSetTrendData = (xcategories, trendData, name) => {
+    const seriesData = [{
+      name,
+      data: []
+    }];
+    if (!term) {
+      xcategories.forEach((obj, idx) => {
+        const cnt = trendData.filter((data) => handleGetTermCount(data.timeStamp, obj)).length;
+        seriesData[0].data.push(cnt);
+      });
     } else {
-      console.log(mails);
+      xcategories.forEach((obj, idx) => {
+        const cnt = trendData.filter((data) => data.timeStamp.substring(2, 7) === obj).length;
+        seriesData[0].data.push(cnt);
+      });
     }
+    setSeries(seriesData)
+    setXLabels(xcategories);
+  }
+
+  const handleTrendChart = (xcategories) => {
+    !countType ? handleSetTrendData(xcategories, vistors, "방문자") : handleSetTrendData(xcategories, mails, "메일");
   };
 
   useEffect(() => {
     const xcategories = initDataRangeList(!term ? '주별' : '월별');
     handleTrendChart(xcategories);
-  }, [countType, term]);
+  }, [countType, term, mails, vistors]);
 
   return (
     <div className="section__grid__wrap content">
@@ -277,7 +283,7 @@ function DashBoard() {
                   },
                   {
                     headerName: '시간',
-                    field: 'timestamp',
+                    field: 'timeStamp',
                     width: 200,
                     valueFormatter: ({ value }) =>
                       value ? value.replace('T', ' ').replace('Z', '') : '-',
@@ -336,7 +342,7 @@ function DashBoard() {
                   id: 'column-chart',
                 },
                 xaxis: {
-                  categories: ['05/07', '05/08', '05/09', '05/10', '05/11', '05/12', '05/13'],
+                  categories: xLabels,
                 },
                 plotOptions: {
                   bar: {
@@ -358,12 +364,7 @@ function DashBoard() {
                   },
                 },
               }}
-              series={[
-                {
-                  name: '메일',
-                  data: [30, 40, 45, 50, 49, 80, 20],
-                },
-              ]}
+              series={series}
               type="bar"
               height={407}
             />
