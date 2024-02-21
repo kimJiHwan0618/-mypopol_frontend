@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import _ from '@lodash';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Lottie from 'react-lottie';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
@@ -22,9 +22,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 const schema = yup.object().shape({
   userId: yup.string().required('유저ID를 입력해 주세요.'),
-  password: yup
-    .string()
-    .required('비밀번호를 입력해 주세요.')
+  password: yup.string().required('비밀번호를 입력해 주세요.'),
 });
 
 const defaultValues = {
@@ -48,20 +46,20 @@ function SignInPage() {
   const getSnsUserInfo = ({ name, res }) => {
     switch (name) {
       case 'naver':
-        handleGetSnsUser(res.user.email, name);
+        handleGetSnsUser(res.user.email, res?.accessToken, name);
         break;
       case 'google':
-        handleGetSnsUser(res.wt.cu, name);
+        handleGetSnsUser(res.wt.cu, res?.accessToken, name);
         break;
       default:
         break;
     }
   };
 
-  const handleGetSnsUser = async (userEmail, name) => {
+  const handleGetSnsUser = async (userEmail, snsAuthToken, name) => {
     try {
       jwtService
-        .signInWithEmailAndPassword({ userEmail }, setLoginLoading)
+        .signInWithEmailAndPassword({ userEmail, snsAuthToken }, setLoginLoading)
         .then((res) => {
           !res &&
             confirmAlert({
