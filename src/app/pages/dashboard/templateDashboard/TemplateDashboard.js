@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import { Button } from '@mui/material';
@@ -25,7 +26,6 @@ import {
   selectMails,
   setVistors,
 } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
-import _ from '@lodash';
 
 function DashBoard() {
   const user = useSelector(selectUser);
@@ -137,27 +137,34 @@ function DashBoard() {
   };
 
   const handleSetTrendData = (xcategories, trendData, name) => {
-    const seriesData = [{
-      name,
-      data: []
-    }];
+    const xList = [];
+    const seriesData = [
+      {
+        name,
+        data: [],
+      },
+    ];
     if (!term) {
-      xcategories.forEach((obj, idx) => {
+      xcategories.map((obj, idx) => {
         const cnt = trendData.filter((data) => handleGetTermCount(data.timeStamp, obj)).length;
+        xList.push(`~${obj.slice(4)}`);
         seriesData[0].data.push(cnt);
       });
     } else {
-      xcategories.forEach((obj, idx) => {
+      xcategories.map((obj, idx) => {
         const cnt = trendData.filter((data) => data.timeStamp.substring(2, 7) === obj).length;
+        xList.push(obj);
         seriesData[0].data.push(cnt);
       });
     }
-    setSeries(seriesData)
-    setXLabels(xcategories);
-  }
+    setSeries(seriesData);
+    setXLabels(xList);
+  };
 
   const handleTrendChart = (xcategories) => {
-    !countType ? handleSetTrendData(xcategories, vistors, "방문자") : handleSetTrendData(xcategories, mails, "메일");
+    !countType
+      ? handleSetTrendData(xcategories, vistors, '방문자')
+      : handleSetTrendData(xcategories, mails, '메일');
   };
 
   useEffect(() => {
