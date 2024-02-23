@@ -72,6 +72,29 @@ export const getMails = createAsyncThunk(
   }
 );
 
+export const testWss = createAsyncThunk(
+  'dashboard/home/get/test',
+  async (params, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_HOST}/dashboard/home/get/test`,
+        {
+          params,
+          headers: {
+            'session-id': 'your-session-id',
+          },
+        }
+      );
+      return await response;
+    } catch (error) {
+      if (!error.response.data) {
+        return rejectWithValue(error);
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const initialState = {
   popols: [],
   works: [],

@@ -1,5 +1,5 @@
 import FuseSuspense from '@fuse/core/FuseSuspense';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { selectFuseCurrentLayoutConfig } from 'app/store/fuse/settingsSlice';
 import { useSelector } from 'react-redux';
@@ -11,9 +11,39 @@ import { Header, SideMenuBar, MainTitleBar, CommonPageCom, LoadingWrap, PageServ
 function MainLayout() {
   const location = useLocation();
   const [menuBarStatus, setMenuBarStatus] = useState();
+  const [messages, setMessages] = useState([]);
+  const [ws, setWs] = useState(null);
   const menuBarToggle = (menuBarStatus) => {
     setMenuBarStatus(menuBarStatus);
   };
+
+  useEffect(() => {
+    const webSocket = new WebSocket('ws://localhost:3002', undefined, {
+      headers: {
+        'session-id': 'your-session-id',
+      },
+    });
+    webSocket.onmessage = (event) => {
+      console.log(event)
+      console.log("제발 ㅠ")
+      const message = event.data;
+      setMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    webSocket.onopen = () => {
+      console.log('WebSocket Connected');
+    };
+
+    webSocket.onerror = (error) => {
+      console.error('WebSocket Error: ', error);
+    };
+
+    setWs(webSocket);
+
+    return () => {
+      webSocket.close();
+    };
+  }, []);
 
   const config = useSelector(selectFuseCurrentLayoutConfig);
 
