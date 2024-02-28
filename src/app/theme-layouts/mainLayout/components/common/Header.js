@@ -1,13 +1,35 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
 import jwtService from 'app/auth/services/jwtService/index';
+import {
+  testWss,
+} from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+
 
 function Header({ menuBarStatus, menuBarToggle }) {
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const menuHideClick = () => {
     menuBarToggle('active');
   };
+
+  const testWs = async () => {
+    try {
+      const { payload } = await dispatch(testWss({}));
+      if (payload.status === 200 && payload?.data) {
+        // dispatch(setVistors(payload.data));
+        // dispatch(setSearchedFlag({ vistors: true }));
+      } else {
+        alert('ws 이력 데이터 조회 에러');
+      }
+    } catch (err) {
+      alert('ws 이력 데이터 조회 에러');
+      // console.log(err);
+    } finally {
+      //
+    }
+  }
 
   const fullScreenToggle = () => {
     if (!document.fullscreenElement) {
@@ -43,7 +65,11 @@ function Header({ menuBarStatus, menuBarToggle }) {
               {/* <!-- // 메뉴 토글 --> */}
               {/* <!-- 캘린더 --> */}
               <a href="#" className="icon__link hide" aria-label="캘린터">
-                <div>
+                <div
+                  onClick={() => {
+                    testWs();
+                  }}
+                >
                   <svg
                     id="view-grid"
                     xmlns="http://www.w3.org/2000/svg"

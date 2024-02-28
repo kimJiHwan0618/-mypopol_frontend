@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import { selectUser } from 'app/store/userSlice';
 import initDataRangeList from 'app/utils/initDataRangeList';
 import {
-  testWss,
   getPopols,
   getWorks,
   getVistors,
@@ -90,23 +89,6 @@ function DashBoard() {
       //
     }
   };
-
-  const testWs = async () => {
-    try {
-      const { payload } = await dispatch(testWss({}));
-      if (payload.status === 200 && payload?.data) {
-        // dispatch(setVistors(payload.data));
-        // dispatch(setSearchedFlag({ vistors: true }));
-      } else {
-        toast.error('ws 이력 데이터 조회 에러');
-      }
-    } catch (err) {
-      toast.error('ws 이력 데이터 조회 에러');
-      // console.log(err);
-    } finally {
-      //
-    }
-  }
 
   const handleGetMails = async () => {
     try {
@@ -192,13 +174,6 @@ function DashBoard() {
 
   return (
     <div className="section__grid__wrap content">
-      <button
-        onClick={() => {
-          testWs();
-        }}
-      >
-        asdsad
-      </button>
       {/* <!-- 총 포폴수 --> */}
       <section className={css.status__box}>
         <div className={`${css.status__box__inner} section__inner`}>

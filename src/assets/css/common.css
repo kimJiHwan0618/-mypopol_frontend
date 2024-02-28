@@ -349,3 +349,13 @@ header .selector__label>ul {
   margin-left: 14px;
   color: #d32f2f;
 }
+
+.common__content {
+  height: 650px;
+}
+
+@media (max-height: 800px) {
+  .common__content {
+    height: 500px;
+  }
+}

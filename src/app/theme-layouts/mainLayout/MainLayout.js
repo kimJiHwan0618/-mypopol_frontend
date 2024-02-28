@@ -13,19 +13,15 @@ function MainLayout() {
   const [menuBarStatus, setMenuBarStatus] = useState();
   const [messages, setMessages] = useState([]);
   const [ws, setWs] = useState(null);
+
   const menuBarToggle = (menuBarStatus) => {
     setMenuBarStatus(menuBarStatus);
   };
 
   useEffect(() => {
-    const webSocket = new WebSocket('ws://localhost:3002', undefined, {
-      headers: {
-        'session-id': 'your-session-id',
-      },
-    });
+    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_HOST, undefined, {});
     webSocket.onmessage = (event) => {
-      console.log(event)
-      console.log("제발 ㅠ")
+      console.log(`onmessage : ${event}`)
       const message = event.data;
       setMessages((prevMessages) => [...prevMessages, message]);
     };

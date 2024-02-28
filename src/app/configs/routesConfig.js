@@ -8,6 +8,8 @@ import LandingPageConfig from 'app/pages/landing/LandingPageConfig';
 import TemplateDashboardConfig from 'app/pages/dashboard/templateDashboard/TemplateDashboardConfig';
 import MailManagementConfig from 'app/pages/templateManagement/mailManagement/MailManagementConfig';
 import PageManagementConfig from 'app/pages/templateManagement/pageManagement/PageManagementConfig';
+import MailHistoryConfig from 'app/pages/history/mail/MailHistoryConfig';
+import VisitorHistoryConfig from 'app/pages/history/vistor/VisitorHistoryConfig';
 import ContactusConfig from 'app/pages/guide/contactus/ContactusConfig';
 import ForgotPwConfig from 'app/pages/forgot-password/ForgotPwConfig';
 import ManualConfig from 'app/pages/guide/manual/ManualConfig';
@@ -28,6 +30,8 @@ const routeConfigs = [
   Error404PageConfig,
   ForgotPwConfig,
   ManualConfig,
+  MailHistoryConfig,
+  VisitorHistoryConfig
 ];
 
 const routes = [
