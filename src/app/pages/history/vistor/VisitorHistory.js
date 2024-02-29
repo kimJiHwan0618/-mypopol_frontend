@@ -28,6 +28,7 @@ const VistorHistory = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const [popol, setPopol] = useState('전체');
+  const [popolOptions, setPopolOptions] = useState([]);
   const popolSelector = useRef();
   const popols = useSelector(selectPopols);
   const vistors = useSelector(selectVistors);
@@ -39,8 +40,23 @@ const VistorHistory = () => {
   const [filterData, setFilterData] = useState([]);
 
   const handleFilterClick = () => {
-    console.log(vistors);
-    console.log(popols);
+    const fromd = startDate.toISOString().split('T')[0];
+    const fromt = startTime.format('HH:mm:ss');
+    const tod = endDate.toISOString().split('T')[0];
+    const tot = endTime.format('HH:mm:ss');
+    const startDateTime = new Date(`${fromd}T${fromt}.000Z`);
+    const toDateTime = new Date(`${tod}T${tot}.000Z`);
+    const filter1 = vistors.filter((item) => {
+      const itemTime = new Date(item.timeStamp);
+      return itemTime >= startDateTime && itemTime <= toDateTime;
+    });
+    const filter2 = filter1.filter((item) => {
+      if (popol !== '전체') {
+        return item.popolSeq === popol;
+      }
+      return item;
+    });
+    setFilterData(filter2);
   };
 
   const handleGetPopols = async () => {
@@ -49,7 +65,6 @@ const VistorHistory = () => {
       if (payload.status === 200 && payload?.data) {
         await dispatch(setPopols(payload.data));
         await dispatch(setSearchedFlag({ popols: true }));
-        await handleFilterClick();
       } else {
         toast.error('포폴 데이터 조회 에러');
       }
@@ -67,7 +82,6 @@ const VistorHistory = () => {
       if (payload.status === 200 && payload?.data) {
         await dispatch(setVistors(payload.data));
         await dispatch(setSearchedFlag({ vistors: true }));
-        await handleFilterClick();
       } else {
         toast.error('방문자 이력 데이터 조회 에러');
       }
@@ -89,6 +103,18 @@ const VistorHistory = () => {
     }
   }, []);
 
+  useEffect(() => {
+    handleFilterClick();
+  }, [vistors]);
+
+  useEffect(() => {
+    const options = popols.map((obj) => ({
+      name: `${obj.ptId} : ${obj.popolName}`,
+      value: obj.popolSeq,
+    }));
+    setPopolOptions(options);
+  }, [popols]);
+
   return (
     <div className="section__grid__wrap content">
       <section className={`custom__section ${css.history__section}`}>
@@ -109,11 +135,11 @@ const VistorHistory = () => {
                   setPopol(e.target.value);
                 }}>
                 <MenuItem value="전체">전체</MenuItem>
-                {/* {st.map((obj, idx) => (
+                {popolOptions.map((obj, idx) => (
                   <MenuItem key={obj.value} value={obj.value}>
                     {obj.name}
                   </MenuItem>
-                ))} */}
+                ))}
               </TextField>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
