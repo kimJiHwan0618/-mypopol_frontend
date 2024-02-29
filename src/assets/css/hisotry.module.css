@@ -5,3 +5,11 @@
 .history__title {
   margin-bottom: 24px;
 }
+
+.selector__01 {
+  margin-right: 16px !important;
+}
+
+.search__btn {
+  margin-left: 16px;
+}

@@ -4,7 +4,7 @@ import 'gridjs/dist/theme/mermaid.min.css';
 import { Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { ArrowRight, More } from '@mui/icons-material';
+import { ArrowRight } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
 import { toast } from 'react-toastify';
@@ -56,6 +56,7 @@ function DashBoard() {
       //
     }
   };
+
   const handleGetWorks = async () => {
     try {
       const { payload } = await dispatch(getWorks({ userKey: user.userKey }));
@@ -107,6 +108,22 @@ function DashBoard() {
     }
   };
 
+  useEffect(() => {
+    const { popols, works, vistors, mails } = searchedFlag;
+    if (!popols) {
+      handleGetPopols();
+    }
+    if (!works) {
+      handleGetWorks();
+    }
+    if (!vistors) {
+      handleGetVistors();
+    }
+    if (!mails) {
+      handleGetMails();
+    }
+  }, []);
+
   const handleGetTermCount = (text1, text2) => {
     const year = text1.slice(2, 4);
     const month = text1.slice(5, 7);
@@ -156,22 +173,6 @@ function DashBoard() {
     handleTrendChart(xcategories);
   }, [countType, term, mails, vistors]);
 
-  useEffect(() => {
-    const { popols, works, vistors, mails } = searchedFlag;
-    if (!popols) {
-      handleGetPopols();
-    }
-    if (!works) {
-      handleGetWorks();
-    }
-    if (!vistors) {
-      handleGetVistors();
-    }
-    if (!mails) {
-      handleGetMails();
-    }
-  }, []);
-
   return (
     <div className="section__grid__wrap content">
       {/* <!-- 총 포폴수 --> */}
@@ -179,6 +180,16 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">포폴</p>
+            <button aria-label="button">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
           </div>
           <dl>
             <dt className="f__medium">{popols.length}</dt>
@@ -192,6 +203,16 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">작품</p>
+            <button aria-label="button">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
           </div>
           <dl>
             <dt className="f__medium">{works.length}</dt>
@@ -205,6 +226,16 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">방문자</p>
+            <button aria-label="button">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
           </div>
           <dl>
             <dt className="f__medium">{vistors.length}</dt>
@@ -218,6 +249,16 @@ function DashBoard() {
         <div className={`${css.status__box__inner} section__inner`}>
           <div className={`${css.status__top}`}>
             <p className="f__medium">메일</p>
+            <button aria-label="button">
+              <svg viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                />
+              </svg>
+            </button>
           </div>
           <dl>
             <dt className="f__medium">{mails.length}</dt>
