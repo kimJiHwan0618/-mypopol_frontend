@@ -10,21 +10,6 @@ const columns = [
     field: 'timeStamp',
     headerName: '방문시간',
     minWidth: 250,
-    valueFormatter: ({ value }) => {
-      // '2024-03-01T12:34:56' 형식의 문자열을 Date 객체로 변환
-      const originalDate = new Date(value);
-
-      // 서버에서 전송된 날짜가 UTC 기준이라면, 로컬 시간대로 변환
-      const localDate = new Date(originalDate.toLocaleString('en-US', { timeZone: 'UTC' }));
-
-      // 7시간 추가 (Seoul의 경우 UTC+9)
-      localDate.setHours(localDate.getHours() + 6);
-
-      // 'YYYY-MM-DDTHH:mm:ss' 형식의 문자열로 변환
-      const formattedDate = localDate.toISOString().slice(0, 19).replace('T', ' ');
-
-      return formattedDate;
-    },
   },
 ];
 

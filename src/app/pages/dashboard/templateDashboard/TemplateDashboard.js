@@ -132,7 +132,7 @@ function DashBoard() {
     const date2 = new Date(`20${text2.replace('~ ', '')}`).getTime();
     const today = new Date(date2);
     const sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(today.getDate() - 7);
+    sevenDaysAgo.setDate(today.getDate() - 6);
     const test = sevenDaysAgo.getTime();
     return date1 >= test && date1 <= date2;
   };

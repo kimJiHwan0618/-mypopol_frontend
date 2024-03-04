@@ -6,7 +6,6 @@ const columns = [
     field: 'timeStamp',
     headerName: '방문시간',
     minWidth: 250,
-    valueFormatter: ({ value }) => value.replace('T', ' ').replace('.000Z', ''),
   },
 ];
 

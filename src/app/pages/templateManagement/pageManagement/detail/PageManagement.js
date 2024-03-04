@@ -19,9 +19,9 @@ import {
   updatePageTem,
   deleteWork,
 } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
-import { setSearchedFlag } from 'app/pages/templateManagement/pageManagement/store/PageTemplatesSlice';
 import { confirmAlert } from 'react-confirm-alert';
 import { close, open } from 'app/store/common/loadingWrap';
+import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 
 const ListItemTypes = {
   ITEM: 'item',
@@ -230,7 +230,7 @@ function PageManagement() {
             workOrderSet[i].order = i;
           }
           setWorkList(workOrderSet);
-          dispatch(setSearchedFlag(false));
+          dispatch(setSearchedFlag({ popols: false }));
           toast.success('포폴 정보가 업데이트 되었습니다.');
         }
       })
@@ -260,7 +260,7 @@ function PageManagement() {
               .then(({ payload }) => {
                 if (payload.status === 200) {
                   setWorkList(payload.data.response);
-                  dispatch(setSearchedFlag(false));
+                  dispatch(setSearchedFlag({ popols: false }));
 
                   toast.success(`'${e.title}' 작품이 삭제되었습니다.`);
                 }
