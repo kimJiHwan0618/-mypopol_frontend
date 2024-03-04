@@ -147,13 +147,13 @@ const VistorHistory = () => {
                   components={['DatePicker', 'TimePicker', 'DatePicker', 'TimePicker']}>
                   <DatePicker
                     className="custom__selector date__selector"
-                    label="발생일"
+                    label="시작일"
                     value={startDate}
                     onChange={(date) => setStartDate(date)}
                   />
                   <TimePicker
                     className="custom__selector"
-                    label="발생시간"
+                    label="시작시간"
                     value={startTime}
                     onChange={(time) => setStartTime(time)}
                   />
@@ -198,9 +198,9 @@ const VistorHistory = () => {
               columns={column}
               pageSize={100}
               getRowId={(data) => data.countSeq}
-              // onCellClick={}
-              // onRowClick={}
-              // loading
+            // onCellClick={}
+            // onRowClick={}
+            // loading
             />
           </div>
         </div>
