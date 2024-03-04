@@ -46,17 +46,17 @@ const VistorHistory = () => {
     const tot = endTime.format('HH:mm:ss');
     const startDateTime = new Date(`${fromd}T${fromt}.000Z`);
     const toDateTime = new Date(`${tod}T${tot}.000Z`);
-    const filter1 = vistors.filter((item) => {
-      const itemTime = new Date(item.timeStamp);
-      return itemTime >= startDateTime && itemTime <= toDateTime;
-    });
-    const filter2 = filter1.filter((item) => {
-      if (popol !== '전체') {
-        return item.popolSeq === popol;
-      }
-      return item;
-    });
-    setFilterData(filter2);
+    const filter1 = vistors
+      .filter((item) => new Date(item.timeStamp) >= startDateTime && new Date(item.timeStamp) <= toDateTime)
+      .map((item, idx) => ({ ...item, filterRowNumber: idx + 1 }));
+    if (popol === "전체") {
+      setFilterData(filter1);
+    } else {
+      const filter2 = filter1
+        .filter(item => item.popolSeq === popol)
+        .map((item, idx) => ({ ...item, filterRowNumber: idx + 1 }));
+      setFilterData(filter2)
+    }
   };
 
   const handleGetPopols = async () => {
