@@ -277,7 +277,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
@@ -296,7 +296,7 @@ function PageManagement() {
   };
 
   const setImgFile = (imgFileName, backFileName, setImgFile, ptId) => {
-    if (imgFileName !== null && imgFileName !== undefined && imgFileName !== '') {
+    if (imgFileName) {
       setValue(backFileName, imgFileName, activeOption);
       const remoteImageUrl = `https://site.mypopol.com/${ptId}/${user.userId}/img/${imgFileName}`;
       const fileName = imgFileName;
