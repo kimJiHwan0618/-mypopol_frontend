@@ -2,6 +2,7 @@
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import { Button } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ArrowRight } from '@mui/icons-material';
@@ -28,6 +29,7 @@ import {
 } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 
 function DashBoard() {
+  const navigate = useNavigate();
   const user = useSelector(selectUser);
   const searchedFlag = useSelector(selectSearchedFlag);
   const popols = useSelector(selectPopols);
@@ -272,7 +274,11 @@ function DashBoard() {
           <div className="mail__grid">
             <div className={css.status__top2}>
               <p className="normal__title f__medium">최근 메일</p>
-              <Button disabled={mails.length <= 0} variant="contained" className="custom__btn">
+              <Button
+                onClick={() => { navigate('/history/mail'); }}
+                disabled={mails.length <= 0}
+                variant="contained"
+                className="custom__btn">
                 <span className="f__medium">더 보기</span>
                 <ArrowRight />
               </Button>

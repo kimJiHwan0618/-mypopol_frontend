@@ -43,7 +43,11 @@ function SideMenuBar({ menuBarStatus, menuBarToggle }) {
         <div className="bottom vertical__scroll">
           <div className="profile__box">
             <div className="img__wrap">
-              <img src={require('assets/img/profile.jpg')} alt="테스트 프로필 이미지" />
+              <img src={
+                !user.profileImg ?
+                  'https://site.mypopol.com/src/img/profile.jpg' :
+                  `https://site.mypopol.com/src/img/profile/${user.userId}/${user.profileImg}`
+              } alt="프로필 이미지" />
             </div>
             <p className="name f__medium">{user.username}</p>
             <p className="email">{user.userId}</p>

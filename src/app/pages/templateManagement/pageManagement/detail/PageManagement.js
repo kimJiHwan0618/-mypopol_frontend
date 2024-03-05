@@ -138,6 +138,7 @@ function PageManagement() {
   const schema = yup.object().shape({
     popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
     thumbnail: yup.string(), // 파일여부?
+    profile: yup.string(), // 파일여부?
     mainColor: yup.string().notOneOf([' ', null], '메인색상을 선택해 주세요.'),
     icon: yup.string().notOneOf([' ', null], '아이콘타입을 선택해 주세요.'),
     fakeName: yup.string().required('예명은 필수 정보 입니다.'),
@@ -147,7 +148,6 @@ function PageManagement() {
       .required('이메일은 필수 정보 입니다.'),
     phone: yup.string().matches(/^[0-9]{9,11}$/i, "번호는 '-' 없이 9~11자리 번호로 입력해주세요"),
     title: yup.string().required('인사글은 필수 정보 입니다.'),
-    profile: yup.string(), // 파일여부?
   });
 
   const methods = useForm({
@@ -277,7 +277,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });

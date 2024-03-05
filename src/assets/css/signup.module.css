@@ -154,6 +154,7 @@
 .content>div {
   margin-bottom: 4px;
   min-height: 75.91px;
+  display: flex;
 }
 
 .content>div:nth-of-type(3) {
