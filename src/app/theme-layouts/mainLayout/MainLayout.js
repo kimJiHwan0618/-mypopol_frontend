@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { Header, SideMenuBar, MainTitleBar, CommonPageCom, LoadingWrap, PageServiceNotice } from './components/common';
 
 function MainLayout() {
+  const config = useSelector(selectFuseCurrentLayoutConfig);
   const location = useLocation();
   const [menuBarStatus, setMenuBarStatus] = useState();
   const [messages, setMessages] = useState([]);
@@ -19,6 +20,7 @@ function MainLayout() {
   };
 
   useEffect(() => {
+    console.log(config)
     const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_HOST, undefined, {});
     webSocket.onmessage = (event) => {
       console.log(`onmessage : ${event}`)
@@ -41,7 +43,6 @@ function MainLayout() {
     };
   }, []);
 
-  const config = useSelector(selectFuseCurrentLayoutConfig);
 
   return (
     <div id="layout">
@@ -52,10 +53,11 @@ function MainLayout() {
       )}
       <div className="modal__bg" />
       <main>
-        {config.toolbar.display && (
+        {config.rightSidePanel.display && ( // header = rightSidePanel
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
         )}
-        {config.toolbar.display && location.pathname.split('/')[1] !== 'apps' && <MainTitleBar />}
+        {/* {config.toolbar.display && location.pathname.split('/')[1] !== 'apps' && <MainTitleBar />} */}
+        {config.toolbar.display && <MainTitleBar />}  {/* toolbar = MainTitleBar */}
         <FuseSuspense>{!config.enabled ? <PageServiceNotice /> : <CommonPageCom />}</FuseSuspense>
       </main>
       <FuseMessage />

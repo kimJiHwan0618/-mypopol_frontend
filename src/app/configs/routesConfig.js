@@ -12,6 +12,7 @@ import MailHistoryConfig from 'app/pages/history/mail/MailHistoryConfig';
 import VisitorHistoryConfig from 'app/pages/history/vistor/VisitorHistoryConfig';
 import ContactusConfig from 'app/pages/guide/contactus/ContactusConfig';
 import ForgotPwConfig from 'app/pages/forgot-password/ForgotPwConfig';
+import MyPageConfig from 'app/pages/my-page/MyPageConfig';
 import ManualConfig from 'app/pages/guide/manual/ManualConfig';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/pages/404/Error404Page';
@@ -31,7 +32,8 @@ const routeConfigs = [
   ForgotPwConfig,
   ManualConfig,
   MailHistoryConfig,
-  VisitorHistoryConfig
+  VisitorHistoryConfig,
+  MyPageConfig
 ];
 
 const routes = [

@@ -5,7 +5,7 @@ import jwtService from 'app/auth/services/jwtService/index';
 import {
   testWss,
 } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
-
+import { confirmAlert } from 'react-confirm-alert';
 
 function Header({ menuBarStatus, menuBarToggle }) {
   const user = useSelector(selectUser);
@@ -144,7 +144,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               <input type="text" id="profile" />
               <ul>
                 <li className="list">
-                  <NavLink to="apps/user">
+                  <NavLink to="my-page/profile">
                     <span className="icon">
                       <svg viewBox="0 0 24 24" stroke="currentColor">
                         <path
@@ -155,11 +155,27 @@ function Header({ menuBarStatus, menuBarToggle }) {
                         />
                       </svg>
                     </span>
-                    <p className="f__medium">프로필</p>
+                    <p className="f__medium">마이페이지</p>
                   </NavLink>
                 </li>
                 <li className="list">
-                  <a href="#" onClick={(e) => jwtService.logout()}>
+                  <a href="#" onClick={(e) => {
+                    confirmAlert({
+                      title: `로그아웃 하시겠습니까 ?`,
+                      // message: '메세지 공간입니다.',
+                      buttons: [
+                        {
+                          label: '예',
+                          onClick: () => {
+                            jwtService.logout()
+                          },
+                        },
+                        {
+                          label: '취소',
+                        },
+                      ],
+                    });
+                  }}>
                     <span className="icon">
                       <svg viewBox="0 0 24 24" stroke="currentColor">
                         <path

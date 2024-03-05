@@ -265,6 +265,10 @@
   border-radius: 100px;
 }
 
+.sns__item>.remove__btn {
+  margin-left: 16px;
+}
+
 .thumbnail__img__box {
   border: 1px solid rgb(219, 219, 219);
   background: #fafafa;
@@ -368,9 +372,7 @@
   margin-left: 16px;
 }
 
-.sns__item>.remove__btn {
-  margin-left: 16px;
-}
+
 
 .work__item__poster {
   width: 70px;
