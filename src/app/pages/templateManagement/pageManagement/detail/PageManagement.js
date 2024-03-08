@@ -260,8 +260,7 @@ function PageManagement() {
               .then(({ payload }) => {
                 if (payload.status === 200) {
                   setWorkList(payload.data.response);
-                  dispatch(setSearchedFlag({ popols: false }));
-
+                  dispatch(setSearchedFlag({ works: false }));
                   toast.success(`'${e.title}' 작품이 삭제되었습니다.`);
                 }
               })

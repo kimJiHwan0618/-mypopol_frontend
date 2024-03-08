@@ -11,17 +11,17 @@ const FileUpload = (props) => {
   };
 
   const fileUploadStyle = {
-    alignItems: "center",
-    backgroundColor: "#fafafa",
-    border: "2px dashed #aaa",
-    borderRadius: "2px",
-    color: "#bdbdbd",
-    display: "flex",
-    flexDirection: "column",
+    alignItems: 'center',
+    backgroundColor: '#fafafa',
+    border: '2px dashed #aaa',
+    borderRadius: '2px',
+    color: '#bdbdbd',
+    display: 'flex',
+    flexDirection: 'column',
     height: props.height,
-    justifyContent: "center",
-    outline: "none",
-    transition: "border .24s ease-in-out"
+    justifyContent: 'center',
+    outline: 'none',
+    transition: 'border .24s ease-in-out',
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -33,10 +33,11 @@ const FileUpload = (props) => {
         <p>여기에 올려놔주세요!</p>
       ) : (
         <p>
-          <FontAwesomeIcon icon={faFileUpload} />이미지 파일을 선택하거나 드래그로 추가하세요.
+          <FontAwesomeIcon icon={faFileUpload} />
+          이미지 파일을 선택하거나 드래그로 추가하세요.
         </p>
       )}
-    </div >
+    </div>
   );
 };
 

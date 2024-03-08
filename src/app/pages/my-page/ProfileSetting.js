@@ -7,7 +7,7 @@ import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploade
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import convertFile from 'app/utils/convertFile';
-import { putProfileImg } from 'app/pages/my-page/store/ProfileSettingSlice';
+import { putProfileImg, putProfileInfo } from 'app/pages/my-page/store/ProfileSettingSlice';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -52,6 +52,47 @@ const ProfileSetting = () => {
     trigger,
   } = methods;
   const { errors, isValid, dirtyFields } = formState;
+
+  const handleUserInfoSubmit = async () => {
+    const excuteUpdate = async () => {
+      const { payload } = await dispatch(
+        putProfileInfo({
+          userId: user.userId,
+          username: getValues('userName'),
+          password: getValues('newPassword'),
+        })
+      );
+      if (payload.status === 200) {
+        toast.success('사용자 정보를 업데이트 하였습니다.');
+        dispatch(
+          setUser({
+            ...user,
+            username: getValues('userName'),
+          })
+        );
+      } else {
+        toast.error('사용자 정보 업데이트 에러');
+      }
+    };
+    try {
+      if (getValues('newPassword') !== getValues('newPasswordCheck')) {
+        toast.warning('새 비밀번호를 확인해주세요.');
+      } else if (getValues('newPassword') === '') {
+        setLoading2(true);
+        await excuteUpdate();
+      } else if (getValues('newPassword').length >= 6 && getValues('newPassword').length <= 12) {
+        setLoading2(true);
+        await excuteUpdate();
+      } else {
+        toast.warning('비밀번호는 6자리이상 12자리 이하로 입력해주세요.');
+      }
+    } catch (err) {
+      toast.error('사용자 정보 업데이트 에러');
+      console.log(err);
+    } finally {
+      setLoading2(false);
+    }
+  };
 
   const handleProfileImgSave = async () => {
     try {
@@ -110,7 +151,6 @@ const ProfileSetting = () => {
           toast.error(error);
           return;
         }
-
         const loadComplate = () => {
           setProfileImg(file);
         };
@@ -121,12 +161,13 @@ const ProfileSetting = () => {
   };
 
   useEffect(() => {
-    console.log(user);
     handleSetImgFile();
     setValue('userId', user.userId, activeOption);
     setValue('roleName', `${user.role} : 기본 사용자 권한`, activeOption);
     setValue('authValue', user.authValue, activeOption);
     setValue('userName', user.username, activeOption);
+    setValue('newPassword', '', activeOption);
+    setValue('newPasswordCheck', '', activeOption);
   }, []);
 
   return (
@@ -156,7 +197,7 @@ const ProfileSetting = () => {
               onClick={handleProfileImgSave}>
               {!loading1 ? (
                 <>
-                  <span className="mx-8 text-white font-bold">저장</span>
+                  <span className="mx-8 text-white font-bold">1</span>
                   <Save />
                 </>
               ) : (
@@ -193,12 +234,16 @@ const ProfileSetting = () => {
               color="secondary"
               className="custom__btn f__medium"
               size="large"
-              disabled={false}
-              onClick={() => {
-                // authTypeClick('휴대폰');
-              }}>
-              <span className="mx-8 text-white font-bold">저장</span>
-              <Save />
+              disabled={!isValid || loading2}
+              onClick={handleUserInfoSubmit}>
+              {!loading2 ? (
+                <>
+                  <span className="mx-8 text-white font-bold">저장</span>
+                  <Save />
+                </>
+              ) : (
+                <Lottie options={{ loop: true, autoplay: true, animationData }} />
+              )}
             </Button>
           </div>
           <ul className={css.user__info__list__wrap}>
@@ -289,11 +334,11 @@ const ProfileSetting = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    type="password"
                     fullWidth
                     label="새비밀번호"
-                    type="text"
                     error={!!errors.newPassword}
-                    helperText={errors?.newPassword?.message}
+                    helperText="6자리 이상 12자리 이하로 입력해주세요."
                   />
                 )}
               />
@@ -305,11 +350,11 @@ const ProfileSetting = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    type="password"
                     fullWidth
                     label="새비밀번호 확인"
-                    type="text"
                     error={!!errors.newPasswordCheck}
-                    helperText={errors?.newPasswordCheck?.message}
+                    helperText="6자리 이상 12자리 이하로 입력해주세요."
                   />
                 )}
               />

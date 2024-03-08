@@ -55,7 +55,7 @@ function SignUpPage() {
     password: yup
       .string()
       .required('비밀번호를 입력해 주세요.')
-      .min(8, '비밀번호는 최소 6자 이상으로 입력해 주세요.')
+      .min(6, '비밀번호는 최소 6자 이상으로 입력해 주세요.')
       .max(12, '비밀번호는 최소 12자 이하로 입력해 주세요.'),
     passwordCheck: yup
       .string()

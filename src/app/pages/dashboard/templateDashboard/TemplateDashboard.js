@@ -2,7 +2,7 @@
 import css from 'assets/css/templateDashboard.module.css';
 import 'gridjs/dist/theme/mermaid.min.css';
 import { Button } from '@mui/material';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ArrowRight } from '@mui/icons-material';
@@ -275,7 +275,9 @@ function DashBoard() {
             <div className={css.status__top2}>
               <p className="normal__title f__medium">최근 메일</p>
               <Button
-                onClick={() => { navigate('/history/mail'); }}
+                onClick={() => {
+                  navigate('/history/mail');
+                }}
                 disabled={mails.length <= 0}
                 variant="contained"
                 className="custom__btn">

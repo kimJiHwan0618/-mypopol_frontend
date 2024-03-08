@@ -15,8 +15,17 @@ import { addOrUpdateWork } from 'app/pages/templateManagement/pageManagement/sto
 import _ from '@lodash';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
+import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+import ImgPreview from 'app/theme-layouts/mainLayout/components/pageManagement/ImgPreview';
 
-const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updateWorkResult, siteListData }) => {
+const Ptid01WorkModal = ({
+  isOpen,
+  onRequestClose,
+  popInfo,
+  addWorkResult,
+  updateWorkResult,
+  siteListData,
+}) => {
   // const siteListData = [];
   /** 예외 케이스는 추후 반영 예정 */
   // // { name: '그 외', value: 'etc' },
@@ -74,6 +83,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
         default:
           console.log('default case');
       }
+      URL.revokeObjectURL(arg.file);
       setValue(arg.name, arg.file.name);
     } else {
       toast.warning('이미지 파일을 선택해주세요!');
@@ -133,14 +143,15 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
         popInfo.ptId,
         popInfo.workInfo.src
       );
-      popInfo.workInfo.logo === "none" ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption) :
-        setImgFile(
-          popInfo.workInfo.logo,
-          'titleImgOld',
-          setTitle01Img,
-          popInfo.ptId,
-          popInfo.workInfo.src
-        );
+      popInfo.workInfo.logo === 'none'
+        ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
+        : setImgFile(
+            popInfo.workInfo.logo,
+            'titleImgOld',
+            setTitle01Img,
+            popInfo.ptId,
+            popInfo.workInfo.src
+          );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
       for (let i = 0; i < siteArr.length; i += 1) {
@@ -163,18 +174,18 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
   }, [isOpen]);
 
   const workSaveClick = () => {
-    const fileObj = {}
-    if (popInfo.ptId === "ptid01") {
+    const fileObj = {};
+    if (popInfo.ptId === 'ptid01') {
       fileObj.titleImg = title01Img;
       fileObj.posterImg = banner01Img;
     }
 
-    const siteArray = Object.keys(siteList).map(item => ({
+    const siteArray = Object.keys(siteList).map((item) => ({
       name: siteList[item].name,
-      link: `${getValues()[`${item}Link`]}`
+      link: `${getValues()[`${item}Link`]}`,
     }));
 
-    const titleImgName = fileObj.titleImg === null ? "none" : fileObj.titleImg.name;
+    const titleImgName = fileObj.titleImg === null ? 'none' : fileObj.titleImg.name;
 
     const param = {
       fields: {
@@ -187,21 +198,22 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           poster: fileObj.posterImg.name,
         },
         siteList: JSON.stringify({ website: siteArray }),
-        state: popInfo.state
+        state: popInfo.state,
       },
       files: fileObj,
-    }
+    };
 
-    setLoading(true)
+    setLoading(true);
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
         if (payload.status === 200) {
-          if (popInfo.state === "추가") {
+          if (popInfo.state === '추가') {
             addWorkResult(payload.data.response);
           }
-          if (popInfo.state === "수정") {
+          if (popInfo.state === '수정') {
             updateWorkResult(payload.data.response);
           }
+          dispatch(setSearchedFlag({ works: false }));
           onRequestClose();
           toast.success(`작품이 ${popInfo.state}되었습니다.`);
         }
@@ -211,7 +223,7 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
         toast.error(`작품 ${popInfo.state} 실패`);
       })
       .finally(() => {
-        setLoading(false)
+        setLoading(false);
       });
   };
 
@@ -246,21 +258,18 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       </button>
       <div className={`${css.wrap__inner} vertical__scroll`}>
         <div className={css2.list__item}>
-          <p className="f__medium">메인 배너<span>&nbsp;(1250 x 1450 px 이미지를 권장합니다.)</span></p>
+          <p className="f__medium">
+            메인 배너<span>&nbsp;(1250 x 1450 px 이미지를 권장합니다.)</span>
+          </p>
           {banner01Img === null || !banner01Img.type.startsWith('image/') ? (
             <div>
-              <FileUpload
-                name="ptId01Banner"
-                onFileSelect={handleFileSelect}
-                height="361px"
-                control={control}
-              />
-              <p className='custom__form__error'>메인 배너 이미지는 필수 파일 입니다.</p>
+              <FileUpload name="ptId01Banner" onFileSelect={handleFileSelect} height="361px" />
+              <p className="custom__form__error">메인 배너 이미지는 필수 파일 입니다.</p>
             </div>
           ) : (
             <>
               <div className={css.ptid01__banner__box}>
-                <img src={URL.createObjectURL(banner01Img)} alt={banner01Img.name} />
+                <ImgPreview imgFile={banner01Img} />
               </div>
               <Controller
                 name="ptId01Banner"
@@ -285,17 +294,12 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           <p className="f__medium">타이틀 이미지</p>
           {title01Img === null || !title01Img.type.startsWith('image/') ? (
             <div>
-              <FileUpload
-                name="ptId01Logo"
-                onFileSelect={handleFileSelect}
-                height="80px"
-                control={control}
-              />
+              <FileUpload name="ptId01Logo" onFileSelect={handleFileSelect} height="80px" />
             </div>
           ) : (
             <>
               <div className={css.ptid01__title__box}>
-                <img src={URL.createObjectURL(title01Img)} alt={title01Img.name} />
+                <ImgPreview imgFile={title01Img} />
               </div>
               <Controller
                 name="ptId01Logo"
@@ -476,21 +480,20 @@ const Ptid01WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
             onClick={() => {
               workSaveClick();
             }}>
-            {
-              !loading ? (
-                <>
-                  <span className="f__medium">작품 {popInfo.state}</span>
-                  <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                    <use
-                      href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
-                        }`}
-                    />
-                  </svg>
-                </>
-              ) : (
-                <Lottie options={{ loop: true, autoplay: true, animationData }} />
-              )
-            }
+            {!loading ? (
+              <>
+                <span className="f__medium">작품 {popInfo.state}</span>
+                <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                  <use
+                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
+                      popInfo.state === '추가' ? 'plus' : 'pencil'
+                    }`}
+                  />
+                </svg>
+              </>
+            ) : (
+              <Lottie options={{ loop: true, autoplay: true, animationData }} />
+            )}
           </Button>
         </div>
       </div>
