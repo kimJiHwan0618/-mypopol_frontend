@@ -6,9 +6,18 @@ import { useSelector } from 'react-redux';
 import FuseMessage from '@fuse/core/FuseMessage';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import { Header, SideMenuBar, MainTitleBar, CommonPageCom, LoadingWrap, PageServiceNotice } from './components/common';
+import { selectUser } from 'app/store/userSlice';
+import {
+  Header,
+  SideMenuBar,
+  MainTitleBar,
+  CommonPageCom,
+  LoadingWrap,
+  PageServiceNotice,
+} from './components/common';
 
 function MainLayout() {
+  const user = useSelector(selectUser);
   const config = useSelector(selectFuseCurrentLayoutConfig);
   const location = useLocation();
   const [menuBarStatus, setMenuBarStatus] = useState();
@@ -20,10 +29,13 @@ function MainLayout() {
   };
 
   useEffect(() => {
-    console.log(config)
-    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_HOST, undefined, {});
+    const webSocket = new WebSocket(
+      `${process.env.REACT_APP_WEBSOCKET_HOST}/?userId=${user.userId}`,
+      undefined,
+      {}
+    );
     webSocket.onmessage = (event) => {
-      console.log(`onmessage : ${event}`)
+      console.log(`onmessage : ${event}`);
       const message = event.data;
       setMessages((prevMessages) => [...prevMessages, message]);
     };
@@ -43,7 +55,6 @@ function MainLayout() {
     };
   }, []);
 
-
   return (
     <div id="layout">
       <ToastContainer style={{ zIndex: 99999 }} position="bottom-center" />
@@ -57,7 +68,7 @@ function MainLayout() {
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
         )}
         {/* {config.toolbar.display && location.pathname.split('/')[1] !== 'apps' && <MainTitleBar />} */}
-        {config.toolbar.display && <MainTitleBar />}  {/* toolbar = MainTitleBar */}
+        {config.toolbar.display && <MainTitleBar />} {/* toolbar = MainTitleBar */}
         <FuseSuspense>{!config.enabled ? <PageServiceNotice /> : <CommonPageCom />}</FuseSuspense>
       </main>
       <FuseMessage />
