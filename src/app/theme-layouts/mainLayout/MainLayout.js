@@ -29,31 +29,34 @@ function MainLayout() {
   };
 
   useEffect(() => {
-    const webSocket = new WebSocket(
-      `${process.env.REACT_APP_WEBSOCKET_HOST}/?userId=${user.userId}`,
-      undefined,
-      {}
-    );
-    webSocket.onmessage = (event) => {
-      console.log(`onmessage : ${event}`);
-      const message = event.data;
-      setMessages((prevMessages) => [...prevMessages, message]);
-    };
+    console.log(user?.userId);
+    if (user?.userId) {
+      const webSocket = new WebSocket(
+        `${process.env.REACT_APP_WEBSOCKET_HOST}/websocket/?userId=${user.userId}`,
+        undefined,
+        {}
+      );
+      webSocket.onmessage = (event) => {
+        console.log(`onmessage : ${event}`);
+        const message = event.data;
+        setMessages((prevMessages) => [...prevMessages, message]);
+      };
 
-    webSocket.onopen = () => {
-      console.log('WebSocket Connected');
-    };
+      webSocket.onopen = () => {
+        console.log('WebSocket Connected');
+      };
 
-    webSocket.onerror = (error) => {
-      console.error('WebSocket Error: ', error);
-    };
+      webSocket.onerror = (error) => {
+        console.error('WebSocket Error: ', error);
+      };
 
-    setWs(webSocket);
+      setWs(webSocket);
 
-    return () => {
-      webSocket.close();
-    };
-  }, []);
+      return () => {
+        webSocket.close();
+      };
+    }
+  }, [user?.userId]);
 
   return (
     <div id="layout">
