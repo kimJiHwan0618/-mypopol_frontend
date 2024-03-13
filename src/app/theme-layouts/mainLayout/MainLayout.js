@@ -55,7 +55,7 @@ function MainLayout() {
           case "방문자 카운트":
             dispatch(setVistors([...vistorsRef.current, message.data]));
             break;
-          case "메일 카운트":
+          case "이메일 카운트":
             dispatch(setMails([...mailsRef.current, message.data]));
             break;
           default:
