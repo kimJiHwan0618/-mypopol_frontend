@@ -197,7 +197,7 @@ const ProfileSetting = () => {
               onClick={handleProfileImgSave}>
               {!loading1 ? (
                 <>
-                  <span className="mx-8 text-white font-bold">1</span>
+                  <span className="mx-8 text-white font-bold">저장</span>
                   <Save />
                 </>
               ) : (
