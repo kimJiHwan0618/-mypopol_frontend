@@ -3,6 +3,7 @@ import { selectUser } from 'app/store/userSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@mui/material';
 import { useState, useEffect } from 'react';
+import { OpenInNew as LinkIcon } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Lottie from 'react-lottie';
@@ -195,31 +196,29 @@ function PageManagements() {
                           {obj.domain
                             ? `https://${obj.domain}`
                             : `site.mypopol.com/${obj.ptId}/${user.userId}`}
+                          <Button
+                            style={{
+                              marginLeft: "16px",
+                              width: "46.45px",
+                              minWidth: "auto"
+                            }}
+                            variant="contained"
+                            color="secondary"
+                            className="custom__btn f__medium"
+                            fullWidth
+                            onClick={() => {
+                              window.open(
+                                obj.domain
+                                  ? `https://${obj.domain}`
+                                  : `https://site.mypopol.com/${obj.ptId}/${user.userId}`,
+                                '_blank',
+                                'noopener,noreferrer'
+                              );
+                            }}>
+                            <LinkIcon />
+                          </Button>
                         </dd>
                       </dl>
-                      <a
-                        aria-label="사이트 링크 아이콘"
-                        href={
-                          obj.domain
-                            ? `https://${obj.domain}`
-                            : `https://site.mypopol.com/${obj.ptId}/${user.userId}`
-                        }
-                        target="_blank"
-                        className={css.link__icon}
-                        rel="noreferrer">
-                        <svg
-                          id="external-link"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                      </a>
                     </li>
                     <li>
                       <dl>
