@@ -14,22 +14,22 @@ function Header({ menuBarStatus, menuBarToggle }) {
     menuBarToggle('active');
   };
 
-  const testWs = async () => {
-    try {
-      const { payload } = await dispatch(testWss({}));
-      if (payload.status === 200 && payload?.data) {
-        // dispatch(setVistors(payload.data));
-        // dispatch(setSearchedFlag({ vistors: true }));
-      } else {
-        alert('ws 이력 데이터 조회 에러');
-      }
-    } catch (err) {
-      alert('ws 이력 데이터 조회 에러');
-      // console.log(err);
-    } finally {
-      //
-    }
-  }
+  // const testWs = async () => {
+  //   try {
+  //     const { payload } = await dispatch(testWss({ userId: user.userId }));
+  //     if (payload.status === 200 && payload?.data) {
+  //       // dispatch(setVistors(payload.data));
+  //       // dispatch(setSearchedFlag({ vistors: true }));
+  //     } else {
+  //       alert('ws 이력 데이터 조회 에러');
+  //     }
+  //   } catch (err) {
+  //     alert('ws 이력 데이터 조회 에러');
+  //     // console.log(err);
+  //   } finally {
+  //     //
+  //   }
+  // }
 
   const fullScreenToggle = () => {
     if (!document.fullscreenElement) {
@@ -67,7 +67,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               <a href="#" className="icon__link hide" aria-label="캘린터">
                 <div
                   onClick={() => {
-                    testWs();
+                    // testWs();
                   }}
                 >
                   <svg

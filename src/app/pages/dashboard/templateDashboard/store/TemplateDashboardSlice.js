@@ -76,14 +76,9 @@ export const testWss = createAsyncThunk(
   'dashboard/home/get/test',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/dashboard/home/get/test`,
-        {
-          params,
-          headers: {
-            'session-id': 'your-session-id',
-          },
-        }
+        params
       );
       return await response;
     } catch (error) {
