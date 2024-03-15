@@ -192,13 +192,13 @@ function PageManagements() {
                       <dl>
                         <dt className="f__medium">링크</dt>
                         <dd>
-                          :&nbsp;&nbsp;&nbsp;
-                          {obj.domain
-                            ? `https://${obj.domain}`
-                            : `site.mypopol.com/${obj.ptId}/${user.userId}`}
+                          <p>
+                            {obj.domain
+                              ? `https://${obj.domain}`
+                              : `site.mypopol.com/${obj.ptId}/${user.userId}`}</p>
                           <Button
                             style={{
-                              marginLeft: "16px",
+                              marginLeft: "12px",
                               width: "46.45px",
                               minWidth: "auto"
                             }}
@@ -223,14 +223,13 @@ function PageManagements() {
                     <li>
                       <dl>
                         <dt className="f__medium">설명</dt>
-                        <dd>:&nbsp;&nbsp;&nbsp;{obj.description}</dd>
+                        <dd>{obj.description}</dd>
                       </dl>
                     </li>
                     <li>
                       <dl>
                         <dt className="f__medium">남은기한</dt>
                         <dd>
-                          :&nbsp;&nbsp;&nbsp;
                           {365 - obj.usedDay} 일
                         </dd>
                       </dl>
@@ -238,13 +237,51 @@ function PageManagements() {
                     <li>
                       <dl>
                         <dt className="f__medium">사용기한 갱신일</dt>
-                        <dd>:&nbsp;&nbsp;&nbsp;{obj.renewalDate}</dd>
+                        <dd>{obj.renewalDate}</dd>
                       </dl>
                     </li>
                     <li>
                       <dl>
                         <dt className="f__medium">마지막 수정일시</dt>
-                        <dd>:&nbsp;&nbsp;&nbsp;{obj.lastUpdated}</dd>
+                        <dd>{obj.lastUpdated}</dd>
+                      </dl>
+                    </li>
+                  </ul>
+                  <ul className={css.icon__wrap__mobile}>
+                    <li>
+                      <dl>
+                        <dt>
+                          <svg
+                            size="24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 100 100">
+                            <use
+                              href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#users`}
+                            />
+                          </svg>
+                        </dt>
+                        <dd className="f__medium">
+                          {vistors.filter((item) => item.popolSeq === obj.popolSeq).length}
+                        </dd>
+                      </dl>
+                    </li>
+                    <li>
+                      <dl>
+                        <dt>
+                          <svg
+                            size="24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 100 100">
+                            <use
+                              href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#mail`}
+                            />
+                          </svg>
+                        </dt>
+                        <dd className="f__medium">
+                          {mails.filter((item) => item.popolSeq === obj.popolSeq).length}
+                        </dd>
                       </dl>
                     </li>
                   </ul>

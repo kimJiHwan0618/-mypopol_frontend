@@ -30,7 +30,7 @@ function MainLayout() {
   const vistorsRef = useRef(vistors);
   const mailsRef = useRef(mails);
   const config = useSelector(selectFuseCurrentLayoutConfig);
-  const [menuBarStatus, setMenuBarStatus] = useState();
+  const [menuBarStatus, setMenuBarStatus] = useState('hide');
   const [ws, setWs] = useState(null);
 
   const menuBarToggle = (menuBarStatus) => {
@@ -85,7 +85,7 @@ function MainLayout() {
       {config.leftSidePanel.display && (
         <SideMenuBar menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
       )}
-      <div className="modal__bg" />
+      <div className="modal__bg" onClick={() => { menuBarToggle("hide") }} />
       <main>
         {config.rightSidePanel.display && ( // header = rightSidePanel
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />

@@ -64,7 +64,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
               </button>
               {/* <!-- // 메뉴 토글 --> */}
               {/* <!-- 캘린더 --> */}
-              <a href="#" className="icon__link hide" aria-label="캘린터">
+              <NavLink to="apps" className="icon__link hide">
                 <div
                   onClick={() => {
                     // testWs();
@@ -84,7 +84,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
                     />
                   </svg>
                 </div>
-              </a>
+              </NavLink>
               {/* <!-- // 캘린더 --> */}
             </div>
           </div>
