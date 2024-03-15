@@ -309,10 +309,11 @@ header>.header__inner>.right>.icon>label>ul>li>a>.icon>img {
   width: 100%;
 }
 
+.header__inner>.left>.wrap>div>.icon__link.hide {
+  display: none;
+}
+
 @media (max-width: 1200px) {
-  .header__inner>.left>.wrap>div>.icon__link.hide {
-    display: none;
-  }
 
   .header__inner>.left>.wrap>div>.menuOn.hide {
     display: block;
