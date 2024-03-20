@@ -76,7 +76,7 @@ function MainLayout() {
         webSocket.close();
       };
     }
-  }, [user?.userId]);
+  }, []);
 
   return (
     <div id="layout">

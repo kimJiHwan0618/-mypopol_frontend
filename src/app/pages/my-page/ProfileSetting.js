@@ -162,13 +162,15 @@ const ProfileSetting = () => {
 
   useEffect(() => {
     handleSetImgFile();
-    setValue('userId', user.userId, activeOption);
-    setValue('roleName', `${user.role} : 기본 사용자 권한`, activeOption);
-    setValue('authValue', user.authValue, activeOption);
-    setValue('userName', user.username, activeOption);
-    setValue('newPassword', '', activeOption);
-    setValue('newPasswordCheck', '', activeOption);
-  }, []);
+    if (user) {
+      setValue('userId', user.userId, activeOption);
+      setValue('roleName', `${user.role} : 기본 사용자 권한`, activeOption);
+      setValue('authValue', user.authValue, activeOption);
+      setValue('userName', user.username, activeOption);
+      setValue('newPassword', '', activeOption);
+      setValue('newPasswordCheck', '', activeOption);
+    }
+  }, [user?.userId]);
 
   return (
     <div className="section__grid__wrap content">
@@ -255,6 +257,7 @@ const ProfileSetting = () => {
                   <TextField
                     {...field}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     className="custom__input__readonly"
                     label="유저 ID"
                     InputProps={{
@@ -276,6 +279,7 @@ const ProfileSetting = () => {
                   <TextField
                     {...field}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     label="유저 권한"
                     className="custom__input__readonly"
                     InputProps={{
@@ -297,6 +301,7 @@ const ProfileSetting = () => {
                   <TextField
                     {...field}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     label="본인 인증 이메일"
                     className="custom__input__readonly"
                     InputProps={{
@@ -318,6 +323,7 @@ const ProfileSetting = () => {
                   <TextField
                     {...field}
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     label="유저명"
                     type="text"
                     error={!!errors.userName}
@@ -336,6 +342,7 @@ const ProfileSetting = () => {
                     {...field}
                     type="password"
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     label="새비밀번호"
                     error={!!errors.newPassword}
                     helperText="6자리 이상 12자리 이하로 입력해주세요."
@@ -352,6 +359,7 @@ const ProfileSetting = () => {
                     {...field}
                     type="password"
                     fullWidth
+                    InputLabelProps={{ shrink: true }}
                     label="새비밀번호 확인"
                     error={!!errors.newPasswordCheck}
                     helperText="6자리 이상 12자리 이하로 입력해주세요."

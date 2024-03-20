@@ -276,7 +276,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
@@ -442,6 +442,7 @@ function PageManagement() {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      InputLabelProps={{ shrink: true }}
                       className="mb-24"
                       label="포폴명"
                       autoFocus
@@ -531,6 +532,7 @@ function PageManagement() {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      InputLabelProps={{ shrink: true }}
                       className="mb-24"
                       label="예명"
                       autoFocus
@@ -551,6 +553,7 @@ function PageManagement() {
                   render={({ field }) => (
                     <TextField
                       {...field}
+                      InputLabelProps={{ shrink: true }}
                       className="mb-24"
                       fullWidth
                       required
@@ -606,6 +609,7 @@ function PageManagement() {
                     render={({ field }) => (
                       <TextField
                         {...field}
+                        InputLabelProps={{ shrink: true }}
                         className="mb-24"
                         label="이메일"
                         autoFocus
@@ -634,6 +638,7 @@ function PageManagement() {
                     render={({ field }) => (
                       <TextField
                         {...field}
+                        InputLabelProps={{ shrink: true }}
                         className="mb-24"
                         label="전화번호"
                         autoFocus
@@ -720,6 +725,7 @@ function PageManagement() {
                       render={({ field }) => (
                         <TextField
                           {...field}
+                          InputLabelProps={{ shrink: true }}
                           className="mb-24"
                           label="아이디"
                           autoFocus
@@ -738,6 +744,7 @@ function PageManagement() {
                         <TextField
                           {...field}
                           className="mb-24"
+                          InputLabelProps={{ shrink: true }}
                           label="링크"
                           autoFocus
                           type="text"

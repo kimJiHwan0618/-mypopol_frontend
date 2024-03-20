@@ -146,12 +146,12 @@ const Ptid01WorkModal = ({
       popInfo.workInfo.logo === 'none'
         ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
         : setImgFile(
-            popInfo.workInfo.logo,
-            'titleImgOld',
-            setTitle01Img,
-            popInfo.ptId,
-            popInfo.workInfo.src
-          );
+          popInfo.workInfo.logo,
+          'titleImgOld',
+          setTitle01Img,
+          popInfo.ptId,
+          popInfo.workInfo.src
+        );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
       for (let i = 0; i < siteArr.length; i += 1) {
@@ -327,6 +327,7 @@ const Ptid01WorkModal = ({
             render={({ field }) => (
               <TextField
                 {...field}
+                InputLabelProps={{ shrink: true }}
                 className="mb-24"
                 label="작품명"
                 autoFocus
@@ -347,6 +348,7 @@ const Ptid01WorkModal = ({
             render={({ field }) => (
               <TextField
                 {...field}
+                InputLabelProps={{ shrink: true }}
                 className="mb-24"
                 label="부제"
                 autoFocus
@@ -367,6 +369,7 @@ const Ptid01WorkModal = ({
             render={({ field }) => (
               <TextField
                 {...field}
+                InputLabelProps={{ shrink: true }}
                 className="mb-24"
                 fullWidth
                 label="소개글"
@@ -447,6 +450,7 @@ const Ptid01WorkModal = ({
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    InputLabelProps={{ shrink: true }}
                     className="mb-24"
                     label="링크"
                     autoFocus
@@ -485,9 +489,8 @@ const Ptid01WorkModal = ({
                 <span className="f__medium">작품 {popInfo.state}</span>
                 <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                   <use
-                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
-                      popInfo.state === '추가' ? 'plus' : 'pencil'
-                    }`}
+                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
+                      }`}
                   />
                 </svg>
               </>
