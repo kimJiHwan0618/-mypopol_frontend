@@ -186,9 +186,9 @@ function SignInPage() {
                     비밀번호 찾기
                   </Link>
                 </div>
-                {/* 개발중 sns 로그인 버튼 주석 */}
-                {/* <div className={css.sns__login__wrap}>
-                  <div className={css.sns__btn}>
+                <div className={css.sns__login__wrap}>
+                  {/* 개발중 naver 로그인 버튼 주석 */}
+                  {/* <div className={css.sns__btn}>
                     <Button className=" w-full mt-16 f__bold">
                       <span className={css.logo__img}>
                         <img
@@ -198,11 +198,11 @@ function SignInPage() {
                       </span>
                     </Button>
                     <NaverLoginBtn getSnsUserInfo={getSnsUserInfo} />
-                  </div>
+                  </div> */}
                   <div className={`${css.sns__btn} ${css.google__btn}`}>
                     <GoogleLoginBtn getSnsUserInfo={getSnsUserInfo} />
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
             <div className={css.right__section}>
