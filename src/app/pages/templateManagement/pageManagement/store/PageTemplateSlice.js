@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const postPopolInfo = createAsyncThunk(
-  'site/post/popol-info',
+  'site/popol',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/site/post/popol-info`,
+        `${process.env.REACT_APP_API_HOST}/site/popol`,
         params
       );
       return await response;
@@ -20,7 +20,7 @@ export const postPopolInfo = createAsyncThunk(
 );
 
 export const updatePageTem = createAsyncThunk(
-  'templateManage/put/page/update',
+  'templateManage/page',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -38,7 +38,7 @@ export const updatePageTem = createAsyncThunk(
           encodeURIComponent(params.files.thumbnailImg.name)
         );
       const response = await axios.put(
-        `${process.env.REACT_APP_API_HOST}/templatemanage/put/page/update`,
+        `${process.env.REACT_APP_API_HOST}/templatemanage/page`,
         formData,
         {
           headers: {
@@ -57,7 +57,7 @@ export const updatePageTem = createAsyncThunk(
 );
 
 export const addOrUpdateWork = createAsyncThunk(
-  'templateManage/post/page/work/add-update',
+  'templateManage/page/work',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -74,7 +74,7 @@ export const addOrUpdateWork = createAsyncThunk(
         encodeURIComponent(params.files.posterImg.name)
       );
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/templateManage/post/page/work/add-update`,
+        `${process.env.REACT_APP_API_HOST}/templateManage/page/work`,
         formData,
         {
           headers: {
@@ -93,11 +93,11 @@ export const addOrUpdateWork = createAsyncThunk(
 );
 
 export const deleteWork = createAsyncThunk(
-  'templateManage/delete/page/work',
+  'templateManage/page/work',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_HOST}/templateManage/delete/page/work`,
+        `${process.env.REACT_APP_API_HOST}/templateManage/page/work`,
         {
           params,
         }

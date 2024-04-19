@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const putProfileImg = createAsyncThunk(
-  'my-page/profile/post/profile-img',
+  'my-page/profile/img',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const formData = new FormData();
@@ -11,7 +11,7 @@ export const putProfileImg = createAsyncThunk(
       formData.append('oldFileName', params.oldFileName);
       formData.append('userId', params.userId);
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/my-page/profile/post/profile-img`,
+        `${process.env.REACT_APP_API_HOST}/my-page/profile/img`,
         formData,
         {
           headers: {
@@ -31,11 +31,11 @@ export const putProfileImg = createAsyncThunk(
 );
 
 export const putProfileInfo = createAsyncThunk(
-  'my-page/profile/put/profile-info',
+  'my-page/profile/info',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_HOST}/my-page/profile/put/profile-info`,
+        `${process.env.REACT_APP_API_HOST}/my-page/profile/info`,
         params
       );
       return await response;

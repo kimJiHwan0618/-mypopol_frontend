@@ -1,6 +1,6 @@
 const jwtServiceConfig = {
-  signIn: '/common/post/login',
-  accessToken: '/auth/put/access-token',
+  signIn: '/common/login',
+  accessToken: '/auth/jwt/refresh',
   updateUser: '/auth/user/update', // 아직 미개발
 };
 

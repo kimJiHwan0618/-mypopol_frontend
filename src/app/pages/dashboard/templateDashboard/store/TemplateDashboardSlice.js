@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const getPopols = createAsyncThunk(
-  'dashboard/home/get/popols',
+  'dashboard/popols',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/dashboard/home/get/popols`,
+        `${process.env.REACT_APP_API_HOST}/dashboard/popols`,
         { params }
       );
       return await response;
@@ -19,11 +19,11 @@ export const getPopols = createAsyncThunk(
   }
 );
 export const getWorks = createAsyncThunk(
-  'dashboard/home/get/works',
+  'dashboard/works',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/dashboard/home/get/works`,
+        `${process.env.REACT_APP_API_HOST}/dashboard/works`,
         { params }
       );
       return await response;
@@ -37,11 +37,11 @@ export const getWorks = createAsyncThunk(
 );
 
 export const getVistors = createAsyncThunk(
-  'dashboard/home/get/vistors',
+  'dashboard/vistors',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/dashboard/home/get/vistors`,
+        `${process.env.REACT_APP_API_HOST}/dashboard/vistors`,
         { params }
       );
       return await response;
@@ -55,11 +55,11 @@ export const getVistors = createAsyncThunk(
 );
 
 export const getMails = createAsyncThunk(
-  'dashboard/home/get/mails',
+  'dashboard/mails',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/dashboard/home/get/mails`,
+        `${process.env.REACT_APP_API_HOST}/dashboard/mails`,
         { params }
       );
       return await response;
@@ -73,7 +73,7 @@ export const getMails = createAsyncThunk(
 );
 
 export const testWss = createAsyncThunk(
-  'dashboard/home/get/test',
+  'dashboard/test',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(

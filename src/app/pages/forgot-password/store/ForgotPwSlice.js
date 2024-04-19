@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const putUserPassword = createAsyncThunk(
-  'common/put/user/password',
+  'common/user/password',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_HOST}/common/put/user/password`,
+        `${process.env.REACT_APP_API_HOST}/common/user/password`,
         params
       );
       return await response;

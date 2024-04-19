@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const postAuthCode = createAsyncThunk(
-  'common/post/signUpCode',
+  'common/signUpCode',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/common/post/signup-code`,
+        `${process.env.REACT_APP_API_HOST}/common/signup-code`,
         params
       );
       return await response;
@@ -20,11 +20,11 @@ export const postAuthCode = createAsyncThunk(
 );
 
 export const postUser = createAsyncThunk(
-  'common/post/user',
+  'common/user',
   async (params, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/common/post/user`,
+        `${process.env.REACT_APP_API_HOST}/common/user`,
         params
       );
       return await response;
@@ -38,10 +38,10 @@ export const postUser = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk(
-  'common/get/user',
+  'common/user',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/common/get/user`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/common/user`, {
         params,
       });
       return await response;
