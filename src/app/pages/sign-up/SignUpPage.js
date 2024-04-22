@@ -8,7 +8,7 @@ import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
 import * as yup from 'yup';
 import _ from '@lodash';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import css from 'assets/css/signup.module.css';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
@@ -16,17 +16,23 @@ import templatesJson from 'app/data/signUp/templates.json';
 import dateParser from 'app/utils/dateParser';
 import classnames from 'classnames';
 import jwtService from 'app/auth/services/jwtService';
-import { postAuthCode, getUser, postUser } from './store/SingUpSlice';
+import { postAuthCode, getUser, postUser, checkAuthCode } from './store/SingUpSlice';
 
 function SignUpPage() {
   const { step } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  const timeCount = useRef(120);
+  const intervalIdRef = useRef(null);
+  const timeoutText = useRef(null);
+  const [timeout, setTimeout] = useState(0);
   const [loading, setLoading] = useState(false); // 유저 인증코드, id 중복체크, 유저생성
+  const [loading2, setLoading2] = useState(false); // 인증 확인
   const [authStep, setAuthStep] = useState(1); // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
   const [authType, setAuthType] = useState(null); // 휴대폰, 이메일
-  const [authKey, setAuthKey] = useState(null);
+  const [authValue, setAuthValue] = useState(null);
+  const [authCode, setAuthCode] = useState(null);
   const [userIdCheck, setUserIdCheck] = useState(false);
   const [templateId, setTemplateId] = useState('none');
   const schema = yup.object().shape({
@@ -45,7 +51,7 @@ function SignUpPage() {
       .string()
       .required('이메일을 입력해주세요.')
       .email('올바른 이메일 형식이 아닙니다.'),
-    authKey: yup
+    authCode: yup
       .string()
       .required('인증번호를 입력해주세요.')
       .min(8, '인증번호는 8자 입니다.')
@@ -95,21 +101,42 @@ function SignUpPage() {
     setAuthStep(1);
   };
 
-  const authCheck = (param, snsAuthKey) => {
+  const authCheck = (param, snsAuthCode) => {
     if (param === 2 && !authType) {
       toast.warning('인증방법을 선택해주세요.');
       resetPage();
-    } else if (param === 3 && !authKey && !snsAuthKey) {
+    } else if (param === 3 && !authCode && !snsAuthCode) {
       toast.warning('본인인증을 진행해주세요.');
       resetPage();
     }
   };
 
-  const authKeyCheckBtnClick = () => {
-    if (getValues().authKey === authKey) {
-      navigate('/sign-up/3');
-    } else {
-      toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+  const authCodeCheckBtnClick = async () => {
+    setLoading2(true);
+    try {
+      const { payload } = await dispatch(
+        checkAuthCode({
+          authValue,
+          authCode: getValues().authCode,
+        })
+      );
+      switch (payload.status) {
+        case 200:
+          timeCount.current = 120;
+          await setAuthCode(payload.data);
+          clearInterval(intervalIdRef.current);
+          navigate('/sign-up/3');
+          break;
+        case 401:
+          toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+          break;
+        default:
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error('인증코드 확인중 에러가 발생하였습니다.');
+    } finally {
+      setLoading2(false);
     }
   };
 
@@ -193,6 +220,20 @@ function SignUpPage() {
       const { payload } = await dispatch(postAuthCode({ userEmail: getValues().userEmail }));
       switch (payload.status) {
         case 200:
+          setAuthValue(getValues().userEmail);
+          await setTimeout(1);
+          timeCount.current = 120;
+          intervalIdRef.current = setInterval(() => {
+            if (timeCount.current <= 0) {
+              setTimeout(2);
+              timeCount.current = 120;
+              clearInterval(intervalIdRef.current);
+            }
+            timeoutText.current.textContent = `${String(
+              Math.floor(timeCount.current / 60)
+            ).padStart(2, '0')} : ${String(timeCount.current % 60).padStart(2, '0')}`;
+            timeCount.current -= 1;
+          }, 1000);
           toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
           break;
         case 401:
@@ -216,9 +257,10 @@ function SignUpPage() {
         case 1:
           break;
         case 2:
-          setAuthKey(null);
+          setAuthCode(null);
           setValue('userEmail', '', activeOption);
-          setValue('authKey', '', activeOption);
+          setValue('authCode', '', activeOption);
+          setTimeout(0);
           authCheck(2);
           break;
         case 3:
@@ -228,12 +270,12 @@ function SignUpPage() {
           setValue('passwordCheck', '', activeOption);
           setUserIdCheck(false);
           if (userEmail) {
-            const snsAuthKey = String(new Date().getTime()).slice(-8);
+            const snsAuthCode = String(new Date().getTime()).slice(-8);
             setValue('userEmail', userEmail, activeOption);
-            setValue('authKey', snsAuthKey, activeOption);
-            setAuthKey(snsAuthKey);
+            setValue('authCode', snsAuthCode, activeOption);
+            setAuthCode(snsAuthCode);
             setAuthType('이메일');
-            authCheck(3, snsAuthKey);
+            authCheck(3, snsAuthCode);
           } else {
             authCheck(3);
           }
@@ -246,6 +288,10 @@ function SignUpPage() {
     } else {
       resetPage();
     }
+    return () => {
+      // intervalIdRef에 저장된 interval을 중지
+      clearInterval(intervalIdRef.current);
+    };
   }, [step]);
 
   return (
@@ -304,6 +350,9 @@ function SignUpPage() {
                             className="mb-24"
                             placeholder="ex) mypopol@naver.com"
                             label="이메일"
+                            InputProps={{
+                              readOnly: timeout === 1,
+                            }}
                             autoFocus
                             type="email"
                             error={!!errors.userEmail}
@@ -321,7 +370,7 @@ function SignUpPage() {
                           className="custom__btn f__medium"
                           size="large"
                           fullWidth
-                          disabled={!!errors.userEmail || loading}
+                          disabled={!!errors.userEmail || loading || timeout === 1}
                           onClick={() => {
                             handlePostAuthCode();
                           }}>
@@ -334,42 +383,49 @@ function SignUpPage() {
                       </div>
                     </div>
                   )}
-                  {authStep === 2 && authKey && (
+                  {authStep === 2 && timeout === 1 && (
                     <>
-                      <Controller
-                        name="authKey"
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            className="mb-24"
-                            placeholder="8자리 인증코드 ex)16258725"
-                            label="인증코드"
-                            type="text"
-                            autoFocus
-                            error={!!errors.authKey}
-                            helperText={errors?.authKey?.message}
-                            variant="outlined"
-                            required
-                            fullWidth
-                          />
-                        )}
-                      />
+                      <div className={css.timeout__input}>
+                        <p
+                          className="f__medium"
+                          style={{ marginBottom: '12px', textAlign: 'right' }}
+                          ref={timeoutText}
+                        />
+                        <Controller
+                          name="authCode"
+                          control={control}
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              className="mb-24"
+                              placeholder="8자리 인증코드"
+                              label="인증코드"
+                              type="text"
+                              autoFocus
+                              error={!!errors.authCode}
+                              helperText={errors?.authCode?.message}
+                              variant="outlined"
+                              required
+                              fullWidth
+                            />
+                          )}
+                        />
+                      </div>
                       <Button
                         variant="contained"
                         color="secondary"
                         className="custom__btn f__medium"
                         size="large"
                         style={{ marginBottom: 12 }}
-                        disabled={!!errors.authKey || loading}
+                        disabled={!!errors.authCode || loading2}
                         onClick={() => {
-                          authKeyCheckBtnClick();
+                          authCodeCheckBtnClick();
                         }}>
                         <span className="mx-8 text-white font-bold">인증 확인</span>
                       </Button>
                     </>
                   )}
-                  {authStep === 3 && authKey && (
+                  {authStep === 3 && authCode && (
                     <>
                       <div className={css.sign__up__item}>
                         {userIdCheck && (
@@ -504,7 +560,7 @@ function SignUpPage() {
                       </div>
                     </>
                   )}
-                  {authStep === 4 && authKey && (
+                  {authStep === 4 && authCode && (
                     <>
                       <div className={css.template__selector__wrap}>
                         <TextField

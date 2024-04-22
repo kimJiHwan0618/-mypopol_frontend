@@ -350,8 +350,8 @@ header .selector__label > ul {
   border: 2px solid var(--main-color);
 }
 
-.custom__input__readonly {
-  background: #e7e7e7;
+input:read-only {
+  background: #e7e7e7 !important;
 }
 
 .custom__form__error {

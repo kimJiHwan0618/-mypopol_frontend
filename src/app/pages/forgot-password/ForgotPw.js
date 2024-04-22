@@ -80,7 +80,9 @@ function SignInPage() {
     setLoading(true);
     try {
       const { userId, password } = getValues();
-      const { payload } = await dispatch(putUserPassword({ userId, password, authValue, authCode }));
+      const { payload } = await dispatch(
+        putUserPassword({ userId, password, authValue, authCode })
+      );
       switch (payload.status) {
         case 200:
           toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
@@ -88,7 +90,7 @@ function SignInPage() {
           break;
         case 401:
           toast.warning('인증정보가 유효하지 않습니다. 다시 시도해주세요.');
-          handleResetPage()
+          handleResetPage();
           break;
         default:
       }
@@ -103,14 +105,16 @@ function SignInPage() {
   const handleAuthCodeCheck = async () => {
     setLoading(true);
     try {
-      const { payload } = await dispatch(checkAuthCode({
-        authValue,
-        authCode: getValues().authCode,
-      }));
+      const { payload } = await dispatch(
+        checkAuthCode({
+          authValue,
+          authCode: getValues().authCode,
+        })
+      );
       switch (payload.status) {
         case 200:
           timeCount.current = 120;
-          await setAuthCode(payload.data)
+          await setAuthCode(payload.data);
           clearInterval(intervalIdRef.current);
           navigate('/forgot-password/3');
           break;
@@ -120,7 +124,7 @@ function SignInPage() {
         default:
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       toast.error('인증코드 확인중 에러가 발생하였습니다.');
     } finally {
       setLoading(false);
@@ -142,7 +146,7 @@ function SignInPage() {
     }
   };
 
-  const createtAuthCode = async () => {
+  const handlePostAuthCode = async () => {
     setLoading(true);
     try {
       const { userId, userName } = getValues();
@@ -157,11 +161,19 @@ function SignInPage() {
               timeCount.current = 120;
               clearInterval(intervalIdRef.current);
             }
-            timeoutText.current.textContent = `${String(Math.floor(timeCount.current / 60)).padStart(2, '0')} :            ${String(timeCount.current % 60).padStart(2, '0')}`
-            timeCount.current -= 1;
-          }, 1000)
+            if (timeoutText.current) {
+              timeoutText.current.textContent = `${String(
+                Math.floor(timeCount.current / 60)
+              ).padStart(2, '0')} : ${String(timeCount.current % 60).padStart(2, '0')}`;
+              timeCount.current -= 1;
+            } else {
+              timeCount.current = 120;
+              clearInterval(intervalIdRef.current);
+            }
+          }, 1000);
           toast.info(
-            `인증코드를 전송했습니다. ${payload.data.authType === 'email' ? '이메일' : '휴대폰'
+            `인증코드를 전송했습니다. ${
+              payload.data.authType === 'email' ? '이메일' : '휴대폰'
             }을 확인해주세요`
           );
           break;
@@ -266,7 +278,7 @@ function SignInPage() {
                           fullWidth
                           disabled={!!errors.userName || !!errors.userId || loading}
                           onClick={() => {
-                            createtAuthCode();
+                            handlePostAuthCode();
                           }}>
                           {loading ? (
                             <Lottie options={{ loop: true, autoplay: true, animationData }} />
@@ -279,30 +291,34 @@ function SignInPage() {
                   )}
                   {authStep === 2 && (
                     <>
-                      {
-                        !timeout && (
-                          <p className='f__medium' style={{ marginBottom: "12px", textAlign: "right" }} ref={timeoutText} />
-                        )
-                      }
-                      <Controller
-                        name="authCode"
-                        control={control}
-                        render={({ field }) => (
-                          <TextField
-                            {...field}
-                            className="mb-24"
-                            placeholder="8자리 인증코드 ex)16258725"
-                            label="인증코드"
-                            type="text"
-                            autoFocus
-                            error={!!errors.authCode}
-                            helperText={errors?.authCode?.message}
-                            variant="outlined"
-                            required
-                            fullWidth
+                      <div className={css.timeout__input}>
+                        {!timeout && (
+                          <p
+                            className="f__medium"
+                            style={{ marginBottom: '12px', textAlign: 'right' }}
+                            ref={timeoutText}
                           />
                         )}
-                      />
+                        <Controller
+                          name="authCode"
+                          control={control}
+                          render={({ field }) => (
+                            <TextField
+                              {...field}
+                              className="mb-24"
+                              placeholder="8자리 인증코드"
+                              label="인증코드"
+                              type="text"
+                              autoFocus
+                              error={!!errors.authCode}
+                              helperText={errors?.authCode?.message}
+                              variant="outlined"
+                              required
+                              fullWidth
+                            />
+                          )}
+                        />
+                      </div>
                       <Button
                         variant="contained"
                         color="secondary"
@@ -316,12 +332,16 @@ function SignInPage() {
                         {loading ? (
                           <Lottie options={{ loop: true, autoplay: true, animationData }} />
                         ) : (
-                          <span className="mx-8 text-white font-bold">확인</span>
+                          <span className="mx-8 text-white font-bold">인증 확인</span>
                         )}
                       </Button>
-                      {
-                        timeout && <p className='f__medium' style={{ margin: "12px 0", textAlign: "center", color: "#d32f2f" }}>인증번호가 만료되었습니다.</p>
-                      }
+                      {timeout && (
+                        <p
+                          className="f__medium"
+                          style={{ margin: '12px 0', textAlign: 'center', color: '#d32f2f' }}>
+                          인증번호가 만료되었습니다.
+                        </p>
+                      )}
                     </>
                   )}
                   {authStep === 3 && (
@@ -394,7 +414,7 @@ function SignInPage() {
                       if (Number(step) === 1) {
                         navigate(`/sign-in`);
                       } else if (Number(step) === 3) {
-                        setAuthValue(null)
+                        setAuthValue(null);
                         navigate(`/forgot-password/${Number(step) - 1}`);
                       } else {
                         navigate(`/forgot-password/${Number(step) - 1}`);

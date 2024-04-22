@@ -5,10 +5,9 @@ export const checkAuthCode = createAsyncThunk(
   'common/auth-code',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_HOST}/common/auth-code`,
-        { params }
-      );
+      const response = await axios.get(`${process.env.REACT_APP_API_HOST}/common/auth-code`, {
+        params,
+      });
       return await response;
     } catch (error) {
       return rejectWithValue(error.response);
@@ -26,10 +25,7 @@ export const postAuthCode = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -38,10 +34,7 @@ export const postUser = createAsyncThunk(
   'common/user',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/common/user`,
-        params
-      );
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/common/user`, params);
       return await response;
     } catch (error) {
       if (!error.response.data) {
