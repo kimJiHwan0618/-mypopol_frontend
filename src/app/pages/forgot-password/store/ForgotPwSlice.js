@@ -11,10 +11,7 @@ export const putUserPassword = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      rejectWithValue(error.response);
     }
   }
 );

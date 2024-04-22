@@ -7,23 +7,25 @@ import { useParams, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import _ from '@lodash';
 import { useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import css from 'assets/css/signup.module.css';
-import { postAuthCode } from 'app/pages/sign-up/store/SingUpSlice';
+import { postAuthCode, checkAuthCode } from 'app/pages/sign-up/store/SingUpSlice';
 import { putUserPassword } from './store/ForgotPwSlice';
 
 function SignInPage() {
-  const { step } = useParams();
-  const [loading, setLoading] = useState(false); // 인증번호 발급 api loading state
-  const [loading2, setLoading2] = useState(false); // 새 비밀번호 적용 api loading state
-  const [userIdCheck, setUserIdCheck] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const timeCount = useRef(120);
+  const intervalIdRef = useRef(null);
+  const timeoutText = useRef(null);
+  const { step } = useParams();
+  const [loading, setLoading] = useState(false); // 인증번호 발급 api, 인증번호 체크, 새 비밀번호 적용
   const [authStep, setAuthStep] = useState(1);
+  const [timeout, setTimeout] = useState(false);
   const [authValue, setAuthValue] = useState(null); // 이메일 or 휴대폰번호
-  const [authKey, setAuthKey] = useState(null); // 인증번호 발급후 set
+  const [authCode, setAuthCode] = useState(null); // 인증번호 발급후 set
   const schema = yup.object().shape({
     userId: yup
       .string()
@@ -36,7 +38,7 @@ function SignInPage() {
       .required('유저명을 입력해주세요.')
       .min(2, '유저명은 2자 이상으로 입력해주세요.')
       .max(6, '유저명은 6자 이하로 입력해주세요'),
-    authKey: yup
+    authCode: yup
       .string()
       .required('인증번호를 입력해주세요.')
       .min(8, '인증번호는 8자 입니다.')
@@ -75,29 +77,53 @@ function SignInPage() {
   const { isValid, dirtyFields, errors } = formState;
 
   const updateUserPassword = async () => {
-    setLoading2(true);
+    setLoading(true);
     try {
       const { userId, password } = getValues();
-      const { payload } = await dispatch(putUserPassword({ userId, password }));
-      if (payload.status === 200 && payload?.data) {
-        toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
-        navigate('/sign-in');
-      } else {
-        toast.error('비밀번호 변경중 에러가 발생하였습니다.');
+      const { payload } = await dispatch(putUserPassword({ userId, password, authValue, authCode }));
+      switch (payload.status) {
+        case 200:
+          toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
+          navigate('/sign-in');
+          break;
+        case 401:
+          toast.warning('인증정보가 유효하지 않습니다. 다시 시도해주세요.');
+          handleResetPage()
+          break;
+        default:
       }
     } catch (err) {
       toast.error('비밀번호 변경중 에러가 발생하였습니다.');
       console.log(err);
     } finally {
-      setLoading2(false);
+      setLoading(false);
     }
   };
 
-  const handleAuthKeyCheck = () => {
-    if (getValues().authKey === authKey) {
-      navigate('/forgot-password/3');
-    } else {
-      toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+  const handleAuthCodeCheck = async () => {
+    setLoading(true);
+    try {
+      const { payload } = await dispatch(checkAuthCode({
+        authValue,
+        authCode: getValues().authCode,
+      }));
+      switch (payload.status) {
+        case 200:
+          timeCount.current = 120;
+          await setAuthCode(payload.data)
+          clearInterval(intervalIdRef.current);
+          navigate('/forgot-password/3');
+          break;
+        case 401:
+          toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
+          break;
+        default:
+      }
+    } catch (err) {
+      console.log(err)
+      toast.error('인증코드 확인중 에러가 발생하였습니다.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +136,7 @@ function SignInPage() {
     if (param === 2 && !authValue) {
       toast.warning('유저정보를 입력해주세요.');
       handleResetPage();
-    } else if (param === 3 && (getValues().authKey !== authKey || !authKey)) {
+    } else if (param === 3 && (Number(getValues().authCode) !== Number(authCode) || !authCode)) {
       toast.warning('인증번호 발급을 통한 인증을 진행해주세요.');
       handleResetPage();
     }
@@ -121,21 +147,28 @@ function SignInPage() {
     try {
       const { userId, userName } = getValues();
       const { payload } = await dispatch(postAuthCode({ userId, userName, forgotPw: true }));
-      if (payload.status === 200) {
-        if (payload.data) {
-          setAuthKey(payload.data.authKey);
+      switch (payload.status) {
+        case 200:
           setAuthValue(payload.data.authValue);
           navigate('/forgot-password/2');
+          intervalIdRef.current = setInterval(() => {
+            if (timeCount.current <= 0) {
+              setTimeout(true);
+              timeCount.current = 120;
+              clearInterval(intervalIdRef.current);
+            }
+            timeoutText.current.textContent = `${String(Math.floor(timeCount.current / 60)).padStart(2, '0')} :            ${String(timeCount.current % 60).padStart(2, '0')}`
+            timeCount.current -= 1;
+          }, 1000)
           toast.info(
-            `인증코드를 전송했습니다. ${
-              payload.data.authType === 'email' ? '이메일' : '휴대폰'
+            `인증코드를 전송했습니다. ${payload.data.authType === 'email' ? '이메일' : '휴대폰'
             }을 확인해주세요`
           );
-        } else {
+          break;
+        case 401:
           toast.warning('입력하신 유저정보와 일치하는 계정이 없습니다.');
-        }
-      } else {
-        toast.error(payload);
+          break;
+        default:
       }
     } catch (error) {
       toast.error('인증코드 발급중 에러가 발생하였습니다.');
@@ -150,11 +183,12 @@ function SignInPage() {
     if (step && step >= 1 && step <= 3) {
       switch (Number(step)) {
         case 1:
+          setTimeout(false);
           setValue('userId', '', activeOption);
           setValue('userName', '', activeOption);
           break;
         case 2:
-          setValue('authKey', '', activeOption);
+          setValue('authCode', '', activeOption);
           handleAuthCheck(2);
           break;
         case 3:
@@ -245,8 +279,13 @@ function SignInPage() {
                   )}
                   {authStep === 2 && (
                     <>
+                      {
+                        !timeout && (
+                          <p className='f__medium' style={{ marginBottom: "12px", textAlign: "right" }} ref={timeoutText} />
+                        )
+                      }
                       <Controller
-                        name="authKey"
+                        name="authCode"
                         control={control}
                         render={({ field }) => (
                           <TextField
@@ -256,8 +295,8 @@ function SignInPage() {
                             label="인증코드"
                             type="text"
                             autoFocus
-                            error={!!errors.authKey}
-                            helperText={errors?.authKey?.message}
+                            error={!!errors.authCode}
+                            helperText={errors?.authCode?.message}
                             variant="outlined"
                             required
                             fullWidth
@@ -270,12 +309,19 @@ function SignInPage() {
                         className="custom__btn f__medium"
                         size="large"
                         style={{ marginBottom: 12 }}
-                        disabled={!!errors.authKey}
+                        disabled={!!errors.authCode || timeout || loading}
                         onClick={() => {
-                          handleAuthKeyCheck();
+                          handleAuthCodeCheck();
                         }}>
-                        <span className="mx-8 text-white font-bold">인증 확인</span>
+                        {loading ? (
+                          <Lottie options={{ loop: true, autoplay: true, animationData }} />
+                        ) : (
+                          <span className="mx-8 text-white font-bold">확인</span>
+                        )}
                       </Button>
+                      {
+                        timeout && <p className='f__medium' style={{ margin: "12px 0", textAlign: "center", color: "#d32f2f" }}>인증번호가 만료되었습니다.</p>
+                      }
                     </>
                   )}
                   {authStep === 3 && (
@@ -324,12 +370,12 @@ function SignInPage() {
                         className="custom__btn f__medium"
                         size="large"
                         style={{ marginBottom: 12 }}
-                        disabled={_.isEmpty(dirtyFields) || !isValid || loading2}
+                        disabled={_.isEmpty(dirtyFields) || !isValid || loading}
                         fullWidth
                         onClick={() => {
                           updateUserPassword();
                         }}>
-                        {loading2 ? (
+                        {loading ? (
                           <Lottie options={{ loop: true, autoplay: true, animationData }} />
                         ) : (
                           <span className="mx-8 text-white font-bold">확인</span>
@@ -347,6 +393,9 @@ function SignInPage() {
                     onClick={() => {
                       if (Number(step) === 1) {
                         navigate(`/sign-in`);
+                      } else if (Number(step) === 3) {
+                        setAuthValue(null)
+                        navigate(`/forgot-password/${Number(step) - 1}`);
                       } else {
                         navigate(`/forgot-password/${Number(step) - 1}`);
                       }

@@ -23,9 +23,7 @@ function SignUpPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const [loading, setLoading] = useState(false); // 유저 인증코드 api
-  const [loading2, setLoading2] = useState(false); // id 중복체크 api
-  const [loading3, setLoading3] = useState(false); // 유저생성 api
+  const [loading, setLoading] = useState(false); // 유저 인증코드, id 중복체크, 유저생성
   const [authStep, setAuthStep] = useState(1); // 1 : 인증타입 선택, 2 : 인증번호 입력, 3 : 아이디 비밀번호 입력
   const [authType, setAuthType] = useState(null); // 휴대폰, 이메일
   const [authKey, setAuthKey] = useState(null);
@@ -120,7 +118,7 @@ function SignUpPage() {
   };
 
   const handleGetUser = async () => {
-    setLoading2(true);
+    setLoading(true);
     try {
       const { payload } = await dispatch(getUser({ userId: getValues().userId }));
       if (payload.status === 200) {
@@ -139,12 +137,12 @@ function SignUpPage() {
       toast.error('유저ID 조회중 에러가 발생하였습니다.');
       console.log(error);
     } finally {
-      setLoading2(false);
+      setLoading(false);
     }
   };
 
   const handleSignUpUser = async () => {
-    setLoading3(true);
+    setLoading(true);
     let authVal1;
     let authVal2;
     switch (authType) {
@@ -185,7 +183,7 @@ function SignUpPage() {
       toast.error('유저 생성중에 에러가 발생하였습니다.');
       console.log(error);
     } finally {
-      setLoading3(false);
+      setLoading(false);
     }
   };
 
@@ -193,15 +191,14 @@ function SignUpPage() {
     setLoading(true);
     try {
       const { payload } = await dispatch(postAuthCode({ userEmail: getValues().userEmail }));
-      if (payload.status === 200) {
-        if (payload.data) {
-          setAuthKey(payload.data.authKey);
+      switch (payload.status) {
+        case 200:
           toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
-        } else {
-          toast.warning('유저 계정에서 사용중인 이메일입니다. 다른메일을 입력해주세요.');
-        }
-      } else {
-        toast.error(payload);
+          break;
+        case 401:
+          toast.warning('다른 계정에서 사용중인 이메일입니다. 다른메일을 입력해주세요.');
+          break;
+        default:
       }
     } catch (error) {
       toast.error('인증코드 발급중 에러가 발생하였습니다.');
@@ -364,7 +361,7 @@ function SignUpPage() {
                         className="custom__btn f__medium"
                         size="large"
                         style={{ marginBottom: 12 }}
-                        disabled={!!errors.authKey}
+                        disabled={!!errors.authKey || loading}
                         onClick={() => {
                           authKeyCheckBtnClick();
                         }}>
@@ -424,11 +421,11 @@ function SignUpPage() {
                               className="custom__btn f__medium"
                               size="large"
                               fullWidth
-                              disabled={!!errors.userId || loading2 || userIdCheck}
+                              disabled={!!errors.userId || loading || userIdCheck}
                               onClick={() => {
                                 handleGetUser();
                               }}>
-                              {loading2 ? (
+                              {loading ? (
                                 <Lottie options={{ loop: true, autoplay: true, animationData }} />
                               ) : (
                                 <span className="mx-8 text-white font-bold">중복 확인</span>
@@ -562,11 +559,11 @@ function SignUpPage() {
                         size="large"
                         fullWidth
                         style={{ marginBottom: 12 }}
-                        disabled={templateId === 'none' || loading3}
+                        disabled={templateId === 'none' || loading}
                         onClick={() => {
                           handleSignUpUser();
                         }}>
-                        {loading3 ? (
+                        {loading ? (
                           <Lottie options={{ loop: true, autoplay: true, animationData }} />
                         ) : (
                           <span className="mx-8 text-white font-bold">유저 생성</span>
