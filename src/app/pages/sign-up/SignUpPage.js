@@ -147,17 +147,17 @@ function SignUpPage() {
     setLoading(true);
     try {
       const { payload } = await dispatch(getUser({ userId: getValues().userId }));
-      if (payload.status === 200) {
-        if (payload.data) {
+      switch (payload.status) {
+        case 200:
           toast.info('사용가능한 ID입니다.');
           setValue('password', '', activeOption);
           setValue('passwordCheck', '', activeOption);
           setUserIdCheck(true);
-        } else {
+          break;
+        case 409:
           toast.warning('사용중인 ID입니다.');
-        }
-      } else {
-        toast.error(payload);
+          break;
+        default:
       }
     } catch (error) {
       toast.error('유저ID 조회중 에러가 발생하였습니다.');
