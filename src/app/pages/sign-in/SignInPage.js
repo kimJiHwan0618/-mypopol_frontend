@@ -69,7 +69,7 @@ function SignInPage() {
                 {
                   label: '예',
                   onClick: () => {
-                    navigate('/sign-up/3', { state: { sns: name, userEmail } });
+                    navigate('/sign-up/3', { state: { sns: name, userEmail, snsAuthToken } });
                   },
                 },
                 {

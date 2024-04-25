@@ -54,8 +54,7 @@ function SignUpPage() {
     authCode: yup
       .string()
       .required('인증번호를 입력해주세요.')
-      .min(8, '인증번호는 8자 입니다.')
-      .max(8, '인증번호는 8자 입니다.'),
+      .min(8, '인증번호는 8자 입니다.'),
     password: yup
       .string()
       .required('비밀번호를 입력해 주세요.')
@@ -209,7 +208,7 @@ function SignUpPage() {
           toast.success('유저 생성이 완료되었습니다!');
           break;
         case 400:
-          toast.success('유효하지않은 접근입니다. 다시 시도해주세요.');
+          toast.warning('유효하지않은 접근입니다. 이전단계부터 다시 시도해주세요.');
           navigate(`/sign-in/1`);
           break;
         default:
@@ -260,6 +259,7 @@ function SignUpPage() {
   useEffect(() => {
     setAuthStep(Number(step));
     const userEmail = location.state?.userEmail;
+    const snsAuthToken = location.state?.snsAuthToken;
     if (step && step >= 1 && step <= 3) {
       switch (Number(step)) {
         case 1:
@@ -278,12 +278,11 @@ function SignUpPage() {
           setValue('passwordCheck', '', activeOption);
           setUserIdCheck(false);
           if (userEmail) {
-            const snsAuthCode = String(new Date().getTime()).slice(-8);
             setValue('userEmail', userEmail, activeOption);
-            setValue('authCode', snsAuthCode, activeOption);
-            setAuthCode(snsAuthCode);
+            setValue('authCode', snsAuthToken, activeOption);
+            setAuthCode(snsAuthToken);
             setAuthType('이메일');
-            authCheck(3, snsAuthCode);
+            authCheck(3, snsAuthToken);
           } else {
             authCheck(3);
           }
@@ -297,7 +296,6 @@ function SignUpPage() {
       resetPage();
     }
     return () => {
-      // intervalIdRef에 저장된 interval을 중지
       clearInterval(intervalIdRef.current);
     };
   }, [step]);

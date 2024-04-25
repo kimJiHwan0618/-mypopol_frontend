@@ -140,7 +140,7 @@ function SignInPage() {
     if (param === 2 && !authValue) {
       toast.warning('유저정보를 입력해주세요.');
       handleResetPage();
-    } else if (param === 3 && (Number(getValues().authCode) !== Number(authCode) || !authCode)) {
+    } else if (param === 3 && (getValues().authCode !== authCode || !authCode)) {
       toast.warning('인증번호 발급을 통한 인증을 진행해주세요.');
       handleResetPage();
     }
