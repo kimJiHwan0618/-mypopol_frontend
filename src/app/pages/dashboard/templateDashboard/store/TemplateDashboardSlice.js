@@ -11,10 +11,7 @@ export const getPopols = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -28,10 +25,7 @@ export const getWorks = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -46,10 +40,7 @@ export const getVistors = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -64,10 +55,7 @@ export const getMails = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -82,10 +70,7 @@ export const testWss = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );

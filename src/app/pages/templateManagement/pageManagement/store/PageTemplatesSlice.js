@@ -11,10 +11,7 @@ export const getPageTemList = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );

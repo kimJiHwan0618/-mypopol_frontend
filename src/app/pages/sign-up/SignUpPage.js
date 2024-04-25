@@ -197,14 +197,22 @@ function SignUpPage() {
           .trim(),
         authType: authVal1,
         authValue: authVal2,
+        authCode,
         phone: authType === '휴대폰' ? '' : '010-0000-0000', // 휴대폰 번호 인증시 휴대전화 번호
         email: authType === '이메일' ? getValues().userEmail : '',
       };
       const { payload } = await dispatch(postUser(params));
-      if (payload.status === 200) {
-        jwtService.setSession(payload.data.accessToken);
-        jwtService.emit('onLogin', payload.data);
-        toast.success('유저 생성이 완료되었습니다!');
+      switch (payload.status) {
+        case 200:
+          jwtService.setSession(payload.data.accessToken);
+          jwtService.emit('onLogin', payload.data);
+          toast.success('유저 생성이 완료되었습니다!');
+          break;
+        case 400:
+          toast.success('유효하지않은 접근입니다. 다시 시도해주세요.');
+          navigate(`/sign-in/1`);
+          break;
+        default:
       }
     } catch (error) {
       toast.error('유저 생성중에 에러가 발생하였습니다.');

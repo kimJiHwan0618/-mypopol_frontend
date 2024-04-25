@@ -37,10 +37,7 @@ export const postUser = createAsyncThunk(
       const response = await axios.post(`${process.env.REACT_APP_API_HOST}/common/user`, params);
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -54,10 +51,7 @@ export const getUser = createAsyncThunk(
       });
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );

@@ -21,11 +21,7 @@ export const putProfileImg = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      console.log(error);
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -40,10 +36,7 @@ export const putProfileInfo = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );

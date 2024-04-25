@@ -11,10 +11,7 @@ export const postPopolInfo = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -48,10 +45,7 @@ export const updatePageTem = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -84,10 +78,7 @@ export const addOrUpdateWork = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
@@ -104,10 +95,7 @@ export const deleteWork = createAsyncThunk(
       );
       return await response;
     } catch (error) {
-      if (!error.response.data) {
-        return rejectWithValue(error);
-      }
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response);
     }
   }
 );
