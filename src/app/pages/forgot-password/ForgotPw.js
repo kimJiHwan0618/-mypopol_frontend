@@ -118,7 +118,7 @@ function SignInPage() {
           clearInterval(intervalIdRef.current);
           navigate('/forgot-password/3');
           break;
-        case 401:
+        case 400:
           toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
           break;
         default:
@@ -172,12 +172,11 @@ function SignInPage() {
             }
           }, 1000);
           toast.info(
-            `인증코드를 전송했습니다. ${
-              payload.data.authType === 'email' ? '이메일' : '휴대폰'
+            `인증코드를 전송했습니다. ${payload.data.authType === 'email' ? '이메일' : '휴대폰'
             }을 확인해주세요`
           );
           break;
-        case 401:
+        case 404:
           toast.warning('입력하신 유저정보와 일치하는 계정이 없습니다.');
           break;
         default:

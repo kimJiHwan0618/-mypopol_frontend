@@ -2,7 +2,6 @@ import FuseUtils from '@fuse/utils/FuseUtils';
 import axios from 'axios';
 import jwtServiceConfig from './jwtServiceConfig';
 
-/* eslint-disable camelcase */
 class JwtService extends FuseUtils.EventEmitter {
   init() {
     this.setInterceptors();
@@ -31,10 +30,8 @@ class JwtService extends FuseUtils.EventEmitter {
     const access_token = this.getAccessToken();
     if (!access_token) {
       this.emit('onNoAccessToken');
-
       return;
     }
-
     if (this.isAuthTokenValid(access_token)) {
       this.setSession(access_token);
       this.emit('onAutoLogin', true);
@@ -62,7 +59,7 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  signInWithEmailAndPassword = (params, setLoginLoading) => {
+  signIn = (params, setLoading) => {
     return new Promise((resolve, reject) => {
       axios
         .post(process.env.REACT_APP_API_HOST + jwtServiceConfig.signIn, params)
@@ -77,15 +74,11 @@ class JwtService extends FuseUtils.EventEmitter {
           }
         })
         .catch((error) => {
-          console.log(error)
-          if (error.status === 401) {
-            reject(error.response.data);
-          } else {
-            this.emit('onAutoLogout', error.response?.data?.message);
-          }
+          reject(error);
+          // this.emit('onAutoLogout', error.response?.data?.message);
         })
         .finally(() => {
-          setLoginLoading && setLoginLoading(false);
+          setLoading && setLoading(false);
         });
     });
   };
@@ -125,15 +118,27 @@ class JwtService extends FuseUtils.EventEmitter {
       axios.defaults.headers.common.Authorization = `${access_token}`;
     } else {
       localStorage.removeItem('jwt_access_token');
-      localStorage.removeItem('com.naver.nid.oauth.state_token');
-      localStorage.removeItem('com.naver.nid.access_token');
       delete axios.defaults.headers.common.Authorization;
     }
   };
 
-  logout = () => {
-    this.setSession(null);
-    this.emit('onLogout', 'Logged out');
+  logout = (userId) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(process.env.REACT_APP_API_HOST + jwtServiceConfig.logout, {
+          userId,
+        })
+        .then((res) => {
+          const { data } = res;
+          if (res.status === 200) {
+            this.setSession(null);
+            this.emit('onLogout', 'Logged out');
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   isAuthTokenValid = (access_token) => {

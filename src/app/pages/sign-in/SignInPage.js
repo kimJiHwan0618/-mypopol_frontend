@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import Lottie from 'react-lottie';
 import Welcome from 'app/theme-layouts/mainLayout/components/signUp/Welcome';
 import animationData from 'app/data/loading.json';
-import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
+// import NaverLoginBtn from 'app/pages/sign-in/snsLogin/Naver';
 import GoogleLoginBtn from 'app/pages/sign-in/snsLogin/Google';
 import css from 'assets/css/signin.module.css';
 import jwtService from 'app/auth/services/jwtService';
@@ -33,7 +33,7 @@ const defaultValues = {
 function SignInPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',
     defaultValues,
@@ -59,7 +59,7 @@ function SignInPage() {
   const handleGetSnsUser = async (userEmail, snsAuthToken, name) => {
     try {
       jwtService
-        .signInWithEmailAndPassword({ userEmail, snsAuthToken }, setLoginLoading)
+        .signIn({ userEmail, snsAuthToken }, setLoading)
         .then((res) => {
           !res &&
             confirmAlert({
@@ -86,24 +86,23 @@ function SignInPage() {
         });
     } catch (err) {
       toast.error('SNS 유저 조회중 에러가 발생하였습니다.');
-      console.log(err);
     } finally {
       //
     }
   };
 
   function onSubmit({ userId, password }) {
-    setLoginLoading(true);
+    setLoading(true);
     jwtService
-      .signInWithEmailAndPassword({ userId, password }, setLoginLoading)
+      .signIn({ userId, password }, setLoading)
       .then((res) => {
         !res && toast.warning('아이디와 비밀번호를 확인해주세요.');
       })
-      .catch((_error) => {
-        toast.error(_error.message);
+      .catch((error) => {
+        toast.error(error.message);
       })
       .finally(() => {
-        setLoginLoading(false);
+        setLoading(false);
       });
   }
 
@@ -156,10 +155,10 @@ function SignInPage() {
                     color="secondary"
                     className={`custom__btn f__medium ${css.login__btn}`}
                     aria-label="Sign in"
-                    disabled={_.isEmpty(dirtyFields) || !isValid || loginLoading}
+                    disabled={_.isEmpty(dirtyFields) || !isValid || loading}
                     type="submit"
                     size="large">
-                    {!loginLoading ? (
+                    {!loading ? (
                       <span className="mx-8 text-white font-bold">로그인</span>
                     ) : (
                       <Lottie options={{ loop: true, autoplay: true, animationData }} />

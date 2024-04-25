@@ -127,7 +127,7 @@ function SignUpPage() {
           clearInterval(intervalIdRef.current);
           navigate('/sign-up/3');
           break;
-        case 401:
+        case 400:
           toast.warning('8자리 인증코드를 한번 더 확인해주세요.');
           break;
         default:
@@ -236,7 +236,7 @@ function SignUpPage() {
           }, 1000);
           toast.info('인증코드를 전송했습니다. 메일을 확인해주세요');
           break;
-        case 401:
+        case 409:
           toast.warning('다른 계정에서 사용중인 이메일입니다. 다른메일을 입력해주세요.');
           break;
         default:
