@@ -37,7 +37,7 @@ function SignInPage() {
       .string()
       .required('유저명을 입력해주세요.')
       .min(2, '유저명은 2자 이상으로 입력해주세요.')
-      .max(6, '유저명은 6자 이하로 입력해주세요'),
+      .max(8, '유저명은 8자 이하로 입력해주세요'),
     authCode: yup
       .string()
       .required('인증번호를 입력해주세요.')
@@ -140,7 +140,7 @@ function SignInPage() {
     if (param === 2 && !authValue) {
       toast.warning('유저정보를 입력해주세요.');
       handleResetPage();
-    } else if (param === 3 && (getValues().authCode !== authCode || !authCode)) {
+    } else if (param === 3 && !authCode) {
       toast.warning('인증번호 발급을 통한 인증을 진행해주세요.');
       handleResetPage();
     }

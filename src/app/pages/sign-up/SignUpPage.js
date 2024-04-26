@@ -40,7 +40,7 @@ function SignUpPage() {
       .string()
       .required('유저명은 필수정보입니다.')
       .min(2, '유저명은 2자 이상으로 입력해주세요.')
-      .max(6, '유저명은 6자 이하로 입력해주세요'),
+      .max(8, '유저명은 8자 이하로 입력해주세요'),
     userId: yup
       .string()
       .required('유저ID를 입력해 주세요.')
