@@ -88,7 +88,7 @@ function SignInPage() {
           toast.success('비밀번호가 변경되었습니다. 새로운 비밀번호로 로그인하세요.');
           navigate('/sign-in');
           break;
-        case 401:
+        case 400:
           toast.warning('인증정보가 유효하지 않습니다. 다시 시도해주세요.');
           handleResetPage();
           break;

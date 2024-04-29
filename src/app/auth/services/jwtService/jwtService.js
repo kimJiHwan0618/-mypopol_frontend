@@ -90,18 +90,16 @@ class JwtService extends FuseUtils.EventEmitter {
           access_token: this.getAccessToken(),
         })
         .then((res) => {
-          const { data } = res;
-          if (res.status === 200) {
+          const { data, status } = res;
+          if (status === 200) {
             this.setSession(data.accessToken);
             resolve(data);
-          } else {
-            this.logout();
-            reject(data);
           }
         })
         .catch((error) => {
-          this.logout();
-          reject(error.response.data);
+          const { response: { status, data } } = error;
+          const message = `${status} : ${data.message}`
+          reject(message);
         });
     });
   };

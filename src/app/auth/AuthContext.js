@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import FuseSplashScreen from '@fuse/core/FuseSplashScreen';
 import { showMessage } from 'app/store/fuse/messageSlice';
-import { logoutUser, setUser } from 'app/store/userSlice';
+import { appReset, setUser } from 'app/store/userSlice';
 import { getSideMenus } from 'app/store/common/navigationSlice';
 import jwtService from './services/jwtService';
 
@@ -24,8 +24,10 @@ function AuthProvider({ children }) {
         .then((user) => {
           success(user, '유저 인증 토큰을 갱신했습니다.');
         })
-        .catch((error) => {
-          pass(error.message);
+        .catch((message) => {
+          dispatch(appReset());
+          pass(message);
+          jwtService.setSession(null);
         });
     });
 
@@ -39,14 +41,12 @@ function AuthProvider({ children }) {
 
     jwtService.on('onLogout', () => {
       pass('로그아웃 되었습니다.');
-
-      dispatch(logoutUser());
+      dispatch(appReset());
     });
 
     jwtService.on('onAutoLogout', (message) => {
       pass(message);
-
-      dispatch(logoutUser());
+      dispatch(appReset());
     });
 
     jwtService.on('onNoAccessToken', () => {

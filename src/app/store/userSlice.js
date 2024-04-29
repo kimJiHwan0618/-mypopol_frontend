@@ -48,7 +48,7 @@ export const updateUserShortcuts = createAsyncThunk(
   }
 );
 
-export const logoutUser = () => async (dispatch, getState) => {
+export const appReset = () => async (dispatch, getState) => {
   const { user } = getState();
 
   if (!user.role || user.role.length === 0) {
@@ -61,7 +61,6 @@ export const logoutUser = () => async (dispatch, getState) => {
   });
 
   dispatch(setInitialSettings());
-
   return dispatch(userLoggedOut());
 };
 
