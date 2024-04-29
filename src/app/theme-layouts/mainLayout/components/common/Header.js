@@ -142,7 +142,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
                   </NavLink>
                 </li>
                 <li className="list">
-                  <a href="#" onClick={(e) => {
+                  <span onClick={(e) => {
                     confirmAlert({
                       title: `로그아웃 하시겠습니까 ?`,
                       // message: '메세지 공간입니다.',
@@ -170,7 +170,7 @@ function Header({ menuBarStatus, menuBarToggle }) {
                       </svg>
                     </span>
                     <p className="f__medium">로그아웃</p>
-                  </a>
+                  </span>
                 </li>
               </ul>
               <div className="profile__wrap">

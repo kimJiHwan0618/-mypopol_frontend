@@ -63,13 +63,13 @@ const ProfileSetting = () => {
         })
       );
       if (payload.status === 200) {
-        toast.success('사용자 정보를 업데이트 하였습니다.');
-        dispatch(
+        await dispatch(
           setUser({
             ...user,
             username: getValues('userName'),
           })
         );
+        await toast.success('사용자 정보를 업데이트 하였습니다.');
       } else {
         toast.error('사용자 정보 업데이트 에러');
       }
@@ -101,25 +101,25 @@ const ProfileSetting = () => {
         putProfileImg({ file: profileImg, oldFileName: profileImgBack, userId: user.userId })
       );
       if (payload.status === 200) {
-        toast.success('프로필 이미지를 업데이트 하였습니다.');
         if (profileImg?.name) {
-          setProfileImgBack(profileImg.name);
-          dispatch(
+          await setProfileImgBack(profileImg.name);
+          await dispatch(
             setUser({
               ...user,
               profileImg: profileImg.name,
             })
           );
         } else {
-          dispatch(
+          await dispatch(
             setUser({
               ...user,
               profileImg: '',
             })
           );
         }
+        await toast.success('프로필 이미지를 업데이트 하였습니다.');
       } else {
-        toast.error('프로필 이미지 업데이트 에러');
+        await toast.error('프로필 이미지 업데이트 에러');
       }
     } catch (err) {
       toast.error('프로필 이미지 업데이트 에러');

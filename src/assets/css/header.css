@@ -267,7 +267,8 @@ header>.header__inner>.right>.icon>label>.profile__wrap .user__img img {
   height: 100%;
 }
 
-header>.header__inner>.right>.icon>label>ul>li>a {
+header>.header__inner>.right>.icon>label>ul>li>a,
+header>.header__inner>.right>.icon>label>ul>li>span {
   -webkit-tap-highlight-color: transparent;
   background-color: transparent;
   outline: 0px;
@@ -299,7 +300,8 @@ header>.header__inner>.right>.icon>label>ul>li>a:hover {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-header>.header__inner>.right>.icon>label>ul>li>a>.icon {
+header>.header__inner>.right>.icon>label>ul>li>a>.icon,
+header>.header__inner>.right>.icon>label>ul>li>span>.icon {
   display: block;
   width: 30px;
   margin-right: 8px;
