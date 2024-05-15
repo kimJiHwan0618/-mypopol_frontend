@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { selectUser } from 'app/store/userSlice';
@@ -15,9 +16,10 @@ import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkM
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import { getLabel } from 'app/utils/getLabels/pageManagement';
 import {
-  updatePageTem,
   deleteWork,
+  updatePageTem,
 } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import { confirmAlert } from 'react-confirm-alert';
 import { close, open } from 'app/store/common/loadingWrap';
@@ -75,6 +77,7 @@ function PageManagement() {
   const [updateLoading, setUpdateLoading] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [popInfo, setPopInfo] = useState({});
+  const [schema, setSchema] = useState(yup.object().shape());
   const [workList, setWorkList] = useState([]);
   const [siteListData, setSiteListData] = useState([]);
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -134,21 +137,6 @@ function PageManagement() {
     }
     setWorkList(workList);
   };
-
-  const schema = yup.object().shape({
-    popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
-    thumbnail: yup.string(), // 파일여부?
-    profile: yup.string(), // 파일여부?
-    mainColor: yup.string().notOneOf([' ', null], '메인색상을 선택해 주세요.'),
-    icon: yup.string().notOneOf([' ', null], '아이콘타입을 선택해 주세요.'),
-    fakeName: yup.string().required('예명은 필수 정보 입니다.'),
-    email: yup
-      .string()
-      .email('이메일 형식으로 입력해주세요.')
-      .required('이메일은 필수 정보 입니다.'),
-    phone: yup.string().matches(/^[0-9]{9,11}$/i, "번호는 '-' 없이 9~11자리 번호로 입력해주세요"),
-    title: yup.string().required('인사글은 필수 정보 입니다.'),
-  });
 
   const methods = useForm({
     mode: 'onChange',
@@ -215,6 +203,16 @@ function PageManagement() {
       },
     };
     param.fields.phone = param.fields.phone.replace(/(\d{3})(\d{3,4})(\d{3,4})/, '$1-$2-$3');
+    if (param.fields.ptId === 'ptid02') {
+      const etc = {
+        job: param.fields.job,
+        aboutMe: param.fields.aboutMe.replaceAll('\n', '\\n'),
+        skills: {},
+        sns: clone,
+      };
+      console.log(etc);
+      param.fields.snsList = JSON.stringify(etc);
+    }
     setUpdateLoading(true);
     dispatch(updatePageTem(param))
       .then(({ payload }) => {
@@ -276,7 +274,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
@@ -356,18 +354,59 @@ function PageManagement() {
           console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
         });
       if (sns !== null && sns !== '' && sns !== undefined) {
-        setSnsList(JSON.parse(sns));
-        const snsListLocal = JSON.parse(sns);
+        let snsListLocal;
+        const shape = {};
+        const etc = JSON.parse(sns);
+        switch (ptId) {
+          case 'ptid01':
+            setSnsList(etc);
+            snsListLocal = etc;
+            break;
+          case 'ptid02':
+            setSnsList(etc.sns);
+            snsListLocal = etc.sns;
+            shape.job = yup.string().required('어떤 개발자인지 입력주세요.');
+            shape.aboutMe = yup.string().required('자기소개를 입력해주세요.');
+            setValue(`job`, etc.job, activeOption);
+            setValue(`aboutMe`, etc.aboutMe, activeOption);
+            break;
+          default:
+        }
         const snsKeys = Object.keys(snsListLocal);
         const snsValues = Object.values(snsListLocal);
         for (let i = 0; i < snsKeys.length; i += 1) {
-          // 필드 등록
-          register(`${snsKeys[i]}Id`, { required: `${snsKeys[i]} 아이디를 입력해주세요` });
-          register(`${snsKeys[i]}Link`, { required: `${snsKeys[i]} 링크를 입력해주세요` });
+          shape[`${snsKeys[i]}Id`] = yup.string().required(`${snsKeys[i]} 아이디를 입력해주세요`);
+          shape[`${snsKeys[i]}Link`] = yup.string().required(`${snsKeys[i]} 링크를 입력해주세요`);
           // 값 세팅
           setValue(`${snsKeys[i]}Id`, snsValues[i].id, activeOption);
           setValue(`${snsKeys[i]}Link`, snsValues[i].link, activeOption);
         }
+        setSchema(
+          yup.object().shape({
+            popolName: yup.string().required('포폴명은 필수 정보 입니다.'),
+            thumbnail: yup.string(), // 파일여부?
+            profile: yup.string(), // 파일여부?
+            mainColor: yup.string().notOneOf([' ', null], '메인색상을 선택해 주세요.'),
+            icon: yup.string().notOneOf([' ', null], '아이콘타입을 선택해 주세요.'),
+            fakeName: yup
+              .string()
+              .required(
+                `${getLabel(
+                  location?.state?.template?.popolInfo?.ptId,
+                  'fakeName'
+                )}은 필수 정보 입니다.`
+              ),
+            email: yup
+              .string()
+              .email('이메일 형식으로 입력해주세요.')
+              .required('이메일은 필수 정보 입니다.'),
+            phone: yup
+              .string()
+              .matches(/^[0-9]{9,11}$/i, "번호는 '-' 없이 9~11자리 번호로 입력해주세요"),
+            title: yup.string().required('인사글은 필수 정보 입니다.'),
+            ...shape,
+          })
+        );
       }
     }
   }, [setValue, register, setSnsList]);
@@ -459,18 +498,22 @@ function PageManagement() {
               <div className={css.list__item}>
                 <p className="f__medium">메인 색상</p>
                 <ul className={css.color__item__wrap}>
-                  {['rgb(255, 182, 59)', 'rgb(75, 135, 224)', 'rgb(75, 224, 149)'].map((color) => (
-                    <li
-                      onClick={(e) => {
-                        setValue('mainColor', color);
-                      }}
-                      className={getValues().mainColor === color ? css.selected__color : ''}
-                      key={color}>
-                      <span
-                        style={{ backgroundColor: color, boxShadow: `0 10px 14px -5px ${color}` }}
-                      />
-                    </li>
-                  ))}
+                  {['rgb(255,182,59)', 'rgb(75,135,224)', 'rgb(75,224,149)', 'rgb(55,65,81)'].map(
+                    (color) => (
+                      <li
+                        onClick={(e) => {
+                          setValue('mainColor', color);
+                        }}
+                        className={
+                          getValues().mainColor?.trim() === color ? css.selected__color : ''
+                        }
+                        key={color}>
+                        <span
+                          style={{ backgroundColor: color, boxShadow: `0 10px 14px -5px ${color}` }}
+                        />
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
             </div>
@@ -534,7 +577,7 @@ function PageManagement() {
                       {...field}
                       InputLabelProps={{ shrink: true }}
                       className="mb-24"
-                      label="예명"
+                      label={getLabel(location.state.template.popolInfo.ptId, 'fakeName')}
                       autoFocus
                       required
                       type="text"
@@ -546,6 +589,29 @@ function PageManagement() {
                   )}
                 />
               </div>
+              {location?.state?.template?.popolInfo?.ptId === 'ptid02' && (
+                <div className={css.list__item}>
+                  <Controller
+                    name="job"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        InputLabelProps={{ shrink: true }}
+                        className="mb-24"
+                        label="개발자 유형"
+                        autoFocus
+                        type="text"
+                        error={!!errors.job}
+                        helperText={errors?.job?.message}
+                        variant="outlined"
+                        required
+                        fullWidth
+                      />
+                    )}
+                  />
+                </div>
+              )}
               <div className={css.list__item}>
                 <Controller
                   name="title"
@@ -561,13 +627,35 @@ function PageManagement() {
                       multiline
                       error={!!errors.title}
                       helperText={errors?.title?.message}
-                      rows={3}
+                      rows={location?.state?.template?.popolInfo?.ptId === 'ptid02' ? 1 : 3}
                       variant="outlined"
                     />
                   )}
                 />
               </div>
               <div className={css.list__item}>
+                <Controller
+                  name="aboutMe"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      InputLabelProps={{ shrink: true }}
+                      className="mb-24"
+                      fullWidth
+                      required
+                      label="자기소개"
+                      multiline
+                      error={!!errors.aboutMe}
+                      helperText={errors?.aboutMe?.message}
+                      rows={5}
+                      variant="outlined"
+                    />
+                  )}
+                />
+              </div>
+              {/* 아이콘 타입 default 고정 */}
+              {/* <div className={css.list__item}>
                 <Controller
                   name="icon"
                   control={control}
@@ -592,17 +680,17 @@ function PageManagement() {
                     </TextField>
                   )}
                 />
-              </div>
+              </div> */}
               <div className={`${css.list__item} ${css.profile__icon__list}`}>
                 <div>
-                  <span className={css.profile__icon}>
+                  {/* <span className={css.profile__icon}>
                     {getValues().icon !== undefined && (
                       <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
                         alt="이메일 아이콘"
                       />
                     )}
-                  </span>
+                  </span> */}
                   <Controller
                     name="email"
                     control={control}
@@ -624,14 +712,14 @@ function PageManagement() {
                   />
                 </div>
                 <div>
-                  <span className={css.profile__icon}>
+                  {/* <span className={css.profile__icon}>
                     {getValues().icon !== undefined && (
                       <img
                         src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
                         alt="전화 아이콘"
                       />
                     )}
-                  </span>
+                  </span> */}
                   <Controller
                     name="phone"
                     control={control}
@@ -781,7 +869,9 @@ function PageManagement() {
               sectionTitleClick(e);
             }}
             className={`${css.title__bar} top line`}>
-            <p className="f__medium normal__title">작품 정보</p>
+            <p className="f__medium normal__title">
+              {getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 정보
+            </p>
             <span className={css.arrow__btn} />
           </div>
           <div ref={workSection} className={`${css.section__content}`}>
@@ -799,7 +889,9 @@ function PageManagement() {
                     });
                     openModal();
                   }}>
-                  <span className="f__medium">작품 추가</span>
+                  <span className="f__medium">
+                    {getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 추가
+                  </span>
                   <svg
                     size="24"
                     fill="none"

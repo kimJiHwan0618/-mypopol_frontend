@@ -51,10 +51,7 @@ function SignUpPage() {
       .string()
       .required('이메일을 입력해주세요.')
       .email('올바른 이메일 형식이 아닙니다.'),
-    authCode: yup
-      .string()
-      .required('인증번호를 입력해주세요.')
-      .min(8, '인증번호는 8자 입니다.'),
+    authCode: yup.string().required('인증번호를 입력해주세요.').min(8, '인증번호는 8자 입니다.'),
     password: yup
       .string()
       .required('비밀번호를 입력해 주세요.')
@@ -189,6 +186,12 @@ function SignUpPage() {
         templateId,
         popolName: templatesJson.filter((obj) => obj.id === templateId)[0]?.popolName,
         title: templatesJson.filter((obj) => obj.id === templateId)[0]?.title,
+        defaultColor: templatesJson.filter((obj) => obj.id === templateId)[0]?.defaultColor,
+        fakeName: templatesJson.filter((obj) => obj.id === templateId)[0]?.fakeName,
+        sns:
+          templatesJson.filter((obj) => obj.id === templateId)[0]?.sns === null
+            ? null
+            : JSON.stringify(templatesJson.filter((obj) => obj.id === templateId)[0]?.sns),
         userKey: dateParser(new Date())
           .replaceAll(':', '')
           .replaceAll('-', ' ')

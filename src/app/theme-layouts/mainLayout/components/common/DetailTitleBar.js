@@ -43,14 +43,14 @@ function DetailTitleBar({ saveBtnClick, isValid, dirtyFields, updateLoading }) {
             // });
             saveBtnClick();
           }}>
-          <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-            <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#upload`} />
-          </svg>
           {!updateLoading ? (
             <span className="f__medium">저장</span>
           ) : (
             <Lottie options={{ loop: true, autoplay: true, animationData }} />
           )}
+          <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <use href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#upload`} />
+          </svg>
         </Button>
       </div>
     </div>
