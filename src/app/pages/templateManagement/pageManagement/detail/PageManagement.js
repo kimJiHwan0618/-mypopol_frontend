@@ -230,6 +230,8 @@ function PageManagement() {
           setWorkList(workOrderSet);
           dispatch(setSearchedFlag({ popols: false }));
           toast.success('포폴 정보가 업데이트 되었습니다.');
+        } else {
+          throw Error('포폴 업데이트중 에러가 발생하였습니다.');
         }
       })
       .catch((error) => {
@@ -633,27 +635,29 @@ function PageManagement() {
                   )}
                 />
               </div>
-              <div className={css.list__item}>
-                <Controller
-                  name="aboutMe"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      InputLabelProps={{ shrink: true }}
-                      className="mb-24"
-                      fullWidth
-                      required
-                      label="자기소개"
-                      multiline
-                      error={!!errors.aboutMe}
-                      helperText={errors?.aboutMe?.message}
-                      rows={5}
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </div>
+              {location?.state?.template?.popolInfo?.ptId === 'ptid02' && (
+                <div className={css.list__item}>
+                  <Controller
+                    name="aboutMe"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        InputLabelProps={{ shrink: true }}
+                        className="mb-24"
+                        fullWidth
+                        required
+                        label="자기소개"
+                        multiline
+                        error={!!errors.aboutMe}
+                        helperText={errors?.aboutMe?.message}
+                        rows={5}
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                </div>
+              )}
               {/* 아이콘 타입 default 고정 */}
               {/* <div className={css.list__item}>
                 <Controller
