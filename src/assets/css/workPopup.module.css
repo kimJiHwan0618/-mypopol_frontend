@@ -231,6 +231,13 @@
   max-height: 346px;
   margin: 0 auto;
 }
+.ptid02__banner__box > img {
+  min-width: 350px;
+  min-height: 350px;
+  max-width: 350px;
+  max-height: 350px;
+  margin: 0 auto;
+}
 @media (max-width: 600px) {
   .wrap__inner {
     min-width: 336px;

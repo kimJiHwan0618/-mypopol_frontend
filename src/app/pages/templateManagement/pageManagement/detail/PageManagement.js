@@ -13,6 +13,7 @@ import convertFile from 'app/utils/convertFile';
 import { toast } from 'react-toastify';
 import { MenuItem, TextField, Button } from '@mui/material';
 import Ptid01WorkModal from 'app/theme-layouts/mainLayout/components/Ptid01WorkModal';
+import Ptid02WorkModal from 'app/theme-layouts/mainLayout/components/Ptid02WorkModal';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
@@ -123,7 +124,6 @@ function PageManagement() {
   };
 
   const addWorkResult = (work) => {
-    workSection.current.style.height = 'auto';
     workList.push(workObjUpdate(work));
     setWorkList(workList);
   };
@@ -163,11 +163,9 @@ function PageManagement() {
       switch (arg.name) {
         case 'thumbnail':
           setThumbnailImg(arg.file);
-          popolSection.current.style.height = 'auto';
           break;
         case 'profile':
           setProfileImg(arg.file);
-          profileSection.current.style.height = 'auto';
           break;
         default:
           console.log('default case');
@@ -245,7 +243,7 @@ function PageManagement() {
 
   const workDeleteClick = (e) => {
     confirmAlert({
-      title: `'${e.title}' 작품을 삭제 하시겠습니까?`,
+      title: `'${e.title}' 프로젝트를 삭제 하시겠습니까?`,
       // message: '메세지 공간입니다.',
       buttons: [
         {
@@ -261,16 +259,15 @@ function PageManagement() {
                 if (payload.status === 200) {
                   setWorkList(payload.data.response);
                   dispatch(setSearchedFlag({ works: false }));
-                  toast.success(`'${e.title}' 작품이 삭제되었습니다.`);
+                  toast.success(`'${e.title}' 프로젝트가 삭제되었습니다.`);
                 }
               })
               .catch((error) => {
                 console.log(error);
-                toast.error(`'${e.title}' 작품 삭제 실패.`);
+                toast.error(`'${e.title}' 프로젝트 삭제 실패.`);
               })
               .finally(() => {
                 dispatch(close());
-                workSection.current.style.height = 'auto';
               });
           },
         },
@@ -285,12 +282,11 @@ function PageManagement() {
   const sectionTitleClick = (e) => {
     const el = e.currentTarget;
     el.classList.toggle('active');
+    el.parentNode.classList.toggle('active');
     if (el.classList.contains('active')) {
       el.childNodes[1].style.transform = 'rotate(0deg)';
-      el.nextSibling.style.height = `${el.nextSibling.childNodes[0].offsetHeight}px`;
     } else {
       el.childNodes[1].style.transform = 'rotate(180deg)';
-      el.nextSibling.style.height = '0px';
     }
   };
 
@@ -347,14 +343,6 @@ function PageManagement() {
       setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
       setImgFile(profile, 'profileOld', setProfileImg, ptId);
       setWorkList(location.state.template.worksInfo);
-      fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
-        .then((res) => res.json())
-        .then((siteList) => {
-          setSiteListData(siteList);
-        })
-        .catch((error) => {
-          console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
-        });
       if (sns !== null && sns !== '' && sns !== undefined) {
         let snsListLocal;
         const shape = {};
@@ -363,6 +351,14 @@ function PageManagement() {
           case 'ptid01':
             setSnsList(etc);
             snsListLocal = etc;
+            fetch('https://site.mypopol.com/ptid01/src/data/siteList.json')
+              .then((res) => res.json())
+              .then((siteList) => {
+                setSiteListData(siteList);
+              })
+              .catch((error) => {
+                console.error('데이터를 가져오는 중 오류가 발생했습니다.', error);
+              });
             break;
           case 'ptid02':
             setSnsList(etc.sns);
@@ -421,14 +417,25 @@ function PageManagement() {
         updateLoading={updateLoading}
       />
       <section>
-        <Ptid01WorkModal
-          isOpen={popOpen}
-          onRequestClose={closeModal}
-          popInfo={popInfo}
-          addWorkResult={addWorkResult}
-          updateWorkResult={updateWorkResult}
-          siteListData={siteListData}
-        />
+        {location?.state?.template?.popolInfo?.ptId === 'ptid01' && (
+          <Ptid01WorkModal
+            isOpen={popOpen}
+            onRequestClose={closeModal}
+            popInfo={popInfo}
+            addWorkResult={addWorkResult}
+            updateWorkResult={updateWorkResult}
+            siteListData={siteListData}
+          />
+        )}
+        {location?.state?.template?.popolInfo?.ptId === 'ptid02' && (
+          <Ptid02WorkModal
+            isOpen={popOpen}
+            onRequestClose={closeModal}
+            popInfo={popInfo}
+            addWorkResult={addWorkResult}
+            updateWorkResult={updateWorkResult}
+          />
+        )}
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
@@ -465,7 +472,6 @@ function PageManagement() {
                           <span
                             onClick={(e) => {
                               setThumbnailImg(null);
-                              popolSection.current.style.height = 'auto';
                               setValue('thumbnail', '');
                             }}
                             className={css.remove__btn}
@@ -559,7 +565,6 @@ function PageManagement() {
                           <span
                             onClick={(e) => {
                               setProfileImg(null);
-                              profileSection.current.style.height = 'auto';
                               setValue('profile', '');
                             }}
                             className={css.remove__btn}
@@ -786,7 +791,6 @@ function PageManagement() {
                           link: '',
                         };
                         setSnsList(clone);
-                        profileSection.current.style.height = 'auto';
                       }
                     }}>
                     <span className="f__medium">추가</span>
@@ -855,7 +859,6 @@ function PageManagement() {
                         delete clone[obj];
                         delete schema.fields[`${obj}Id`];
                         delete schema.fields[`${obj}Link`];
-                        profileSection.current.style.height = 'auto';
                         setSnsList(clone);
                       }}
                     />

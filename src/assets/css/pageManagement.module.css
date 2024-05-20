@@ -28,6 +28,14 @@
   overflow: hidden;
 }
 
+.detail__section.active .inner {
+  height: auto;
+}
+
+.detail__section .inner {
+  height: 0px;
+}
+
 .title__bar {
   padding: 16px 24px;
   box-sizing: border-box;
