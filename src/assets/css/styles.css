@@ -433,7 +433,7 @@ div#menu- {
 
   .section__grid__wrap.common__detail > .sub__nav {
     align-items: flex-start;
-    flex-direction: column;
+    /* flex-direction: column; */
   }
 
   .section__grid__wrap.common__detail > .sub__nav > .left {

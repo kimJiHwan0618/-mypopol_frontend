@@ -1,18 +1,7 @@
 const skills = [
-  [
-    { name: 'HTML', value: 'html' },
-    { name: 'Css', value: 'css' },
-    { name: 'Javascript', value: 'javascript' },
-  ], // Front-End
-  [
-    { name: 'Spring Boot', value: 'springboot' },
-    { name: 'MySQL', value: 'mysql' },
-  ], // Back-End
-  [
-    { name: 'Git', value: 'git' },
-    { name: 'Svn', value: 'svn' },
-    { name: 'Docker', value: 'docker' },
-  ], // Etc
+  [{ value: 'HTML' }, { value: 'Css' }, { value: 'Javascript' }], // Front-End
+  [{ value: 'Spring Boot' }, { value: 'MySQL' }], // Back-End
+  [{ value: 'Git' }, { value: 'Svn' }, { value: 'Docker' }], // Etc
 ];
 
 export default skills;

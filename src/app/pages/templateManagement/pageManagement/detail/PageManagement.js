@@ -85,6 +85,7 @@ function PageManagement() {
   const [popInfo, setPopInfo] = useState({});
   const [schema, setSchema] = useState(yup.object().shape());
   const [workList, setWorkList] = useState([]);
+  const [skillTags, setSkillTags] = useState(['Front-End', 'Back-End', 'Etc']);
   const [skill, setSkill] = useState(0); // 0 front-end, 1 back-end, 2 etc
   const [skills, setSkills] = useState({
     'Front-End': [],
@@ -1006,7 +1007,7 @@ function PageManagement() {
                 sectionTitleClick(e, 'skill');
               }}
               className={`${css.title__bar} top line`}>
-              <p className="f__medium normal__title">기술 정보</p>
+              <p className="f__medium normal__title">기술스택(업무 툴/스킬)</p>
               <span className={css.arrow__btn} />
             </div>
             <div
@@ -1016,7 +1017,7 @@ function PageManagement() {
               <div className="inner">
                 <div className={css.list__item}>
                   <div className={css.select__list}>
-                    {['Front-End', 'Back-End', 'Etc'].map((obj, idx) => (
+                    {skillTags.map((obj, idx) => (
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
@@ -1031,7 +1032,7 @@ function PageManagement() {
                     <div style={{ left: `${skill * 33.33}%` }} className={css.selected__tab} />
                   </div>
                 </div>
-                <div className={css.list__item}>
+                <div>
                   <div className={css.sns__selector}>
                     <TextField
                       select
@@ -1041,12 +1042,13 @@ function PageManagement() {
                       variant="outlined"
                       fullWidth
                       onChange={(e) => {
+                        console.log(e.target);
                         setSkillSelected(e.target.value);
                       }}>
                       <MenuItem value="none">기술을 선택해주세요</MenuItem>
                       {skillsInfo[skill].map((obj, idx) => (
                         <MenuItem key={obj.value} value={obj.value}>
-                          {obj.name}
+                          {obj.value}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -1055,13 +1057,11 @@ function PageManagement() {
                       variant="contained"
                       className="custom__btn"
                       onClick={() => {
-                        const datas = ['Front-End', 'Back-End', 'Etc'];
                         const clone = JSON.parse(JSON.stringify(skills));
-                        console.log(clone);
-                        // setSkills((prevState) => ({
-                        //   ...prevState,
-                        //   [section]: !prevState[section],
-                        // }));
+                        if (!clone[skillTags[skill]].includes(skillSelected)) {
+                          clone[skillTags[skill]] = [...clone[skillTags[skill]], skillSelected];
+                        }
+                        setSkills(clone);
                       }}>
                       <span className="f__medium">추가</span>
                       <svg
@@ -1075,6 +1075,33 @@ function PageManagement() {
                       </svg>
                     </Button>
                   </div>
+                </div>
+                <div className={`${css.skill__list__item}`}>
+                  {skills[skillTags[skill]].map((item) => (
+                    <div className={css.skill__item}>
+                      <div className={css.img__box}>
+                        <img
+                          src={`https://site.mypopol.com/ptid02/src/img/skills/${item
+                            .replaceAll(' ', '')
+                            .toLowerCase()}.svg`}
+                          alt={item}
+                        />
+                      </div>
+                      <p>
+                        {item}{' '}
+                        <span
+                          onClick={(e) => {
+                            const clone = JSON.parse(JSON.stringify(skills));
+                            clone[skillTags[skill]] = clone[skillTags[skill]].filter(
+                              (prev) => prev !== item
+                            );
+                            setSkills(clone);
+                          }}
+                          className={css.remove__btn}
+                        />
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

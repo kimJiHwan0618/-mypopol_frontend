@@ -486,6 +486,54 @@
   left: 172px;
 }
 
+.skill__list__item {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.skill__item {
+  height: 20px;
+  padding: 8px 16px;
+  background-color: rgb(48, 54, 77);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+  color: rgb(255, 255, 255);
+  margin-right: 6px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 300px;
+}
+.skill__item:last-of-type {
+  margin-right: 0px;
+}
+
+.skill__item p {
+  display: flex;
+  align-items: center;
+}
+.skill__item p span {
+  margin-left: 10px;
+  min-width: 20px;
+  max-width: 20px;
+  min-height: 20px;
+  max-height: 20px;
+}
+
+.skill__item .img__box {
+  padding: 4px;
+  width: 30px;
+  height: 30px;
+}
+.skill__item .img__box img {
+  padding: 4px;
+  width: 80%;
+  height: auto;
+}
+
 @media (max-width: 800px) {
   .page__tem__wrap > section {
     width: 100%;
