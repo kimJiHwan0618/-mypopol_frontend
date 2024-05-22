@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Controller, useForm } from 'react-hook-form';
 import css from 'assets/css/pageManagement.module.css';
 import FileUpload from 'app/theme-layouts/shared-components/uploader/FileUploader';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import convertFile from 'app/utils/convertFile';
 import { toast } from 'react-toastify';
 import { MenuItem, TextField, Button } from '@mui/material';
@@ -25,6 +25,7 @@ import {
 import { confirmAlert } from 'react-confirm-alert';
 import { close, open } from 'app/store/common/loadingWrap';
 import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+import skillsInfo from 'app/data/pageManagement/ptid02/skills';
 
 const ListItemTypes = {
   ITEM: 'item',
@@ -71,15 +72,25 @@ function PageManagement() {
   const [profileImg, setProfileImg] = useState(null);
   const [thumbnailImg, setThumbnailImg] = useState(null);
   const [snsSelected, setSnsSelected] = useState('twitter');
+  const [skillSelected, setSkillSelected] = useState('none');
   const [snsList, setSnsList] = useState({});
-  const popolSection = useRef(null);
-  const profileSection = useRef(null);
-  const workSection = useRef(null);
+  const [sections, setSections] = useState({
+    popol: false,
+    profile: false,
+    work: false,
+    skill: false,
+  });
   const [updateLoading, setUpdateLoading] = useState(false);
   const [popOpen, setPopOpen] = useState(false);
   const [popInfo, setPopInfo] = useState({});
   const [schema, setSchema] = useState(yup.object().shape());
   const [workList, setWorkList] = useState([]);
+  const [skill, setSkill] = useState(0); // 0 front-end, 1 back-end, 2 etc
+  const [skills, setSkills] = useState({
+    'Front-End': [],
+    'Back-End': [],
+    Etc: [],
+  }); // 0 front-end, 1 back-end, 2 etc
   const [siteListData, setSiteListData] = useState([]);
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
@@ -279,10 +290,14 @@ function PageManagement() {
     });
   };
 
-  const sectionTitleClick = (e) => {
+  const sectionTitleClick = (e, section) => {
     const el = e.currentTarget;
     el.classList.toggle('active');
-    el.parentNode.classList.toggle('active');
+    setSections((prevState) => ({
+      ...prevState,
+      [section]: !prevState[section],
+    }));
+    el.nextElementSibling.classList.toggle('active');
     if (el.classList.contains('active')) {
       el.childNodes[1].style.transform = 'rotate(0deg)';
     } else {
@@ -439,13 +454,14 @@ function PageManagement() {
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
-              sectionTitleClick(e);
+              sectionTitleClick(e, 'popol');
             }}
             className={`${css.title__bar} top line`}>
             <p className="f__medium normal__title">포폴 정보</p>
             <span className={css.arrow__btn} />
           </div>
-          <div ref={popolSection} className={`${css.section__content}`}>
+          <div
+            className={`${css.section__content} ${sections.popol && css.section__content__active}`}>
             <div className="inner">
               <div className={css.list__item}>
                 <p className="f__medium">썸네일 이미지</p>
@@ -532,14 +548,17 @@ function PageManagement() {
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
-              sectionTitleClick(e);
+              sectionTitleClick(e, 'profile');
             }}
             className={`${css.title__bar} top line`}>
             <p className="f__medium normal__title">프로필 정보</p>
             <span className={css.arrow__btn} />
           </div>
-          <div ref={profileSection} className={`${css.section__content}`}>
-            <div className="inner">
+          <div
+            className={`${css.section__content} ${
+              sections.profile && css.section__content__active
+            }`}>
+            <div className={css.inner}>
               <div className={css.list__item}>
                 <p className="f__medium">프로필 이미지</p>
                 {profileImg === null || !profileImg.type.startsWith('image/') ? (
@@ -873,7 +892,7 @@ function PageManagement() {
         <div className={`${css.detail__section} section__inner`}>
           <div
             onClick={(e) => {
-              sectionTitleClick(e);
+              sectionTitleClick(e, 'work');
             }}
             className={`${css.title__bar} top line`}>
             <p className="f__medium normal__title">
@@ -881,7 +900,8 @@ function PageManagement() {
             </p>
             <span className={css.arrow__btn} />
           </div>
-          <div ref={workSection} className={`${css.section__content}`}>
+          <div
+            className={`${css.section__content} ${sections.work && css.section__content__active}`}>
             <div className="inner">
               <div>
                 <Button
@@ -978,6 +998,89 @@ function PageManagement() {
           </div>
         </div>
       </section>
+      {location?.state?.template?.popolInfo?.ptId === 'ptid02' && (
+        <section>
+          <div className={`${css.detail__section} section__inner`}>
+            <div
+              onClick={(e) => {
+                sectionTitleClick(e, 'skill');
+              }}
+              className={`${css.title__bar} top line`}>
+              <p className="f__medium normal__title">기술 정보</p>
+              <span className={css.arrow__btn} />
+            </div>
+            <div
+              className={`${css.section__content} ${
+                sections?.skill && css.section__content__active
+              }`}>
+              <div className="inner">
+                <div className={css.list__item}>
+                  <div className={css.select__list}>
+                    {['Front-End', 'Back-End', 'Etc'].map((obj, idx) => (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSkill(idx);
+                          setSkillSelected('none');
+                        }}
+                        key={idx}
+                        className={`${css.item} f__medium`}>
+                        <p>{obj}</p>
+                      </div>
+                    ))}
+                    <div style={{ left: `${skill * 33.33}%` }} className={css.selected__tab} />
+                  </div>
+                </div>
+                <div className={css.list__item}>
+                  <div className={css.sns__selector}>
+                    <TextField
+                      select
+                      value={skillSelected}
+                      label="기술 선택"
+                      defaultValue="none"
+                      variant="outlined"
+                      fullWidth
+                      onChange={(e) => {
+                        setSkillSelected(e.target.value);
+                      }}>
+                      <MenuItem value="none">기술을 선택해주세요</MenuItem>
+                      {skillsInfo[skill].map((obj, idx) => (
+                        <MenuItem key={obj.value} value={obj.value}>
+                          {obj.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <Button
+                      disabled={skillSelected === 'none'}
+                      variant="contained"
+                      className="custom__btn"
+                      onClick={() => {
+                        const datas = ['Front-End', 'Back-End', 'Etc'];
+                        const clone = JSON.parse(JSON.stringify(skills));
+                        console.log(clone);
+                        // setSkills((prevState) => ({
+                        //   ...prevState,
+                        //   [section]: !prevState[section],
+                        // }));
+                      }}>
+                      <span className="f__medium">추가</span>
+                      <svg
+                        size="24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 100 100">
+                        <use
+                          href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#plus`}
+                        />
+                      </svg>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

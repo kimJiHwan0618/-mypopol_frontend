@@ -38,7 +38,7 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
     summary: yup.string().required('소개는 필수 정보 입니다.'),
     skills: yup.string().required('주요기술은 필수 정보 입니다.'),
     detail: yup.string().required('상세업무는 필수 정보 입니다.'),
-    ptId01Banner: yup.string().required('메인 배너 이미지는 필수 파일 입니다.'),
+    ptId01Banner: yup.string(),
   });
 
   const methods = useForm({
@@ -155,8 +155,6 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       fileObj.posterImg = banner01Img;
     }
 
-    const titleImgName = fileObj.titleImg === null ? 'none' : fileObj.titleImg.name;
-
     const param = {
       fields: {
         ...getValues(),
@@ -232,7 +230,6 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           {banner01Img === null || !banner01Img.type.startsWith('image/') ? (
             <div>
               <FileUpload name="ptId01Banner" onFileSelect={handleFileSelect} height="361px" />
-              <p className="custom__form__error">메인 배너 이미지는 필수 파일 입니다.</p>
             </div>
           ) : (
             <>
