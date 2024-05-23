@@ -377,6 +377,7 @@ function PageManagement() {
               });
             break;
           case 'ptid02':
+            setSkills(etc.skills);
             setSnsList(etc.sns);
             snsListLocal = etc.sns;
             shape.job = yup.string().required('어떤 개발자인지 입력주세요.');
@@ -786,6 +787,8 @@ function PageManagement() {
                       { name: '트위터', value: 'twitter' },
                       { name: '인스타그램', value: 'instargram' },
                       { name: '유튜브', value: 'youtube' },
+                      { name: '카카오톡', value: 'kakaotalk' },
+                      { name: '깃허브', value: 'github' },
                     ].map((obj, idx) => (
                       <MenuItem key={obj.value} value={obj.value}>
                         {obj.name}
@@ -941,10 +944,14 @@ function PageManagement() {
                     moveItem={moveItem}>
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
-                      <img
-                        src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
-                        alt={`${item.title} 포스터이미지`}
-                      />
+                      {item.poster ? (
+                        <img
+                          src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
+                          alt={`${item.title} 포스터이미지`}
+                        />
+                      ) : (
+                        <img src="https://site.mypopol.com/src/img/no_img.jpg" alt="이미지 없음" />
+                      )}
                     </div>
                     <ul className={css.work__info__wrap}>
                       <li className="f__medium">{item.title}</li>

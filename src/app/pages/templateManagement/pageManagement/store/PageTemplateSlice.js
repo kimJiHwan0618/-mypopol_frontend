@@ -5,10 +5,7 @@ export const postPopolInfo = createAsyncThunk(
   'site/popol',
   async (params, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_HOST}/site/popol`,
-        params
-      );
+      const response = await axios.post(`${process.env.REACT_APP_API_HOST}/site/popol`, params);
       return await response;
     } catch (error) {
       return rejectWithValue(error.response);
@@ -67,6 +64,7 @@ export const addOrUpdateWork = createAsyncThunk(
         params.files.posterImg,
         encodeURIComponent(params.files.posterImg.name)
       );
+      console.log(formData);
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templateManage/page/work`,
         formData,

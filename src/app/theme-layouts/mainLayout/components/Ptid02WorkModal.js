@@ -11,12 +11,12 @@ import { toast } from 'react-toastify';
 import convertFile from 'app/utils/convertFile';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
-import { addOrUpdateWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import _ from '@lodash';
 import Lottie from 'react-lottie';
 import animationData from 'app/data/loading.json';
-import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 import ImgPreview from 'app/theme-layouts/mainLayout/components/pageManagement/ImgPreview';
+import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+import { addOrUpdateWork } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 
 const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updateWorkResult }) => {
   // const siteListData = [];
@@ -24,8 +24,7 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
   // // { name: '그 외', value: 'etc' },
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const [banner01Img, setBanner01Img] = useState(null);
-  const [title01Img, setTitle01Img] = useState(null);
+  const [poster02Img, setPoster02Img] = useState(null);
   const activeOption = {
     shouldDirty: true,
     shouldValidate: true,
@@ -36,9 +35,10 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
     title: yup.string().required('프로젝트명은 필수 정보 입니다.'),
     subTitle: yup.string().required('부제는 필수 정보 입니다.'),
     summary: yup.string().required('소개는 필수 정보 입니다.'),
-    skills: yup.string().required('주요기술은 필수 정보 입니다.'),
+    skill: yup.string().required('주요기술은 필수 정보 입니다.'),
+    date: yup.string().required('프로젝트 기한은 필수 정보 입니다.'),
     detail: yup.string().required('상세업무는 필수 정보 입니다.'),
-    ptId01Banner: yup.string(),
+    ptId02poster: yup.string(),
   });
 
   const methods = useForm({
@@ -62,12 +62,12 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
 
   const handleFileSelect = (arg) => {
     arg.file = new File([arg.file], arg.file.name.replaceAll(' ', ''), { type: arg.file.type });
-    // ptId01Banner;
+    // ptId02poster;
     if (arg.file.type.startsWith('image/')) {
       switch (arg.name) {
-        case 'ptId01Banner':
-          setBanner01Img(arg.file);
-          setValue('ptId01Banner', '', activeOption);
+        case 'ptId02poster':
+          setPoster02Img(arg.file);
+          setValue('ptId02poster', '', activeOption);
           break;
         default:
           console.log('default case');
@@ -109,52 +109,42 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       setValue('title', '', activeOption);
       setValue('subTitle', '', activeOption);
       setValue('summary', '', activeOption);
-      setValue('skills', '', activeOption);
+      setValue('skill', '', activeOption);
       setValue('detail', '', activeOption);
-      setBanner01Img(null);
-      setTitle01Img(null);
+      setPoster02Img(null);
     } else if (popInfo.state === '수정') {
+      const etc = JSON.parse(popInfo.workInfo.etc);
+      setValue('date', etc.date, activeOption);
       setValue('title', popInfo.workInfo.title, activeOption);
       setValue('subTitle', popInfo.workInfo.subTitle, activeOption);
       setValue('summary', popInfo.workInfo.summary, activeOption);
-      setValue('ptId01Banner', popInfo.workInfo.poster, activeOption);
+      setValue('ptId02poster', popInfo.workInfo.poster, activeOption);
+      setValue('skill', etc.skill, activeOption);
+      setValue('detail', etc.detail, activeOption);
       setValue('src', popInfo.workInfo.src, activeOption);
       setValue('workSeq', popInfo.workInfo.workSeq, activeOption);
       setValue('order', popInfo.workInfo.order, activeOption);
-      setImgFile(
-        popInfo.workInfo.poster,
-        'posterImgOld',
-        setBanner01Img,
-        popInfo.ptId,
-        popInfo.workInfo.src
-      );
-      const siteArr = JSON.parse(popInfo.workInfo.etc).website;
-      const siteObj = {};
-      for (let i = 0; i < siteArr.length; i += 1) {
-        siteObj[siteArr[i].name] = {};
-        siteObj[siteArr[i].name].name = siteArr[i].name;
-        siteObj[siteArr[i].name].link = siteArr[i].link;
-      }
-      const siteKeys = Object.keys(siteObj);
-      const siteValues = Object.values(siteObj);
-      for (let i = 0; i < siteKeys.length; i += 1) {
-        // 필드 등록
-        register(`${siteKeys[i]}Name`, { required: `${siteKeys[i]} 아이디를 입력해주세요` });
-        register(`${siteKeys[i]}Link`, { required: `${siteKeys[i]} 링크를 입력해주세요` });
-        // 값 세팅
-        setValue(`${siteKeys[i]}Name`, siteValues[i].name, activeOption);
-        setValue(`${siteKeys[i]}Link`, siteValues[i].link, activeOption);
+      if (popInfo.workInfo.poster) {
+        setImgFile(
+          popInfo.workInfo.poster,
+          'posterImgOld',
+          setPoster02Img,
+          popInfo.ptId,
+          popInfo.workInfo.src
+        );
+      } else {
+        setPoster02Img(null);
       }
     }
   }, [isOpen]);
 
   const workSaveClick = () => {
     const fileObj = {};
-    if (popInfo.ptId === 'ptid01') {
-      fileObj.titleImg = title01Img;
-      fileObj.posterImg = banner01Img;
+    console.log(popInfo);
+    if (popInfo.ptId === 'ptid02') {
+      fileObj.posterImg = poster02Img;
     }
-
+    console.log(fileObj);
     const param = {
       fields: {
         ...getValues(),
@@ -162,16 +152,24 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           userId: user.userId,
           ptId: popInfo.ptId,
           userKey: user.userKey,
-          poster: fileObj.posterImg.name,
+          poster: fileObj.posterImg?.name,
         },
         state: popInfo.state,
+        etc: JSON.stringify({
+          date: getValues('date'),
+          detail: getValues('detail'),
+          skill: getValues('skill'),
+        }),
       },
       files: fileObj,
     };
 
+    console.log(param);
+
     setLoading(true);
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
+        console.log(payload);
         if (payload.status === 200) {
           if (popInfo.state === '추가') {
             addWorkResult(payload.data.response);
@@ -227,25 +225,25 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           <p className="f__medium">
             프로젝트 이미지<span>&nbsp;(정사각형 이미지를 권장합니다!)</span>
           </p>
-          {banner01Img === null || !banner01Img.type.startsWith('image/') ? (
+          {poster02Img === null || !poster02Img.type.startsWith('image/') ? (
             <div>
-              <FileUpload name="ptId01Banner" onFileSelect={handleFileSelect} height="361px" />
+              <FileUpload name="ptId02poster" onFileSelect={handleFileSelect} height="361px" />
             </div>
           ) : (
             <>
               <div className={css.ptid02__banner__box}>
-                <ImgPreview imgFile={banner01Img} />
+                <ImgPreview imgFile={poster02Img} />
               </div>
               <Controller
-                name="ptId01Banner"
+                name="ptId02poster"
                 control={control}
                 render={({ field }) => (
                   <div className={css2.file__status}>
                     <p className="f__regular">{field.value}</p>
                     <span
                       onClick={(e) => {
-                        setBanner01Img(null);
-                        setValue('ptId01Banner', '', activeOption);
+                        setPoster02Img(null);
+                        setValue('ptId02poster', '', activeOption);
                       }}
                       className={css.remove__btn}
                     />
@@ -254,6 +252,27 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
               />
             </>
           )}
+        </div>
+        <div className={css2.list__item}>
+          <Controller
+            name="date"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                InputLabelProps={{ shrink: true }}
+                className="mb-24"
+                label="프로젝트 기간"
+                autoFocus
+                type="text"
+                error={!!errors.date}
+                helperText={errors?.date?.message}
+                variant="outlined"
+                required
+                fullWidth
+              />
+            )}
+          />
         </div>
         <div className={css2.list__item}>
           <Controller
@@ -299,7 +318,7 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
         </div>
         <div className={css2.list__item}>
           <Controller
-            name="skills"
+            name="skill"
             control={control}
             render={({ field }) => (
               <TextField
@@ -308,8 +327,8 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
                 className="mb-24"
                 fullWidth
                 label="주요기술"
-                error={!!errors.skills}
-                helperText={errors?.skills?.message}
+                error={!!errors.skill}
+                helperText={errors?.skill?.message}
                 autoFocus
                 required
                 variant="outlined"
