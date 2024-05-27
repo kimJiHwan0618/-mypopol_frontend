@@ -5,6 +5,7 @@ import FuseSplashScreen from '@fuse/core/FuseSplashScreen';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import { appReset, setUser } from 'app/store/userSlice';
 import { getSideMenus } from 'app/store/common/navigationSlice';
+import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 import jwtService from './services/jwtService';
 
 const AuthContext = React.createContext();
@@ -42,6 +43,7 @@ function AuthProvider({ children }) {
     jwtService.on('onLogout', () => {
       pass('로그아웃 되었습니다.');
       dispatch(appReset());
+      dispatch(setSearchedFlag({ mails: false, works: false, vistors: false, popols: false }));
     });
 
     jwtService.on('onAutoLogout', (message) => {

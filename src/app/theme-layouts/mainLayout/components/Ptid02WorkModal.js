@@ -124,27 +124,29 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       setValue('src', popInfo.workInfo.src, activeOption);
       setValue('workSeq', popInfo.workInfo.workSeq, activeOption);
       setValue('order', popInfo.workInfo.order, activeOption);
-      if (popInfo.workInfo.poster) {
-        setImgFile(
+      popInfo.workInfo.poster === 'none'
+        ? setValue('posterImgOld', popInfo.workInfo.poster, activeOption)
+        : setImgFile(
           popInfo.workInfo.poster,
           'posterImgOld',
           setPoster02Img,
           popInfo.ptId,
           popInfo.workInfo.src
         );
-      } else {
-        setPoster02Img(null);
-      }
+      setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
     }
   }, [isOpen]);
 
   const workSaveClick = () => {
     const fileObj = {};
-    console.log(popInfo);
     if (popInfo.ptId === 'ptid02') {
       fileObj.posterImg = poster02Img;
-    }
-    console.log(fileObj);
+      fileObj.titleImg = null;
+    };
+
+    const posterImgName = fileObj.posterImg === null ? 'none' : fileObj.posterImg.name;
+    const titleImgName = fileObj.titleImg === null ? 'none' : fileObj.titleImg.name;
+
     const param = {
       fields: {
         ...getValues(),
@@ -152,24 +154,22 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           userId: user.userId,
           ptId: popInfo.ptId,
           userKey: user.userKey,
-          poster: fileObj.posterImg?.name,
+          poster: posterImgName,
+          logo: titleImgName
         },
         state: popInfo.state,
         etc: JSON.stringify({
           date: getValues('date'),
-          detail: getValues('detail'),
+          detail: getValues('detail').replaceAll('\n', '\\n'),
           skill: getValues('skill'),
         }),
       },
       files: fileObj,
     };
 
-    console.log(param);
-
     setLoading(true);
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
-        console.log(payload);
         if (payload.status === 200) {
           if (popInfo.state === '추가') {
             addWorkResult(payload.data.response);
@@ -180,6 +180,8 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
           dispatch(setSearchedFlag({ works: false }));
           onRequestClose();
           toast.success(`프로젝트가 ${popInfo.state}되었습니다.`);
+        } else {
+          toast.error(`프로젝트 ${popInfo.state} 에러.`)
         }
       })
       .catch((error) => {
@@ -393,9 +395,8 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
                 <span className="f__medium">프로젝트 {popInfo.state}</span>
                 <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                   <use
-                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
-                      popInfo.state === '추가' ? 'plus' : 'pencil'
-                    }`}
+                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
+                      }`}
                   />
                 </svg>
               </>

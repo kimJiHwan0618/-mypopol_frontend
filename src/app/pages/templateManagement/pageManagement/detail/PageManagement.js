@@ -110,7 +110,7 @@ function PageManagement() {
   };
 
   const workObjUpdate = (param) => {
-    param.etc = param.siteList;
+    // param.etc = param.siteList;
     const keys = Object.keys(param);
     for (let i = 0; i < keys.length; i += 1) {
       if (
@@ -182,6 +182,7 @@ function PageManagement() {
         default:
           console.log('default case');
       }
+      URL.revokeObjectURL(arg.file);
       setValue(arg.name, arg.file.name);
     } else {
       toast.warning('이미지 파일을 선택해주세요!');
@@ -201,11 +202,11 @@ function PageManagement() {
         ...getValues(),
         ...{
           userId: user.userId,
-          ptId: location.state.template.popolInfo.ptId,
+          ptId: location.state?.template?.popolInfo.ptId,
           userKey: user.userKey,
         },
         workList,
-        snsList: Object.keys(snsList).length === 0 ? '' : JSON.stringify(clone),
+        snsList: Object.keys(snsList).length === 0 ? '{}' : JSON.stringify(clone),
       },
       files: {
         profileImg,
@@ -217,10 +218,9 @@ function PageManagement() {
       const etc = {
         job: param.fields.job,
         aboutMe: param.fields.aboutMe.replaceAll('\n', '\\n'),
-        skills: {},
+        skills,
         sns: clone,
       };
-      console.log(etc);
       param.fields.snsList = JSON.stringify(etc);
     }
     setUpdateLoading(true);
@@ -263,7 +263,7 @@ function PageManagement() {
           onClick: () => {
             dispatch(open());
             const param = Object.assign(e, {
-              ptId: location.state.template.popolInfo.ptId,
+              ptId: location.state?.template?.popolInfo.ptId,
               userId: user.userId,
             });
             dispatch(deleteWork(param))
@@ -271,12 +271,12 @@ function PageManagement() {
                 if (payload.status === 200) {
                   setWorkList(payload.data.response);
                   dispatch(setSearchedFlag({ works: false }));
-                  toast.success(`'${e.title}' 프로젝트가 삭제되었습니다.`);
+                  toast.success(`'${e.title}' ${getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 삭제 완료.`);
                 }
               })
               .catch((error) => {
                 console.log(error);
-                toast.error(`'${e.title}' 프로젝트 삭제 실패.`);
+                toast.error(`'${e.title}' ${getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 삭제 실패.`);
               })
               .finally(() => {
                 dispatch(close());
@@ -285,7 +285,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
@@ -321,8 +321,6 @@ function PageManagement() {
 
         const loadComplate = () => {
           setImgFile(file);
-          // profileSection.current.style.height = 'auto';
-          // popolSection.current.style.height = 'auto';
         };
 
         await loadComplate();
@@ -332,6 +330,9 @@ function PageManagement() {
 
   useEffect(() => {
     if (location.state === null) {
+      navigate('/template/page');
+    } else if (location.pathname.split("/")[3] !== user.userId) {
+      toast.warning("올바른 접근이 아닙니다.")
       navigate('/template/page');
     } else {
       const {
@@ -346,7 +347,7 @@ function PageManagement() {
         ptId,
         icon,
         sns,
-      } = location.state.template.popolInfo;
+      } = location.state?.template?.popolInfo;
       setValue('popolName', popolName, activeOption);
       setValue('mainColor', mainColor, activeOption);
       setValue('fakeName', fakeName, activeOption);
@@ -358,7 +359,7 @@ function PageManagement() {
       setValue('icon', icon, activeOption);
       setImgFile(thumbnail, 'thumbnailOld', setThumbnailImg, ptId);
       setImgFile(profile, 'profileOld', setProfileImg, ptId);
-      setWorkList(location.state.template.worksInfo);
+      setWorkList(location.state?.template?.worksInfo);
       if (sns !== null && sns !== '' && sns !== undefined) {
         let snsListLocal;
         const shape = {};
@@ -424,7 +425,7 @@ function PageManagement() {
         );
       }
     }
-  }, [setValue, register, setSnsList]);
+  }, [setValue, register, setSnsList, location.state]);
   return (
     <div className={`section__grid__wrap content common__detail ${css.page__tem__wrap}`}>
       <DetailTitleBar
@@ -557,9 +558,8 @@ function PageManagement() {
             <span className={css.arrow__btn} />
           </div>
           <div
-            className={`${css.section__content} ${
-              sections.profile && css.section__content__active
-            }`}>
+            className={`${css.section__content} ${sections.profile && css.section__content__active
+              }`}>
             <div className={css.inner}>
               <div className={css.list__item}>
                 <p className="f__medium">프로필 이미지</p>
@@ -605,7 +605,7 @@ function PageManagement() {
                       {...field}
                       InputLabelProps={{ shrink: true }}
                       className="mb-24"
-                      label={getLabel(location.state.template.popolInfo.ptId, 'fakeName')}
+                      label={getLabel(location.state?.template?.popolInfo?.ptId, 'fakeName')}
                       autoFocus
                       required
                       type="text"
@@ -914,8 +914,8 @@ function PageManagement() {
                   style={{ width: '100%' }}
                   onClick={() => {
                     setPopInfo({
-                      ptId: location.state.template.popolInfo.ptId,
-                      popolSeq: location.state.template.popolInfo.popolSeq,
+                      ptId: location.state?.template?.popolInfo.ptId,
+                      popolSeq: location.state?.template?.popolInfo.popolSeq,
                       state: '추가',
                     });
                     openModal();
@@ -944,14 +944,19 @@ function PageManagement() {
                     moveItem={moveItem}>
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
-                      {item.poster ? (
-                        <img
-                          src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
-                          alt={`${item.title} 포스터이미지`}
-                        />
-                      ) : (
-                        <img src="https://site.mypopol.com/src/img/no_img.jpg" alt="이미지 없음" />
-                      )}
+                      {
+                        item.poster && item.poster !== "none" && (
+                          <img
+                            src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
+                            alt={`${item.title} 포스터이미지`}
+                          />
+                        )
+                      }
+                      {
+                        item.poster === "none" && (
+                          <img src="https://site.mypopol.com/src/img/no_img.jpg" alt="이미지 없음" />
+                        )
+                      }
                     </div>
                     <ul className={css.work__info__wrap}>
                       <li className="f__medium">{item.title}</li>
@@ -965,8 +970,8 @@ function PageManagement() {
                         className={`${css.modify__btn} custom__btn`}
                         onClick={() => {
                           setPopInfo({
-                            ptId: location.state.template.popolInfo.ptId,
-                            popolSeq: location.state.template.popolInfo.popolSeq,
+                            ptId: location.state?.template?.popolInfo.ptId,
+                            popolSeq: location.state?.template?.popolInfo.popolSeq,
                             state: '수정',
                             workInfo: item,
                           });
@@ -1018,9 +1023,8 @@ function PageManagement() {
               <span className={css.arrow__btn} />
             </div>
             <div
-              className={`${css.section__content} ${
-                sections?.skill && css.section__content__active
-              }`}>
+              className={`${css.section__content} ${sections?.skill && css.section__content__active
+                }`}>
               <div className="inner">
                 <div className={css.list__item}>
                   <div className={css.select__list}>
@@ -1049,7 +1053,6 @@ function PageManagement() {
                       variant="outlined"
                       fullWidth
                       onChange={(e) => {
-                        console.log(e.target);
                         setSkillSelected(e.target.value);
                       }}>
                       <MenuItem value="none">기술을 선택해주세요</MenuItem>
@@ -1065,7 +1068,7 @@ function PageManagement() {
                       className="custom__btn"
                       onClick={() => {
                         const clone = JSON.parse(JSON.stringify(skills));
-                        if (!clone[skillTags[skill]].includes(skillSelected)) {
+                        if (!clone[skillTags[skill]]?.includes(skillSelected)) {
                           clone[skillTags[skill]] = [...clone[skillTags[skill]], skillSelected];
                         }
                         setSkills(clone);
@@ -1084,7 +1087,7 @@ function PageManagement() {
                   </div>
                 </div>
                 <div className={`${css.skill__list__item}`}>
-                  {skills[skillTags[skill]].map((item) => (
+                  {skills[skillTags[skill]]?.map((item) => (
                     <div className={css.skill__item}>
                       <div className={css.img__box}>
                         <img

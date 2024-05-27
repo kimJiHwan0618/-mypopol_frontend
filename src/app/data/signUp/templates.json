@@ -7,7 +7,7 @@
     "link": "https://site.mypopol.com/ptid01/example",
     "defaultColor": "rgb(255,182,59)",
     "fakeName": "작가명",
-    "sns": ""
+    "sns": {}
   },
   {
     "id": "ptid02",
@@ -20,7 +20,11 @@
     "sns": {
       "job": "OOO Developer",
       "aboutMe": "안녕하세요? \\n 개발자 ΟΟΟ입니다.",
-      "skills": {},
+      "skills": {
+        "Front-End": [],
+        "Back-End": [],
+        "Etc": []
+      },
       "sns": {}
     }
   }

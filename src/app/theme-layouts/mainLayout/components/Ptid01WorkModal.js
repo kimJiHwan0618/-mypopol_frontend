@@ -146,12 +146,12 @@ const Ptid01WorkModal = ({
       popInfo.workInfo.logo === 'none'
         ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
         : setImgFile(
-            popInfo.workInfo.logo,
-            'titleImgOld',
-            setTitle01Img,
-            popInfo.ptId,
-            popInfo.workInfo.src
-          );
+          popInfo.workInfo.logo,
+          'titleImgOld',
+          setTitle01Img,
+          popInfo.ptId,
+          popInfo.workInfo.src
+        );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
       for (let i = 0; i < siteArr.length; i += 1) {
@@ -489,9 +489,8 @@ const Ptid01WorkModal = ({
                 <span className="f__medium">작품 {popInfo.state}</span>
                 <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                   <use
-                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
-                      popInfo.state === '추가' ? 'plus' : 'pencil'
-                    }`}
+                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
+                      }`}
                   />
                 </svg>
               </>

@@ -51,20 +51,21 @@ export const addOrUpdateWork = createAsyncThunk(
   'templateManage/page/work',
   async (params, { dispatch, rejectWithValue }) => {
     try {
+      console.log(params)
       const formData = new FormData();
       formData.append('fields', JSON.stringify(params.fields));
-      params.files.titleImg !== null &&
+      params.files?.titleImg &&
         formData.append(
           'titleImg',
           params.files.titleImg,
           encodeURIComponent(params.files.titleImg.name)
         );
-      formData.append(
-        'posterImg',
-        params.files.posterImg,
-        encodeURIComponent(params.files.posterImg.name)
-      );
-      console.log(formData);
+      params.files?.posterImg &&
+        formData.append(
+          'posterImg',
+          params.files.posterImg,
+          encodeURIComponent(params.files.posterImg.name)
+        );
       const response = await axios.post(
         `${process.env.REACT_APP_API_HOST}/templateManage/page/work`,
         formData,
