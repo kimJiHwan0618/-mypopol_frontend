@@ -12,7 +12,7 @@
   min-height: 40px;
 }
 
-.template__top>button {
+.template__top > button {
   margin-left: 12px;
 }
 
@@ -37,7 +37,6 @@
 }
 
 .section__inner {
-  max-width: 1250px;
   margin: 0 auto;
 }
 
@@ -131,39 +130,39 @@
   display: flex;
 }
 
-.icon__wrap>li,
-.icon__wrap__mobile>li {
+.icon__wrap > li,
+.icon__wrap__mobile > li {
   height: 100px;
   display: flex;
   align-items: center;
 }
 
-.icon__wrap__mobile>li {
+.icon__wrap__mobile > li {
   height: 70px;
   min-width: 100px;
 }
 
-.icon__wrap__mobile>li:first-of-type {
+.icon__wrap__mobile > li:first-of-type {
   margin-right: 16px;
 }
 
-.icon__wrap>li:first-of-type dl,
-.icon__wrap__mobile>li:first-of-type dl {
+.icon__wrap > li:first-of-type dl,
+.icon__wrap__mobile > li:first-of-type dl {
   background: #00c39f;
 }
 
-.icon__wrap>li:nth-of-type(2) dl,
-.icon__wrap__mobile>li:nth-of-type(2) dl {
+.icon__wrap > li:nth-of-type(2) dl,
+.icon__wrap__mobile > li:nth-of-type(2) dl {
   background: #00b7e1;
 }
 
-.icon__wrap>li:nth-of-type(3) dl,
-.icon__wrap__mobile>li:nth-of-type(3) dl {
+.icon__wrap > li:nth-of-type(3) dl,
+.icon__wrap__mobile > li:nth-of-type(3) dl {
   background: #9f70df;
 }
 
-.icon__wrap>li>dl,
-.icon__wrap__mobile>li>dl {
+.icon__wrap > li > dl,
+.icon__wrap__mobile > li > dl {
   display: flex;
   align-items: center;
   height: 70%;
@@ -175,21 +174,21 @@
   justify-content: space-between;
 }
 
-.icon__wrap>li>dl dt,
-.icon__wrap__mobile>li>dl dt {
+.icon__wrap > li > dl dt,
+.icon__wrap__mobile > li > dl dt {
   width: 24px;
   height: 24px;
   margin-right: 10px;
 }
 
-.icon__wrap>li>dl dt svg,
-.icon__wrap__mobile>li>dl dt svg {
+.icon__wrap > li > dl dt svg,
+.icon__wrap__mobile > li > dl dt svg {
   min-width: 100%;
   min-height: 100%;
 }
 
-.icon__wrap>li>dl dd,
-.icon__wrap__mobile>li>dl dd {
+.icon__wrap > li > dl dd,
+.icon__wrap__mobile > li > dl dd {
   font-size: 1.2rem;
 }
 
@@ -233,11 +232,11 @@
     display: none;
   }
 
-  .icon__wrap>li {
+  .icon__wrap > li {
     width: 20%;
   }
 
-  .icon__wrap>li>dl {
+  .icon__wrap > li > dl {
     justify-content: space-between;
   }
 }
@@ -255,19 +254,19 @@
     width: 100%;
   }
 
-  .icon__wrap>li {
+  .icon__wrap > li {
     width: 32%;
   }
 }
 
 @media (max-width: 650px) {
-  .icon__wrap>li>dl dt {
+  .icon__wrap > li > dl dt {
     width: 18px;
     height: 18px;
     margin-right: 6px;
   }
 
-  .icon__wrap>li>dl dd {
+  .icon__wrap > li > dl dd {
     font-size: 1rem;
   }
 

@@ -271,12 +271,22 @@ function PageManagement() {
                 if (payload.status === 200) {
                   setWorkList(payload.data.response);
                   dispatch(setSearchedFlag({ works: false }));
-                  toast.success(`'${e.title}' ${getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 삭제 완료.`);
+                  toast.success(
+                    `'${e.title}' ${getLabel(
+                      location?.state?.template?.popolInfo?.ptId,
+                      'workTitle'
+                    )} 삭제 완료.`
+                  );
                 }
               })
               .catch((error) => {
                 console.log(error);
-                toast.error(`'${e.title}' ${getLabel(location?.state?.template?.popolInfo?.ptId, 'workTitle')} 삭제 실패.`);
+                toast.error(
+                  `'${e.title}' ${getLabel(
+                    location?.state?.template?.popolInfo?.ptId,
+                    'workTitle'
+                  )} 삭제 실패.`
+                );
               })
               .finally(() => {
                 dispatch(close());
@@ -285,7 +295,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => { },
+          onClick: () => {},
         },
       ],
     });
@@ -331,8 +341,8 @@ function PageManagement() {
   useEffect(() => {
     if (location.state === null) {
       navigate('/template/page');
-    } else if (location.pathname.split("/")[3] !== user.userId) {
-      toast.warning("올바른 접근이 아닙니다.")
+    } else if (location.pathname.split('/')[3] !== user.userId) {
+      toast.warning('올바른 접근이 아닙니다.');
       navigate('/template/page');
     } else {
       const {
@@ -558,8 +568,9 @@ function PageManagement() {
             <span className={css.arrow__btn} />
           </div>
           <div
-            className={`${css.section__content} ${sections.profile && css.section__content__active
-              }`}>
+            className={`${css.section__content} ${
+              sections.profile && css.section__content__active
+            }`}>
             <div className={css.inner}>
               <div className={css.list__item}>
                 <p className="f__medium">프로필 이미지</p>
@@ -789,6 +800,7 @@ function PageManagement() {
                       { name: '유튜브', value: 'youtube' },
                       { name: '카카오톡', value: 'kakaotalk' },
                       { name: '깃허브', value: 'github' },
+                      { name: '페이스북', value: 'facebook' },
                     ].map((obj, idx) => (
                       <MenuItem key={obj.value} value={obj.value}>
                         {obj.name}
@@ -944,19 +956,15 @@ function PageManagement() {
                     moveItem={moveItem}>
                     <b className={`${css.work__order} f__bold`}>{index + 1}</b>
                     <div className={`${css.work__item__poster}`}>
-                      {
-                        item.poster && item.poster !== "none" && (
-                          <img
-                            src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
-                            alt={`${item.title} 포스터이미지`}
-                          />
-                        )
-                      }
-                      {
-                        item.poster === "none" && (
-                          <img src="https://site.mypopol.com/src/img/no_img.jpg" alt="이미지 없음" />
-                        )
-                      }
+                      {item.poster && item.poster !== 'none' && (
+                        <img
+                          src={`https://site.mypopol.com/${location?.state?.template?.popolInfo?.ptId}/${user.userId}/img/${item.src}/${item.poster}`}
+                          alt={`${item.title} 포스터이미지`}
+                        />
+                      )}
+                      {item.poster === 'none' && (
+                        <img src="https://site.mypopol.com/src/img/no_img.jpg" alt="이미지 없음" />
+                      )}
                     </div>
                     <ul className={css.work__info__wrap}>
                       <li className="f__medium">{item.title}</li>
@@ -1023,8 +1031,9 @@ function PageManagement() {
               <span className={css.arrow__btn} />
             </div>
             <div
-              className={`${css.section__content} ${sections?.skill && css.section__content__active
-                }`}>
+              className={`${css.section__content} ${
+                sections?.skill && css.section__content__active
+              }`}>
               <div className="inner">
                 <div className={css.list__item}>
                   <div className={css.select__list}>
