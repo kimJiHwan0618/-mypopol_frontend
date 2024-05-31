@@ -32,7 +32,7 @@
 
 ### 개발자를 위한 포트폴리오 사이트
 <img src="./src/assets/img/readme/ptid02_rending.gif" align='left' width="31%" >
-- [미리보기](https://site.mypopol.com/ptid02/example)
+- [미리보기](https://site.mypopol.com/ptid01/example)
 
 <br clear="left"/>
 <br/>
