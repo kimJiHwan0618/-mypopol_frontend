@@ -24,14 +24,9 @@
 ## 3. 제공 템플릿
 
 ### 웹툰 & 웹소설 작가를 위한 포트폴리오 사이트 
-![웹툰 & 웹소설 작가를 위한 포트폴리오 사이트](./src/assets/img/readme/ptid01_rending.gif)
+<img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid01/example)
 
 ### 개발자를 위한 포트폴리오 사이트
-![개발자를 위한 포트폴리오 사이트](./src/assets/img/readme/ptid02_rending.gif)
+<img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid02/example)
-
-<div>
-<img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
-<img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
-</div>
