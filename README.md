@@ -27,9 +27,12 @@
 <img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid01/example)
 
-<br />
-<br />
+<br clear="left"/>
+<br/>
 
 ### 개발자를 위한 포트폴리오 사이트
-<img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
+<img src="./src/assets/img/readme/ptid02_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid02/example)
+
+<br clear="left"/>
+<br/>
