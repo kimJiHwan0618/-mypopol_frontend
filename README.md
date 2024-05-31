@@ -25,20 +25,18 @@
 
 ### 웹툰 & 웹소설 작가를 위한 포트폴리오 사이트 
 ![웹툰 & 웹소설 작가를 위한 포트폴리오 사이트](./src/assets/img/readme/ptid01_rending.gif)
-- [미리보기](https://site.mypopol.com/ptid01/example)
 
 ### 개발자를 위한 포트폴리오 사이트
 ![개발자를 위한 포트폴리오 사이트](./src/assets/img/readme/ptid02_rending.gif)
-- [미리보기](https://site.mypopol.com/ptid02/example)
 
 <div style="display: flex; flex-direction: row; justify-content: space-between;">
   <div style="flex: 1; padding: 5px;">
-    <img src="./src/assets/img/readme/ptid01_rending.gif" alt="웹툰 & 웹소설 작가를 위한 포트폴리오 사이트" style="max-width: 100%; height: auto;">
+    <img src="./src/assets/img/readme/ptid01_rending.gif" alt="웹툰 & 웹소설 작가를 위한 포트폴리오 사이트" style="max-width: 40%; height: auto;">
     <br>
     <a href="https://site.mypopol.com/ptid01/example">미리보기</a>
   </div>
   <div style="flex: 1; padding: 5px;">
-    <img src="./src/assets/img/readme/ptid02_rending.gif" alt="개발자를 위한 포트폴리오 사이트" style="max-width: 100%; height: auto;">
+    <img src="./src/assets/img/readme/ptid02_rending.gif" alt="개발자를 위한 포트폴리오 사이트" style="max-width: 40%; height: auto;">
     <br>
     <a href="https://site.mypopol.com/ptid02/example">미리보기</a>
   </div>
