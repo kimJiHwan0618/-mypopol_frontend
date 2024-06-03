@@ -335,9 +335,9 @@ function PageManagements() {
             justifyContent: 'center',
             gridColumn: 'span 4 / span 4',
             width: '100%',
+            maxWidth: "350px"
           }}>
           <Lottie
-            style={{ maxWidth: '350px' }}
             options={{ loop: true, autoplay: true, animationData }}
           />
         </div>

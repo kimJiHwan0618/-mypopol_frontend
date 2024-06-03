@@ -171,6 +171,8 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
     dispatch(addOrUpdateWork(param))
       .then(({ payload }) => {
         if (payload.status === 200) {
+          payload.data.response.etc = payload.data.response.etc.replaceAll('\\\\n', '\\n')
+          console.log(payload.data.response)
           if (popInfo.state === '추가') {
             addWorkResult(payload.data.response);
           }

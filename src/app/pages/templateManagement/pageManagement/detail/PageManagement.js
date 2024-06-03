@@ -295,7 +295,7 @@ function PageManagement() {
         },
         {
           label: '취소',
-          onClick: () => {},
+          onClick: () => { },
         },
       ],
     });
@@ -568,9 +568,8 @@ function PageManagement() {
             <span className={css.arrow__btn} />
           </div>
           <div
-            className={`${css.section__content} ${
-              sections.profile && css.section__content__active
-            }`}>
+            className={`${css.section__content} ${sections.profile && css.section__content__active
+              }`}>
             <div className={css.inner}>
               <div className={css.list__item}>
                 <p className="f__medium">프로필 이미지</p>
@@ -695,43 +694,8 @@ function PageManagement() {
                   />
                 </div>
               )}
-              {/* 아이콘 타입 default 고정 */}
-              {/* <div className={css.list__item}>
-                <Controller
-                  name="icon"
-                  control={control}
-                  defaultValue={activeOption}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      label="아이콘 타입"
-                      required
-                      id="icon"
-                      variant="outlined"
-                      fullWidth>
-                      {[
-                        { name: '기본 아이콘', value: 'default' },
-                        { name: '비트맵 아이콘', value: 'bite' },
-                      ].map((obj, idx) => (
-                        <MenuItem key={obj.value} value={obj.value}>
-                          {obj.name}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </div> */}
               <div className={`${css.list__item} ${css.profile__icon__list}`}>
                 <div>
-                  {/* <span className={css.profile__icon}>
-                    {getValues().icon !== undefined && (
-                      <img
-                        src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/mail.png`}
-                        alt="이메일 아이콘"
-                      />
-                    )}
-                  </span> */}
                   <Controller
                     name="email"
                     control={control}
@@ -753,14 +717,6 @@ function PageManagement() {
                   />
                 </div>
                 <div>
-                  {/* <span className={css.profile__icon}>
-                    {getValues().icon !== undefined && (
-                      <img
-                        src={`https://site.mypopol.com/src/img/icon/${getValues().icon}/phone.png`}
-                        alt="전화 아이콘"
-                      />
-                    )}
-                  </span> */}
                   <Controller
                     name="phone"
                     control={control}
@@ -802,7 +758,7 @@ function PageManagement() {
                       { name: '깃허브', value: 'github' },
                       { name: '페이스북', value: 'facebook' },
                     ].map((obj, idx) => (
-                      <MenuItem key={obj.value} value={obj.value}>
+                      <MenuItem key={idx} value={obj.value}>
                         {obj.name}
                       </MenuItem>
                     ))}
@@ -949,7 +905,7 @@ function PageManagement() {
               <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
                 {workList.map((item, index) => (
                   <DraggableItem
-                    key={item.order}
+                    key={index}
                     id={item.order}
                     data={item}
                     index={index}
@@ -1031,9 +987,8 @@ function PageManagement() {
               <span className={css.arrow__btn} />
             </div>
             <div
-              className={`${css.section__content} ${
-                sections?.skill && css.section__content__active
-              }`}>
+              className={`${css.section__content} ${sections?.skill && css.section__content__active
+                }`}>
               <div className="inner">
                 <div className={css.list__item}>
                   <div className={css.select__list}>
@@ -1066,7 +1021,7 @@ function PageManagement() {
                       }}>
                       <MenuItem value="none">기술을 선택해주세요</MenuItem>
                       {skillsInfo[skill].map((obj, idx) => (
-                        <MenuItem key={obj.value} value={obj.value}>
+                        <MenuItem key={idx} value={obj.value}>
                           {obj.value}
                         </MenuItem>
                       ))}
@@ -1096,8 +1051,8 @@ function PageManagement() {
                   </div>
                 </div>
                 <div className={`${css.skill__list__item}`}>
-                  {skills[skillTags[skill]]?.map((item) => (
-                    <div className={css.skill__item}>
+                  {skills[skillTags[skill]]?.map((item, idx) => (
+                    <div className={css.skill__item} key={idx}>
                       <div className={css.img__box}>
                         <img
                           src={`https://site.mypopol.com/ptid02/src/img/skills/${item
