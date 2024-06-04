@@ -24,7 +24,7 @@ import {
 } from 'app/pages/templateManagement/pageManagement/store/PageTemplateSlice';
 import { confirmAlert } from 'react-confirm-alert';
 import { close, open } from 'app/store/common/loadingWrap';
-import { setSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
+import { setSearchedFlag, selectSearchedFlag } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 import skillsInfo from 'app/data/pageManagement/ptid02/skills';
 
 const ListItemTypes = {
@@ -69,6 +69,7 @@ function PageManagement() {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
   const location = useLocation();
+  const searchedFlag = useSelector(selectSearchedFlag);
   const [profileImg, setProfileImg] = useState(null);
   const [thumbnailImg, setThumbnailImg] = useState(null);
   const [snsSelected, setSnsSelected] = useState('twitter');
@@ -137,6 +138,7 @@ function PageManagement() {
 
   const addWorkResult = (work) => {
     workList.push(workObjUpdate(work));
+    dispatch(setSearchedFlag({ works: false }));
     setWorkList(workList);
   };
 
@@ -345,6 +347,10 @@ function PageManagement() {
       toast.warning('올바른 접근이 아닙니다.');
       navigate('/template/page');
     } else {
+      const { popols, works } = searchedFlag;
+      if (!popols || !works) {
+        navigate('/template/page')
+      }
       const {
         popolName,
         thumbnail,
@@ -358,6 +364,8 @@ function PageManagement() {
         icon,
         sns,
       } = location.state?.template?.popolInfo;
+      // console.log(location.state)
+      // console.log(location)
       setValue('popolName', popolName, activeOption);
       setValue('mainColor', mainColor, activeOption);
       setValue('fakeName', fakeName, activeOption);
@@ -436,6 +444,7 @@ function PageManagement() {
       }
     }
   }, [setValue, register, setSnsList, location.state]);
+
   return (
     <div className={`section__grid__wrap content common__detail ${css.page__tem__wrap}`}>
       <DetailTitleBar

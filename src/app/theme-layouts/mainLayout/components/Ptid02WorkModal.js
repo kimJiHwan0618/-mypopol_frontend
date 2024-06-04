@@ -124,15 +124,18 @@ const Ptid02WorkModal = ({ isOpen, onRequestClose, popInfo, addWorkResult, updat
       setValue('src', popInfo.workInfo.src, activeOption);
       setValue('workSeq', popInfo.workInfo.workSeq, activeOption);
       setValue('order', popInfo.workInfo.order, activeOption);
-      popInfo.workInfo.poster === 'none'
-        ? setValue('posterImgOld', popInfo.workInfo.poster, activeOption)
-        : setImgFile(
+      if (popInfo.workInfo.poster === 'none') {
+        setValue('posterImgOld', popInfo.workInfo.poster, activeOption);
+        setPoster02Img(null);
+      } else {
+        setImgFile(
           popInfo.workInfo.poster,
           'posterImgOld',
           setPoster02Img,
           popInfo.ptId,
           popInfo.workInfo.src
         );
+      }
       setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
     }
   }, [isOpen]);
