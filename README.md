@@ -27,6 +27,8 @@
 <img src="./src/assets/img/readme/ptid01_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid01/example)
 
+**미리보기 링크:** [https://site.mypopol.com/ptid01/example](https://site.mypopol.com/ptid01/example)
+
 <br clear="left"/>
 <br/>
 
@@ -34,5 +36,11 @@
 <img src="./src/assets/img/readme/ptid02_rending.gif" align='left' width="31%" >
 - [미리보기](https://site.mypopol.com/ptid02/example)
 
+**미리보기 링크:** [https://site.mypopol.com/ptid02/example](https://site.mypopol.com/ptid02/example)
+
 <br clear="left"/>
 <br/>
+
+![SNS 미리보기](./src/assets/img/readme/kakaotalk.png)
+
+이미지 설명: SNS에 링크가 노출될 때 메타태그의 내용이 함께 표시됩니다
