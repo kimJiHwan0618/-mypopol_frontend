@@ -18,7 +18,7 @@
 ![WebSocket](https://img.shields.io/badge/WebSocket-000000?style=for-the-badge&logo=websocket&logoColor=white)
 ![MUI](https://img.shields.io/badge/MUI-007FFF?style=for-the-badge&logo=mui&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jwt&logoColor=white)
-![SNS Login](https://img.shields.io/badge/SNS%20Login-FF4500?style=for-the-badge&logo=auth0&logoColor=white)
+![Google Login](https://img.shields.io/badge/Google%20Login-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Drag and Drop](https://img.shields.io/badge/Drag%20and%20Drop-FFCC00?style=for-the-badge&logo=react-dnd&logoColor=white)
 
 ## 3. 제공 템플릿
