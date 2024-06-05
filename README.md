@@ -41,4 +41,4 @@
 
 이미지 설명: SNS에 링크가 노출될 때 메타태그의 내용이 함께 표시됩니다
 
-![SNS 미리보기](./src/assets/img/readme/kakaotalk.png)
+<img src="./src/assets/img/readme/kakaotalk.png" align='left' width="41%" >
