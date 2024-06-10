@@ -146,12 +146,12 @@ const Ptid01WorkModal = ({
       popInfo.workInfo.logo === 'none'
         ? setValue('titleImgOld', popInfo.workInfo.logo, activeOption)
         : setImgFile(
-          popInfo.workInfo.logo,
-          'titleImgOld',
-          setTitle01Img,
-          popInfo.ptId,
-          popInfo.workInfo.src
-        );
+            popInfo.workInfo.logo,
+            'titleImgOld',
+            setTitle01Img,
+            popInfo.ptId,
+            popInfo.workInfo.src
+          );
       const siteArr = JSON.parse(popInfo.workInfo.etc).website;
       const siteObj = {};
       for (let i = 0; i < siteArr.length; i += 1) {
@@ -259,7 +259,7 @@ const Ptid01WorkModal = ({
       <div className={`${css.wrap__inner} vertical__scroll`}>
         <div className={css2.list__item}>
           <p className="f__medium">
-            메인 배너<span>&nbsp;(1250 x 1450 px 이미지를 권장합니다.)</span>
+            메인 배너<span>&nbsp;(1020 x 1450 px 이미지를 권장합니다.)</span>
           </p>
           {banner01Img === null || !banner01Img.type.startsWith('image/') ? (
             <div>
@@ -489,8 +489,9 @@ const Ptid01WorkModal = ({
                 <span className="f__medium">작품 {popInfo.state}</span>
                 <svg size="24" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                   <use
-                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${popInfo.state === '추가' ? 'plus' : 'pencil'
-                      }`}
+                    href={`${process.env.PUBLIC_URL}/images/icon/heroicons-outline.svg#${
+                      popInfo.state === '추가' ? 'plus' : 'pencil'
+                    }`}
                   />
                 </svg>
               </>
