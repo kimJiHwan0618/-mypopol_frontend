@@ -1,6 +1,5 @@
 import FuseSuspense from '@fuse/core/FuseSuspense';
 import { memo, useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { selectFuseCurrentLayoutConfig } from 'app/store/fuse/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FuseMessage from '@fuse/core/FuseMessage';
@@ -11,7 +10,7 @@ import {
   setMails,
   setVistors,
   selectVistors,
-  selectMails
+  selectMails,
 } from 'app/pages/dashboard/templateDashboard/store/TemplateDashboardSlice';
 import {
   Header,
@@ -40,41 +39,45 @@ function MainLayout() {
   useEffect(() => {
     vistorsRef.current = vistors;
     mailsRef.current = mails;
-  }, [mails, vistors])
+  }, [mails, vistors]);
 
   useEffect(() => {
     if (user?.userId) {
-      const webSocket = new WebSocket(
-        `${process.env.REACT_APP_WEBSOCKET_HOST}/websocket/?userId=${user.userId}`,
-        undefined,
-        {}
-      );
-      webSocket.onmessage = (evt) => {
-        const message = JSON.parse(evt.data)
-        switch (message?.type) {
-          case "방문자 카운트":
-            dispatch(setVistors([...vistorsRef.current, message.data]));
-            break;
-          case "이메일 카운트":
-            dispatch(setMails([...mailsRef.current, message.data]));
-            break;
-          default:
-        }
-      };
+      try {
+        const webSocket = new WebSocket(
+          `${process.env.REACT_APP_WEBSOCKET_HOST}/websocket/?userId=${user.userId}`,
+          undefined,
+          {}
+        );
+        webSocket.onmessage = (evt) => {
+          const message = JSON.parse(evt.data);
+          switch (message?.type) {
+            case '방문자 카운트':
+              dispatch(setVistors([...vistorsRef.current, message.data]));
+              break;
+            case '이메일 카운트':
+              dispatch(setMails([...mailsRef.current, message.data]));
+              break;
+            default:
+          }
+        };
 
-      webSocket.onopen = () => {
-        console.log('WebSocket Connected');
-      };
+        webSocket.onopen = () => {
+          console.log('WebSocket Connected');
+        };
 
-      webSocket.onerror = (error) => {
+        webSocket.onerror = (error) => {
+          console.error('WebSocket Error: ', error);
+        };
+
+        setWs(webSocket);
+
+        return () => {
+          webSocket.close();
+        };
+      } catch (error) {
         console.error('WebSocket Error: ', error);
-      };
-
-      setWs(webSocket);
-
-      return () => {
-        webSocket.close();
-      };
+      }
     }
   }, []);
 
@@ -85,7 +88,12 @@ function MainLayout() {
       {config.leftSidePanel.display && (
         <SideMenuBar menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
       )}
-      <div className="modal__bg" onClick={() => { menuBarToggle("hide") }} />
+      <div
+        className="modal__bg"
+        onClick={() => {
+          menuBarToggle('hide');
+        }}
+      />
       <main>
         {config.rightSidePanel.display && ( // header = rightSidePanel
           <Header menuBarStatus={menuBarStatus} menuBarToggle={menuBarToggle} />
